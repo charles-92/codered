@@ -49,33 +49,59 @@ canvas {
 }
 
 /* DROPDOWN */
-.dropdown { position: relative; }
+.dropdown {
+  position: relative;
+}
 
+/* DROPDOWN BOX */
 .dropdown-content {
   display: none;
   position: absolute;
-  background: #111;
-  top: 40px;
+  top: calc(100% + 10px);
   right: 0;
-  min-width: 160px;
+  background: rgba(10, 10, 10, 0.98); /* black */
+  min-width: 220px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 12px;
   border: 1px solid red;
-  z-index: 10;
+  box-shadow: 0 0 15px red;
+  z-index: 9999;
 }
 
+/* LINKS */
 .dropdown-content a {
   display: block;
   padding: 10px;
+  color: #ddd;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.3s;
 }
 
+/* HOVER EFFECT */
 .dropdown-content a:hover {
   background: red;
   color: black;
+  box-shadow: 0 0 10px red;
 }
 
-.show { display: block; }
+/* SHOW */
+.show {
+  display: block;
+}
 
-.arrow { transition: 0.3s; }
-.rotate { transform: rotate(180deg); }
+/* ARROW */
+.arrow {
+  margin-left: 5px;
+  transition: 0.3s;
+}
+
+/* ROTATE */
+.rotate {
+  transform: rotate(180deg);
+}
 
 /* HEADER */
 header {
@@ -374,7 +400,7 @@ footer {
       <a href="Elevator pitch.html">Elevator pitch</a>
       <a href="Website presentation.html">website presentation</a>
         <a href="jeoparody.html">jeoparody</a>
-         <a href="literature review.html">literature review</a>
+         <a href="literature review.html">leterature review</a>
         <a href="persona mapping.html">persona mapping</a>
          <a href="STORYBOARD.html">storyboard</a>
         <a href="prototype.html">prototype</a>
@@ -390,7 +416,7 @@ footer {
 <!-- OUTPUTS -->
 <div class="outputs">
 <div class="quote">
-  <h1>PERSONA MAPPING</h1>
+  <h1>PERSONAL MAPPING</h1>
   <div class="line"></div>
 
   <div class="card">PERSONA MAPPING</div>
@@ -411,8 +437,9 @@ footer {
   <img id="slide" src="24.jpg" alt="slideshow image">
 </div>
 
-  <h2>SHORT DESCRIPTION</h2>
+<h2>SHORT DESCRIPTION</h2>
 <h3><p>The Persona Mapping is based on interviews with chosen students were used to better understand their demographics, objectives, and difficulties with the suggested system, which served as the basis for the persona mapping. This technique assisted in identifying difficulties like reluctance to speak out and a lack of input from administrators, as well as common demands like the need for an easy and accessible mechanism to express concerns. The researchers were able to develop representative user personas that direct the development of a more user-centered and efficient system by examining these discoveries.</p></h3>
+
 
 <footer>
   <p>© 2026 Technology Research Capstone</p>
