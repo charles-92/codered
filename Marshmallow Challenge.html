@@ -39,31 +39,52 @@ body {
   position: relative;
 }
 
+/* DROPDOWN BOX */
 .dropdown-content {
   display: none;
   position: absolute;
-  background: #444;
-  min-width: 1px;
-  top: 50px;
-
+  top: calc(100% + 10px);
+  right: 0;
+  background: rgba(10, 10, 10, 0.98); /* black */
+  min-width: 220px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid red;
+  box-shadow: 0 0 15px red;
+  z-index: 9999;
 }
 
+/* LINKS */
 .dropdown-content a {
   display: block;
   padding: 10px;
+  color: #ddd;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.3s;
 }
 
+/* HOVER EFFECT */
 .dropdown-content a:hover {
-  background: #ff3333;
+  background: red;
+  color: black;
+  box-shadow: 0 0 10px red;
 }
 
-.show { display: block; }
+/* SHOW */
+.show {
+  display: block;
+}
 
+/* ARROW */
 .arrow {
   margin-left: 5px;
   transition: 0.3s;
 }
 
+/* ROTATE */
 .rotate {
   transform: rotate(180deg);
 }
@@ -348,7 +369,7 @@ footer {
       <a href="Elevator pitch.html">Elevator pitch</a>
       <a href="Website presentation.html">website presentation</a>
         <a href="jeoparody.html">jeoparody</a>
-         <a href="literature review.html">research review</a>
+         <a href="literature review.html">literature review</a>
         <a href="persona mapping.html">persona mapping</a>
          <a href="STORYBOARD.html">storyboard</a>
         <a href="prototype.html">prototype</a>
@@ -393,7 +414,7 @@ So, what we learned about in this activity is it taught us an important lesson a
     <source src="Video.mp4" type="video/mp4">
   </video>
 </div>
-  
+
 </section>
 
 <footer>
