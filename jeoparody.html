@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technology Research Capstone</title>
 
 <style>
@@ -12,27 +13,40 @@ body {
   font-family: 'Courier New', monospace;
   background: #000;
   color: white;
-  overflow-x: hidden;
   text-align: center;
+  overflow-x: hidden;
 }
 
-/* NAVBAR */
+/* BACKGROUND FIX */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* NAV */
 .topnav {
-  background-color: #000;
+  background: #000;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  padding: 10px 30px;
+  border-bottom: 1px solid red;
+  position: relative;
+  z-index: 2;
 }
 
 .topnav a {
   color: #fff;
-  padding: 14px 16px;
+  padding: 10px 15px;
   text-decoration: none;
 }
 
-.topnav a:hover { background-color: #ff3333; color: black; }
-.topnav a.active { background-color: #ff0d00; color: white; }
-.topnav .icon { display: none; }
+.topnav a:hover {
+  background: red;
+  color: black;
+}
 
 /* DROPDOWN */
 .dropdown {
@@ -89,132 +103,190 @@ body {
   transform: rotate(180deg);
 }
 
-/* MOBILE */
-@media screen and (max-width: 600px) {
-  .topnav { flex-direction: column; align-items: flex-start; }
-  .topnav a { display: none; width: 100%; }
-  .topnav a.icon { display: block; }
-  .topnav.responsive a { display: block; }
-}
-
 /* HEADER */
 header {
-  padding: 10px;
-  border-bottom: 1px solid #ff3333;
-}
-
-/* SECTION */
-.section {
-  padding: 30px;
-}
-
-/* GALLERY */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 10px;
   padding: 20px;
-
-  background-image: url("y.jpg"); /* your background image */
-  background-size: cover;
-  background-position: center;
-  border-radius: 15px;
+  border-bottom: 1px solid red;
 }
 
-.gallery img {
+/* HERO */
+.hero {
+  max-width: 1225px;
+  margin: 30px auto;
+}
+
+.hero img {
   width: 100%;
-  height: 250px;
-  object-fit: cover;
-  display: block;
+  border-radius: 10px;
+  border: 2px solid red;
+  box-shadow: 0 0 20px red;
 }
 
-.gallery img:hover {
-  transform: scale(1.1);
+/* OUTPUTS */
+.outputs { margin-top: 40px; }
+
+.line {
+  width: 200px;
+  height: 4px;
+  background: red;
+  margin: auto;
+  margin-bottom: 20px;
 }
 
-/* SEARCH */
-#q {
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid red;
-  background: black;
-  color: #ff3333;
+/* CARD */
+.card {
+  background: #1f1f1f;
+  margin: 15px auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  border: 2px solid red;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px;
 }
 
-button {
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ff3333;
-  background: black;
-  color: #ff3333;
+.card:hover {
+  background: red;
+  color: black;
+  transform: scale(1.05);
+}
+
+/* PANEL */
+.panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.5s;
+  background: #111;
+  width: 90%;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.panel-content { padding: 30px; }
+
+/* PDF */
+.pdf-preview {
+  width: 100%;
+  max-width: 800px;
+  height: 500px;
+  margin: 20px auto;
+  border: 3px solid red;
+  border-radius: 10px;
+  overflow: hidden;
   cursor: pointer;
 }
 
-/* FOOTER */
-footer {
-  margin-top: 20px;
-  padding: 20px;
-  border-top: 1px solid red;
+.pdf-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
 }
 
-/* MATRIX */
-canvas {
+/* Footer */
+footer {
+  text-align: center;
+  padding: 10px;
+  background: rgba(0,0,0,0.9);
+  border-top: 1px solid #ff3333;
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+/* VIEWER */
+#viewer, #pdfViewer {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
 }
 
-.hero-content img {
-  width: 900%;        /* control size */
-  max-width: 1200px;  /* prevent too big */
-  height: auto;
-  display: block;
-  margin: 20px auto; /* center */
-  border-radius: 10px;
+#viewer { background: rgba(0,0,0,0.95); }
+
+#pdfViewer { background: #000; }
+
+#viewer img {
+  max-width: 90%;
+  max-height: 80%;
 }
 
-/* Sections */
-.section {
-  padding: 40px;
-  margin: 20px;
-  border-radius: 10px;
+#pdfFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
-.section.light {
-  background: rgba(20,0,0,0.85);
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: red;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+/* Motto quote */
+.quote {
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  font-style: italic;
+  margin-bottom: 20px;
+  background: rgba(14, 13, 13, 0.6);
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: inline-block;
 }
 
-/* Buttons */
-.hero-content {
-  text-align: center;
-}
-
-.hero-content img {
-  width: 1000%;
-  max-width: 1280px;
-  height: auto;
-  display: block;
-  margin: 20px auto;
-  border-radius: 10px;
-  border: 2px solid #ff0d00;
-  box-shadow: 0 0 20px #e50707;
-}  
-
- g{
+/* CONTAINER */
+.slideshow {
+  width: 90%;
+  max-width: 900px;
+  height: 500px; /* fixed frame */
+  margin: 40px auto;
+  border-radius: 15px;
+  overflow: hidden;
   border: 2px solid red;
-  padding: 10px; 
-  border-radius: 8px;
-  background: rgba(11, 11, 11, 0.9); 
-  color: rgb(249, 248, 248); 
-  display: inline-block; 
-  margin: 10px auto; 
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+  background: black;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.ct {
-  position: relative;
-  padding: 20px;
+/* IMAGE */
+.slideshow img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* show whole image */
+  transition: opacity 1s ease-in-out;
 }
+
+/* NAVBAR */
+.topnav {
+  background-color: #000;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.topnav a {
+  color: #fff;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.topnav a:hover { background-color: #ff3333; color: black; }
+.topnav a.active { background-color: #ff0d00; color: white; }
+.topnav .icon { display: none; }
 
 /* Logo stays on the left */
 .logo {
@@ -256,6 +328,10 @@ canvas {
 .logo-text {
   font-size: 18px;
 }
+.ct {
+  position: relative;
+  padding: 20px;
+}
 
 /* Simple header background like navbar */
 .naruto-text {
@@ -291,24 +367,10 @@ canvas {
   margin: 0;
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 10px;
-  background: rgba(0,0,0,0.9);
-  border-top: 1px solid #ff3333;
-  margin-top: 20px;
-  font-size: 20px;
-}
-
-
 </style>
 </head>
 
 <body>
-
-<canvas id="matrixCanvas"></canvas>
-
 <header class="ct">
   <div class="logo">
     <a href="#">
@@ -326,17 +388,12 @@ footer {
   </div>
 </header>
 
-
-<!-- NAVBAR -->
 <nav class="topnav" id="myTopnav">
-  <a href="index.html" class="active">Home</a>
+<a href="index.html" class="active">Home</a>
   <a href="About Us.html">About Us</a>
 
   <div class="dropdown">
-    <a onclick="toggleMenu()">
-      Activity <span id="arrow" class="arrow">▼</span>
-    </a>
-
+    <a onclick="toggleMenu()">Activity <span id="arrow" class="arrow">▼</span></a>
     <div id="dropdownMenu" class="dropdown-content">
       <a href="Marshmallow Challenge.html">Marshmallow Challenge</a>
       <a href="Elevator pitch.html">Elevator pitch</a>
@@ -349,44 +406,66 @@ footer {
     </div>
   </div>
 
-
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">☰</a>
 </nav>
 
-
-<br>
-
-<br>
-
-<div class="hero-content matrix-box">
-  <canvas class="matrixLocal"></canvas>
-  
-  <img src="6.png" alt="Welcome">
-</div>
-<div>
-
-  <h1>JEOPARODY</h1>
-
-<div class="gallery">
-  <img src="30.jpg">
-  <img src="31.jpg">
-  <img src="32.jpg">
-  <img src="33.jpg">
+<div class="hero">
+  <img src="6.png">
 </div>
 
-<g><p>
-  <h2>GROUP REFLECTION</h2>
-<p>Learning became more interesting when participants engaged in a Jeopardy-style activity, which transformed topic review into a game rather than a typical conversation. It improved our comprehension of the classes by enabling us to think fast and retain knowledge under time constraints. Since answering questions collectively made it simpler to come up with the right answer, Wealso gained the importance of cooperation and communication.</p>
-</p></g>
+<!-- OUTPUTS -->
+<div class="outputs">
+<div class="quote">
+  <h1>RESEARCH RIEVIEW</h1>
+  <div class="line"></div>
 
-</section>
+    <div class="card">RESEARCH REVIEW</div>
+  <div class="panel">
+    <div class="panel-content">
+      <div class="pdf-preview" onclick="openPDF('research.pdf')">
+        <iframe src="research.pdf"></iframe>
+      </div>
+    </div>
+  </div>
+
+</div>
+<h2></h2>
+
+<h2 class="quote">Documentation</h2>
+
+<div class="slideshow">
+  <img id="slide" src="#.jpg" alt="slideshow image">
+</div>
+
+<h1>REFLECTION</h1>
+  <p>HACKER </p>
+  <h3>                                                                                                                                                                                                               I gained a better understanding of the technical foundations required for our system by working on the literature review, especially with terms of web-based development and data handling. I gained knowledge about the aspects that make current systems effective and how they handle feedback. This helped me develop a more dependable and useful system.</h3>
+<br>
+  <p>HIPSTER </p>
+  <h3>                                                                                                                                                                                                         I was able to look into how user interface and user experience affect feedback systems' effectiveness by conducting the literature study. I came to see how crucial simplicity and accessibility are in getting people to voice their issues. This assisted me in coming up with designs that are both aesthetically pleasing and practical.  </h3>
+<br>
+  <p>HUSTLER</p>
+  <h3>                                                                                                                                                                                                      I gained a better understanding of the significance of interaction with users and communication in system adoption thanks to the literature review. I witnessed how responsiveness and openness can foster confidence between administrators and users. This helped me come up with ideas for presenting and promoting our system so that it will be broadly embraced.       </h3>
+  <br>
+  <p>HANDLER </p>
+  <h3>                                                                                                                                                                                                                I discovered how effective structure and organization are key components of a successful system through the literature review. I was able to see common issues and how they were resolved by looking at relevant papers. This made it possible for me to oversee our project more skillfully and make sure that every component is in line with our objectives.
+</h3>
 
 <footer>
-<p>ILOILO STATE UNIVERSITY OF FISHERIES SCIENCE AND TECHNOLOGY</p>
-<p>Created by Charles Brian Taberna CODERED</p>
+  <p>© 2026 Technology Research Capstone</p>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- VIEWERS -->
+<div id="viewer">
+  <span class="close-btn" onclick="closeViewer()">✖</span>
+  <img id="viewer-img">
+</div>
+
+<div id="pdfViewer">
+  <span class="close-btn" onclick="closePDF()">✖</span>
+  <iframe id="pdfFrame"></iframe>
+</div>
+
+<!-- SCRIPTS -->
 <script>
 function toggleMenu() {
   document.getElementById("dropdownMenu").classList.toggle("show");
@@ -398,114 +477,127 @@ window.onclick = function(e) {
     document.getElementById("dropdownMenu").classList.remove("show");
     document.getElementById("arrow").classList.remove("rotate");
   }
+};
+
+const cards = document.querySelectorAll(".card");
+
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    const panel = card.nextElementSibling;
+
+    document.querySelectorAll(".panel").forEach(p => {
+      if (p !== panel) p.style.maxHeight = null;
+    });
+
+    panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+  });
+});
+
+function openViewer(img){
+  document.getElementById("viewer").style.display = "flex";
+  document.getElementById("viewer-img").src = img.src;
 }
 
-function myFunction() {
-  let x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
+function closeViewer(){
+  document.getElementById("viewer").style.display = "none";
 }
 
-function search() {
-  let q = document.getElementById("q").value;
-  if(q){
-    window.open("https://www.google.com/search?q=" + q);
-  }
+function openPDF(file){
+  document.getElementById("pdfViewer").style.display = "block";
+  document.getElementById("pdfFrame").src = file;
 }
 
-let scene, camera, renderer;
-let particles, lines;
-let positions, velocities;
+function closePDF(){
+  document.getElementById("pdfViewer").style.display = "none";
+}
+</script>
+
+<script>
+const images = [
+  "#.jpg",
+  "#.jpg",
+  "#.jpg"
+];
+
+let index = 0;
+const slide = document.getElementById("slide");
+
+setInterval(() => {
+  index = (index + 1) % images.length;
+
+  slide.style.opacity = 0;
+
+  setTimeout(() => {
+    slide.src = images[index];
+    slide.style.opacity = 1;
+  }, 500);
+
+}, 5000);
+</script>
+
+<!-- MATRIX BACKGROUND -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.z = 6;
+
+let renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+renderer.domElement.style.position = "fixed";
+renderer.domElement.style.top = "0";
+renderer.domElement.style.left = "0";
+renderer.domElement.style.zIndex = "-1";
+renderer.domElement.style.pointerEvents = "none";
 
 const COUNT = 300;
 const MAX_DISTANCE = 1.5;
 
-init();
-animate();
+let positions = new Float32Array(COUNT * 3);
+let velocities = new Float32Array(COUNT * 3);
 
-function init() {
-  scene = new THREE.Scene();
+for (let i = 0; i < COUNT * 3; i += 3) {
+  positions[i] = (Math.random() - 0.5) * 10;
+  positions[i+1] = (Math.random() - 0.5) * 10;
+  positions[i+2] = (Math.random() - 0.5) * 10;
 
-  camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.z = 6;
-
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  // ✅ BACKGROUND FIX
-  const canvas = renderer.domElement;
-  canvas.style.position = "fixed";
-  canvas.style.top = "0";
-  canvas.style.left = "0";
-  canvas.style.zIndex = "-1";
-  document.body.appendChild(canvas);
-
-  // PARTICLES
-  positions = new Float32Array(COUNT * 3);
-  velocities = new Float32Array(COUNT * 3);
-
-  for (let i = 0; i < COUNT * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 10;
-    positions[i+1] = (Math.random() - 0.5) * 10;
-    positions[i+2] = (Math.random() - 0.5) * 10;
-
-    velocities[i] = (Math.random() - 0.5) * 0.02;
-    velocities[i+1] = (Math.random() - 0.5) * 0.02;
-    velocities[i+2] = (Math.random() - 0.5) * 0.02;
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-  const material = new THREE.PointsMaterial({
-    color: 0xff1a1a,
-    size: 0.05,
-    transparent: true,
-    opacity: 0.9
-  });
-
-  particles = new THREE.Points(geometry, material);
-  scene.add(particles);
-
-  // LINES
-  const lineGeometry = new THREE.BufferGeometry();
-  const linePositions = new Float32Array(COUNT * COUNT * 3);
-
-  lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-
-  const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0xff0000,
-    transparent: true,
-    opacity: 0.15
-  });
-
-  lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-  scene.add(lines);
-
-  window.addEventListener("resize", onResize);
+  velocities[i] = (Math.random() - 0.5) * 0.02;
+  velocities[i+1] = (Math.random() - 0.5) * 0.02;
+  velocities[i+2] = (Math.random() - 0.5) * 0.02;
 }
 
-function animate() {
+const geo = new THREE.BufferGeometry();
+geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+const mat = new THREE.PointsMaterial({
+  color: 0xff1a1a,
+  size: 0.05,
+  transparent: true,
+  opacity: 0.9
+});
+
+const particles = new THREE.Points(geo, mat);
+scene.add(particles);
+
+const lineGeo = new THREE.BufferGeometry();
+const linePos = new Float32Array(COUNT * COUNT * 3);
+lineGeo.setAttribute("position", new THREE.BufferAttribute(linePos, 3));
+
+const lineMat = new THREE.LineBasicMaterial({
+  color: 0xff0000,
+  transparent: true,
+  opacity: 0.12
+});
+
+const lines = new THREE.LineSegments(lineGeo, lineMat);
+scene.add(lines);
+
+function animate(){
   requestAnimationFrame(animate);
 
-  updateParticles();
-  connectLines();
-
-  particles.rotation.y += 0.001;
-  lines.rotation.y += 0.001;
-
-  renderer.render(scene, camera);
-}
-
-function updateParticles() {
   for (let i = 0; i < COUNT * 3; i += 3) {
     positions[i] += velocities[i];
     positions[i+1] += velocities[i+1];
@@ -519,12 +611,8 @@ function updateParticles() {
   }
 
   particles.geometry.attributes.position.needsUpdate = true;
-}
 
-function connectLines() {
-  const pos = particles.geometry.attributes.position.array;
-  const linePos = lines.geometry.attributes.position.array;
-
+  let pos = particles.geometry.attributes.position.array;
   let index = 0;
 
   for (let i = 0; i < COUNT; i++) {
@@ -550,13 +638,20 @@ function connectLines() {
 
   lines.geometry.setDrawRange(0, index / 3);
   lines.geometry.attributes.position.needsUpdate = true;
+
+  particles.rotation.y += 0.001;
+  lines.rotation.y += 0.001;
+
+  renderer.render(scene, camera);
 }
 
-function onResize() {
+animate();
+
+window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-}
+});
 </script>
 
 </body>
