@@ -378,6 +378,122 @@ footer {
   100% { transform: translateX(-2px); opacity: 1; }
 }
 
+
+/* ── HERO ───────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px 60px;
+  text-align: center;
+  position: relative;
+}
+
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 6px;
+  color: var(--red);
+  margin-bottom: 22px;
+  opacity: 0;
+  animation: fadeUp .7s .1s ease forwards;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(48px, 10vw, 110px);
+  font-weight: 900;
+  line-height: .9;
+  letter-spacing: -3px;
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeUp .7s .2s ease forwards;
+}
+
+.hero-title .dim { color: rgba(255,255,255,0.1); }
+.hero-title .white { color: #fff; }
+.hero-title .red {
+  color: var(--red);
+  text-shadow: 0 0 30px rgba(255,0,0,0.7), 0 0 60px rgba(255,0,0,0.3);
+  animation: redPulse 3s ease-in-out infinite;
+}
+
+@keyframes redPulse {
+  0%,100% { text-shadow: 0 0 30px rgba(255,0,0,.7), 0 0 60px rgba(255,0,0,.3); }
+  50%      { text-shadow: 0 0 60px rgba(255,0,0,1), 0 0 100px rgba(255,0,0,.5); }
+}
+
+.hero-sub {
+  font-family: var(--body);
+  font-size: 16px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin-bottom: 50px;
+  opacity: 0;
+  animation: fadeUp .7s .3s ease forwards;
+}
+
+/* ── HERO ── */
+#home {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 110px 40px 70px;
+  position: relative; text-align: center;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 6px; color: var(--red);
+  margin-bottom: 18px;
+  animation: fadeUp .8s ease both;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(72px, 14vw, 180px);
+  line-height: .9; letter-spacing: 6px;
+  animation: fadeUp .8s .1s ease both;
+}
+.hero-title .dim { color: rgba(255,255,255,.1); }
+.hero-title .bright { color: #fff; }
+.hero-title .glow {
+  color: var(--red);
+  text-shadow: 0 0 30px rgba(255,0,0,.7), 0 0 70px rgba(255,0,0,.3);
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { text-shadow: 0 0 30px rgba(255,0,0,.7), 0 0 70px rgba(255,0,0,.3); }
+  50%      { text-shadow: 0 0 60px rgba(255,0,0,1), 0 0 120px rgba(255,0,0,.5); }
+}
+
+.hero-sub {
+  font-family: var(--body); font-size: 16px;
+  letter-spacing: 3px; color: rgba(255,255,255,.35);
+  margin: 18px 0 48px;
+  animation: fadeUp .8s .2s ease both;
+}
+
+.hero-img-wrap {
+  position: relative; display: inline-block;
+  animation: fadeUp .8s .3s ease both;
+}
+.hero-img-wrap img {
+  width: min(900px,82vw); border-radius: 10px;
+  border: 1px solid rgba(255,0,0,.4); display: block;
+}
+.hero-img-glow {
+  position: absolute; inset: -40px;
+  background: radial-gradient(ellipse, rgba(255,0,0,.15) 0%, transparent 70%);
+  z-index: -1; animation: breathe 4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,100% { opacity:.5; transform:scale(1); }
+  50%      { opacity:1;  transform:scale(1.06); }
+}
+
 </style>
 </head>
 <body>
@@ -418,15 +534,33 @@ footer {
   </ul>
 </nav>
 
-<!-- PAGE HERO -->
-<div class="page-hero">
-  <span class="page-eyebrow">THIRD ACTIVITY</span>
-  <h1 class="page-title">
+
+<!-- HERO SECTION -->
+<section id="home">
+
+  <span class="hero-eyebrow">THIRD ACTIVITY</span>
+
+  <h1 class="hero-title">
     <span class="dim">WEB</span><span class="glow">SITE</span><br>
-    <span style="color:#fff;">PRESENTATION</span>
+    <span class="bright">PRESENTATION</span>
   </h1>
-  <p class="page-sub">TEAMWORK · PLANNING · EXECUTION</p>
-</div>
+
+  <p class="hero-sub">TEAMWORK · PLANNING · EXECUTION</p>
+
+  <div class="hero-img-wrap">
+    <img src="6.png" alt="Team CodeRed">
+    <div class="hero-img-glow"></div>
+
+    <!-- corners (optional effect) -->
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+  </div>
+
+</section>
+
+
 
 <div class="divider"></div>
 
@@ -508,8 +642,6 @@ footer {
 </footer>
 
 <script>
-
-   
 function toggleDrop(event) {
   const dropdown = event.target.closest(".dropdown");
   const menu = document.getElementById("dropMenu");
