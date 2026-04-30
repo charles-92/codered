@@ -1270,6 +1270,144 @@ display: flex;
     transform: translateY(0);
   }
 }
+
+/* NAV BASE */
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+
+  background: linear-gradient(90deg, #000, #0a0a0a);
+  border-bottom: 2px solid #ff0000;
+  box-shadow: 0 0 20px #ff0000;
+}
+
+/* NAV ITEMS */
+.nav-links li {
+  position: relative;
+}
+
+/* LINKS */
+.nav-links a {
+  display: block;
+  padding: 14px 18px;
+  color: #ff3b3b;
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.25s;
+  position: relative;
+}
+
+/* HOVER EFFECT (CODE-RED GLOW) */
+.nav-links a:hover {
+  background: #1a0000;
+  color: #fff;
+  text-shadow: 0 0 10px red;
+  box-shadow: inset 0 0 10px red;
+}
+
+/* ACTIVE PAGE */
+.nav-links a.active {
+  background: red;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 0 15px red;
+}
+
+/* =========================
+   DROPDOWN MENU
+========================= */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  background: #050505;
+  min-width: 45px;
+
+  /* 🔥 SCROLL FEATURE */
+  max-height: 240px;
+  overflow-y: auto;
+
+  border: 1px solid red;
+  box-shadow: 0 0 25px red;
+  z-index: 1000;
+}
+
+/* SHOW DROPDOWN */
+.dropdown.show .dropdown-menu {
+  display: block;
+}
+
+/* DROPDOWN ITEMS */
+.dropdown-menu a {
+  padding: 12px 14px;
+  color: #ff3b3b;
+  display: block;
+  border-bottom: 1px solid #1a0000;
+  transition: 0.2s;
+}
+
+/* hover inside dropdown */
+.dropdown-menu a:hover {
+  background: #300000;
+  color: #fff;
+  text-shadow: 0 0 8px red;
+}
+
+/* =========================
+   SCROLLBAR (RED THEME)
+========================= */
+.dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: red;
+  box-shadow: 0 0 10px red;
+  border-radius: 10px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: black;
+}
+
+/* =========================
+   ARROW ANIMATION
+========================= */
+.arrow {
+  font-size: 12px;
+  margin-left: 5px;
+  transition: 0.3s;
+  color: red;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+/* =========================
+   GLITCH EFFECT (CODE-RED FEEL)
+========================= */
+.nav-links a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: red;
+  animation: glitch 0.25s infinite;
+}
+
+@keyframes glitch {
+  0% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(2px); opacity: 0.7; }
+  100% { transform: translateX(-2px); opacity: 1; }
+}
  
 </style>
 </head>
@@ -1305,15 +1443,13 @@ display: flex;
       <small>TECH CAPSTONE</small>
     </div>
   </a>
-
+  
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Home</a></li>
-    <li><a href="About Us.html">About Us</a></li>
+    <li><a href="index.html" class="active">HOME</a></li>
+    <li><a href="About Us.html">About Us </a></li>
     <li class="dropdown">
-      <a href="javascript:void(0);" class="dropbtn" onclick="toggleDropdown()">
-        Activity <span id="arrow" class="arrow">▼</span>
-      </a>
-      <div id="dropdownMenu" class="dropdown-content">
+      <a class="dropdown-toggle" onclick="toggleDrop(event)">ACTIVITY <span class="arrow" id="arrow">▾</span></a>
+      <div class="dropdown-menu" id="dropMenu">
         <a href="Marshmallow Challenge.html">Marshmallow Challenge</a>
         <a href="Elevator pitch.html">Elevator Pitch</a>
         <a href="Website presentation.html">Website Presentation</a>
@@ -1326,9 +1462,6 @@ display: flex;
     </li>
   </ul>
 </nav>
-
-
-
 
 
 <!-- ─── HERO ─── -->
@@ -1535,8 +1668,8 @@ This reflects TEAM CODE RED'S mindset of being proactive. When problems arise, w
 <!-- ─── CODE PLAYGROUND ─── -->
 <section id="playground" style="background:rgba(255,0,0,0.015);">
   <div class="section reveal">
-    <span class="section-label">CODE EDITOR</span>
-    <h2 class="section-title">Code <span>Playground</span></h2>
+    <span class="section-label">CODE EDITOR taberna</span>
+    <h2 class="section-title">Web-Based School Concern <span>and<span> Reporting System</span></h2>
     <div class="section-line"></div>
 
     <div class="editor-wrap">
@@ -1833,6 +1966,27 @@ bootSystem();
 
 <!-- ─── SCRIPTS ─── -->
 <script>
+
+   
+function toggleDrop(event) {
+  const dropdown = event.target.closest(".dropdown");
+  const menu = document.getElementById("dropMenu");
+  const arrow = document.getElementById("arrow");
+
+  dropdown.classList.toggle("show");
+  menu.classList.toggle("show");
+  arrow.classList.toggle("rotate");
+}
+
+/* close when clicking outside */
+window.onclick = function(e) {
+  if (!e.target.closest(".dropdown")) {
+    document.querySelector(".dropdown").classList.remove("show");
+    document.getElementById("dropMenu").classList.remove("show");
+    document.getElementById("arrow").classList.remove("rotate");
+  }
+}
+
 function toggleDropdown() {
   const menu = document.getElementById("dropdownMenu");
   const arrow = document.getElementById("arrow");
