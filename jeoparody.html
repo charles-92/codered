@@ -392,14 +392,19 @@ footer {
   <img id="lightbox-img" src="" alt="">
 </div>
 
-  
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-circle"><img src="logo.png" alt="Logo"></div>
+    <div class="nav-brand">TEAM CODERED<span>TECH RESEARCH CAPSTONE</span></div>
+  </a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">HOME</a></li>
-    <li><a href="About Us.html">About Us </a></li>
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="About Us.html">ABOUT</a></li>
     <li class="dropdown">
-      <a class="dropdown-toggle" onclick="toggleDrop(event)">ACTIVITY <span class="arrow" id="arrow">▾</span></a>
+      <a class="active" onclick="toggleDrop(event)" style="cursor:pointer;">ACTIVITY <span class="arrow" id="arrow">▾</span></a>
       <div class="dropdown-menu" id="dropMenu">
-        <a href="Marshmallow Challenge.html">Marshmallow Challenge</a>
+        <a href="Marshmallow Challenge.html" style="color:var(--red);">Marshmallow Challenge</a>
         <a href="Elevator pitch.html">Elevator Pitch</a>
         <a href="Website presentation.html">Website Presentation</a>
         <a href="jeoparody.html">Jeopardy</a>
@@ -483,27 +488,6 @@ footer {
 </footer>
 
 <script>
-
-   
-function toggleDrop(event) {
-  const dropdown = event.target.closest(".dropdown");
-  const menu = document.getElementById("dropMenu");
-  const arrow = document.getElementById("arrow");
-
-  dropdown.classList.toggle("show");
-  menu.classList.toggle("show");
-  arrow.classList.toggle("rotate");
-}
-
-/* close when clicking outside */
-window.onclick = function(e) {
-  if (!e.target.closest(".dropdown")) {
-    document.querySelector(".dropdown").classList.remove("show");
-    document.getElementById("dropMenu").classList.remove("show");
-    document.getElementById("arrow").classList.remove("rotate");
-  }
-}
-
 /* CURSOR */
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
