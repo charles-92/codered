@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -607,7 +606,6 @@ footer {
   100% { transform: translateX(-2px); opacity: 1; }
 }
 
-
 </style>
 </head>
 <body>
@@ -624,15 +622,15 @@ footer {
     </div>
     <div class="nav-brand">TEAM CODERED<span>TECH RESEARCH CAPSTONE</span></div>
   </a>
-   
   <ul class="nav-links">
     <li><a href="index.html" class="active">HOME</a></li>
     <li><a href="About Us.html">About Us </a></li>
     <li class="dropdown">
       <a class="dropdown-toggle" onclick="toggleDrop(event)">ACTIVITY <span class="arrow" id="arrow">▾</span></a>
       <div class="dropdown-menu" id="dropMenu">
-        <a href="SRS.html">SRS</a>
         <a href="SDD.HTML">SDD</a>
+        <a href="SRS.html">SRS</a>
+        <a href="SPMP.html">SPMP</a>
       </div>
     </li>
   </ul>
@@ -642,7 +640,7 @@ footer {
 <section id="home">
   <p class="hero-eyebrow">TECHNOLOGY RESEARCH CAPSTONE · 2026</p>
   <h1 class="hero-title">
-     <span class="dim">PRO</span><span class="glow">TOTYPE</span><br>
+     <span class="dim">S</span><span class="glow">DD</span><br>
     <span style="color:#fff;"></span>
   </h1>
   <p class="hero-sub">INNOVATION · RESEARCH · EXECUTION</p>
@@ -663,27 +661,26 @@ footer {
 </section>
 
 <div class="divider"></div>
-
-<!-- RESEARCH REVIEW -->
+<!-- SRS OUTPUT -->
 <section id="research">
   <div class="section reveal">
     <span class="sec-label">OUTPUT</span>
-    <h2 class="sec-title">S<span>DD</span></h2>
+    <h2 class="sec-title">S<span>RS</span></h2>
     <div class="sec-line"></div>
 
-  <!-- OUTPUTS -->
-    <div class="card">CLICK THIS</div>
-  <div class="panel">
-    <div class="panel-content">
-      <div class="pdf-preview" onclick="openPDF('PROTOTYPE.pdf')">
-        <iframe src="37.pdf"></iframe>
+    <div class="card" id="card1" onclick="togglePanel('card1','panel1')">
+      SRS DOCUMENT — CLICK TO VIEW
+      <span class="card-arrow">▾</span>
+    </div>
+    <div class="panel" id="panel1">
+      <div class="panel-content">
+        <div class="pdf-preview" onclick="openPDF('37.pdf')">
+          <iframe src="37.pdf" title="SRS Document"></iframe>
+          <div class="pdf-preview-overlay">CLICK TO OPEN FULLSCREEN</div>
+        </div>
       </div>
     </div>
   </div>
-
-</div>
-
-</div>
 </section>
 
 <div class="divider"></div>
@@ -748,24 +745,49 @@ footer {
 </footer>
 
 <script>
- 
-function toggleDrop(event) {
-  const dropdown = event.target.closest(".dropdown");
-  const menu = document.getElementById("dropMenu");
-  const arrow = document.getElementById("arrow");
 
-  dropdown.classList.toggle("show");
-  menu.classList.toggle("show");
-  arrow.classList.toggle("rotate");
+ function toggleMenu() {
+  document.getElementById("dropdownMenu").classList.toggle("show");
+  document.getElementById("arrow").classList.toggle("rotate");
 }
 
-/* close when clicking outside */
 window.onclick = function(e) {
-  if (!e.target.closest(".dropdown")) {
-    document.querySelector(".dropdown").classList.remove("show");
-    document.getElementById("dropMenu").classList.remove("show");
+  if (!e.target.closest('.dropdown')) {
+    document.getElementById("dropdownMenu").classList.remove("show");
     document.getElementById("arrow").classList.remove("rotate");
   }
+};
+
+const cards = document.querySelectorAll(".card");
+
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    const panel = card.nextElementSibling;
+
+    document.querySelectorAll(".panel").forEach(p => {
+      if (p !== panel) p.style.maxHeight = null;
+    });
+
+    panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+  });
+});
+
+function openViewer(img){
+  document.getElementById("viewer").style.display = "flex";
+  document.getElementById("viewer-img").src = img.src;
+}
+
+function closeViewer(){
+  document.getElementById("viewer").style.display = "none";
+}
+
+function openPDF(file){
+  document.getElementById("pdfViewer").style.display = "block";
+  document.getElementById("pdfFrame").src = file;
+}
+
+function closePDF(){
+  document.getElementById("pdfViewer").style.display = "none";
 }
 
 /* ── CURSOR ── */
