@@ -260,7 +260,7 @@ footer {
 /* LINKS */
 .nav-links a {
   display: block;
-  padding: 14px 18px;
+  padding: 25px 25px;
   color: #ff3b3b;
   text-decoration: none;
   letter-spacing: 1px;
@@ -295,7 +295,7 @@ footer {
   left: 0;
 
   background: #050505;
-  min-width: 45px;
+  min-width: 55px;
 
   /* 🔥 SCROLL FEATURE */
   max-height: 240px;
@@ -303,7 +303,7 @@ footer {
 
   border: 1px solid red;
   box-shadow: 0 0 25px red;
-  z-index: 1000;
+  z-index: 2000;
 }
 
 /* SHOW DROPDOWN */
@@ -348,7 +348,7 @@ footer {
    ARROW ANIMATION
 ========================= */
 .arrow {
-  font-size: 12px;
+  font-size: 19px;
   margin-left: 5px;
   transition: 0.3s;
   color: red;
@@ -424,7 +424,7 @@ footer {
   animation: fadeUp .8s .3s ease both;
 }
 .hero-img-wrap img {
-  width: min(900px,82vw); border-radius: 10px;
+  width: min(1100px,82vw); border-radius: 10px;
   border: 1px solid rgba(255,0,0,.4); display: block;
 }
 .hero-img-glow {
@@ -436,6 +436,125 @@ footer {
   0%,100% { opacity:.5; transform:scale(1); }
   50%      { opacity:1;  transform:scale(1.06); }
 }
+
+/* ─── GALLERY / FIRST ACTIVITY ─────────────────────────────── */
+#activity {
+  background: rgba(255,0,0,0.02);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 24px;
+  margin-top: 10px;
+}
+
+.project-card {
+  background: rgba(10,0,0,0.92);
+  border: 1px solid rgba(255,0,0,0.15);
+  border-radius: 15px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255,0,0,0.45);
+  box-shadow: 0 12px 28px rgba(255,0,0,0.18);
+}
+
+.project-img {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-bottom: 2px solid rgba(255,0,0,0.5);
+  background: #111;
+}
+
+.project-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.project-card:hover .project-img img {
+  transform: scale(1.08);
+  filter: brightness(1.1);
+}
+
+.project-body { padding: 16px; }
+
+.project-tag {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--red2);
+  border: 1px solid rgba(255,0,0,0.3);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  letter-spacing: 1px;
+}
+
+.project-title {
+  font-family: var(--display);
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.project-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  font-family: var(--body);
+}
+
+.project-link {
+  font-size: 10px;
+  color: var(--red2);
+  text-decoration: none;
+  font-family: var(--mono);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.project-link:hover { color: #fff; }
+
+/* ─── MARSHMALLOW SECTION ──────────────────────────────────── */
+.marshmallow-block {
+  margin-top: 60px;
+  padding: 40px;
+  background: rgba(255,0,0,0.04);
+  border: 1px solid rgba(255,0,0,0.15);
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.marshmallow-block .quote-big {
+  font-family: var(--display);
+  font-size: clamp(18px, 2.5vw, 26px);
+  color: var(--red);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 14px rgba(255,0,0,0.4);
+}
+
+.marshmallow-block p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--body);
+  margin-bottom: 24px;
+}
+
 
 </style>
 </head>
@@ -511,15 +630,55 @@ footer {
   <h2 class="sec-title">DOCUM<span>ENTATION</span></h2>
   <div class="sec-line"></div>
 
-  <div class="gallery-grid">
-    <div class="gallery-item" onclick="openLB('2.jpg')"><img src="2.jpg" alt="Activity 1"></div>
-    <div class="gallery-item" onclick="openLB('3.jpg')"><img src="3.jpg" alt="Activity 2"></div>
-    <div class="gallery-item" onclick="openLB('4.jpg')"><img src="4.jpg" alt="Activity 3"></div>
-    <div class="gallery-item" onclick="openLB('1.jpg')"><img src="1.jpg" alt="Activity 4"></div>
-    <div class="gallery-item" onclick="openLB('8.jpg')"><img src="8.jpg" alt="Activity 5"></div>
-  </div>
-</div>
+  
+<div class="divider"></div>
+<section>
+  <!-- ─── FIRST ACTIVITY ───────────────────────────────────────── -->
+  <div id="activity">
+  <div class="section reveal">
+    <span class="section-label">ACTIVITY 01</span>
+    <h2 class="section-title">FIRST <span>ACTIVITY</span></h2>
+    <div class="section-line"></div>
 
+    <!-- Gallery grid -->
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-img"><img src="12.jpg" alt="Activity Photo 1"></div>
+        <div class="project-body">
+          <span class="project-tag">CHALLENGE</span>
+          <div class="project-title">MARSHMALLOW CHALLENGE</div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-img"><img src="13.jpg" alt="Activity Photo 2"></div>
+        <div class="project-body">
+          <span class="project-tag">TEAMWORK</span>
+          <div class="project-title">BUILDING TOGETHER</div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-img"><img src="14.jpg" alt="Activity Photo 3"></div>
+        <div class="project-body">
+          <span class="project-tag">CREATIVITY</span>
+          <div class="project-title">STRUCTURE DESIGN</div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-img"><img src="15.jpg" alt="Activity Photo 4"></div>
+        <div class="project-body">
+          <span class="project-tag">ENGINEERING</span>
+          <div class="project-title">RAPID PROTOTYPING</div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-img"><img src="17.jpg" alt="Activity Photo 5"></div>
+        <div class="project-body">
+          <span class="project-tag">RESULTS</span>
+          <div class="project-title">FINAL OUTCOME</div>
+        </div>
+      </div>
+    </div>
+</section>
 <div class="divider"></div>
 
 <div class="divider"></div>
