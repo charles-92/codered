@@ -6,1270 +6,357 @@
 <title>TEAM CODE-RED</title>
 <link rel="icon" href="logo.png" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-/* ─── RESET & BASE ─────────────────────────────────────────── */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --red: #ff0000;
-  --red2: #ff0000;
-  --red3: #cc0000;
-  --dark: #080000;
-  --dark2: #120000;
-  --mono: 'Share Tech Mono', monospace;
-  --display: 'Orbitron', monospace;
-  --body: 'Rajdhani', sans-serif;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--dark);
-  color: #fff;
-  font-family: var(--body);
-  overflow-x: hidden;
-  cursor: none;
-}
-
-/* ─── CUSTOM CURSOR ────────────────────────────────────────── */
-.cursor {
-  position: fixed;
-  width: 12px; height: 12px;
-  background: var(--red);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s, width 0.2s, height 0.2s;
-  mix-blend-mode: screen;
-}
-.cursor-ring {
-  position: fixed;
-  width: 36px; height: 36px;
-  border: 1px solid rgba(255,0,0,0.5);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s, width 0.3s, height 0.3s;
-}
-
-/* ─── MATRIX CANVAS ────────────────────────────────────────── */
-#matrixCanvas {
-  position: fixed;
-  top: 0; left: 0;
-  z-index: -1;
-  opacity: 0.18;
-}
-
-/* ─── SCANLINES ────────────────────────────────────────────── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.08) 2px,
-    rgba(0,0,0,0.08) 4px
-  );
-  pointer-events: none;
-  z-index: 9990;
-}
-/* ── NAVBAR ─────────────────────────────────── */
-nav.topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  background: rgba(4,0,0,0.94);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
-
-.nav-logo-ring {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--red);
-  background: #fff;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  box-shadow: 0 0 14px var(--red-glow);
-}
-
-.nav-logo-ring img {
-  width: 115%; height: 115%;
-  object-fit: contain;
-}
-
-.nav-brand-text {
-  font-family: var(--display);
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  color: #fff;
-  line-height: 1.1;
-}
-
-.nav-brand-text small {
-  display: block;
-  font-size: 8px;
-  color: var(--red);
-  letter-spacing: 4px;
-  font-weight: 400;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2px;
-  list-style: none;
-}
-
-.nav-links a {
-  font-family: var(--mono);
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-decoration: none;
-  padding: 7px 14px;
-  border-radius: 3px;
-  transition: color .2s, background .2s;
-  position: relative;
-}
-
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: 2px; left: 14px; right: 14px;
-  height: 1px;
-  background: var(--red);
-  transform: scaleX(0);
-  transition: transform .2s;
-}
-
-.nav-links a:hover { color: #fff; }
-.nav-links a:hover::after { transform: scaleX(1); }
-.nav-links a.active { color: var(--red); background: var(--surface); }
-
-
-/* Hamburger */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 6px;
-}
-
-.hamburger span {
-  display: block;
-  width: 24px; height: 2px;
-  background: var(--red);
-  transition: all 0.3s;
-}
-
-.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* ─── TOP NAV ───────────────────────────── */
-.topnav {
-  background: rgba(5, 0, 0, 0.95);
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-
-  /* ADD THIS ↓ */
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-/* LINKS */
-.topnav a {
-  color: rgba(255,255,255,0.75);
-  text-decoration: none;
-  padding: 12px 16px;
-  font-family: 'Share Tech Mono', monospace;
-  letter-spacing: 2px;
-  font-size: 13px;
-  position: relative;
-  transition: 0.3s;
-}
-
-.topnav a:hover {
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255,0,0,0.4);
-}
-
-/* ACTIVE */
-.topnav a.active {
-  color: red;
-  text-shadow: 0 0 10px red;
-}
-
-/* ─── DROPDOWN ───────────────────────────── */
-.dropdown {
-  position: relative;
-}
-
-.dropbtn {
-  cursor: pointer;
-}
-
-/* MENU */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 45px;
-  background: rgba(10,0,0,0.98);
-  min-width: 30px;
-  border: 1px solid rgba(255,0,0,0.3);
-  box-shadow: 0 0 20px rgba(255,0,0,0.2);
-  flex-direction: column;
-  z-index: 999;
-}
-
-/* SHOW */
-.dropdown-content.show {
-  display: flex;
-}
-
-/* DROPDOWN LINKS */
-.dropdown-content a {
-  padding: 12px 14px;
-  color: rgba(255,255,255,0.7);
-  text-decoration: none;
-  font-size: 12px;
-  border-left: 2px solid transparent;
-  transition: 0.25s;
-}
-
-.dropdown-content a:hover {
-  background: rgba(255,0,0,0.08);
-  border-left: 2px solid red;
-  color: #fff;
-  padding-left: 20px;
-}
-
-/* ARROW */
-.arrow {
-  display: inline-block;
-  transition: 0.3s;
-}
-
-.arrow.rotate {
-  transform: rotate(180deg);
-}
-
-/* ─── RESPONSIVE ─────────────────────────── */
-@media (max-width: 768px) {
-  .topnav {
-    flex-wrap: wrap;
-  }
-
-  .dropdown-content {
-    position: static;
-    width: 100%;
-  }
-}
-
-/* ─── HERO ─────────────────────────────────────────────────── */
-#home {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100px 40px 60px;
-  position: relative;
-  text-align: center;
-}
-
-.hero-eyebrow {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 5px;
-  color: var(--red2);
-  margin-bottom: 20px;
-  animation: fadeUp 0.8s ease both;
-}
-
-.hero-title {
-  font-family: var(--display);
-  font-size: clamp(80px, 60vw, 200px);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -2px;
-  margin-bottom: 6px;
-  animation: fadeUp 0.8s 0.1s ease both;
-}
-
-.hero-title .team { color: rgba(255,255,255,0.15); }
-.hero-title .code { color: #fff; }
-
-.hero-title .red-word {
-  color: var(--red);
-  text-shadow:
-    0 0 20px rgba(255,0,0,0.6),
-    0 0 40px rgba(255,0,0,0.3);
-  animation: redPulse 3s ease-in-out infinite;
-}
-
-@keyframes redPulse {
-  0%, 100% { text-shadow: 0 0 20px rgba(255,0,0,0.6), 0 0 40px rgba(255,0,0,0.3); }
-  50% { text-shadow: 0 0 40px rgba(255,0,0,0.9), 0 0 80px rgba(255,0,0,0.5), 0 0 120px rgba(255,0,0,0.2); }
-}
-
-.hero-sub {
-  font-family: var(--body);
-  font-size: clamp(14px, 2vw, 18px);
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 1px;
-  margin-bottom: 50px;
-  animation: fadeUp 0.8s 0.2s ease both;
-}
-
-.hero-img-wrap {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 50px;
-  animation: fadeUp 0.8s 0.3s ease both;
-}
-
-.hero-img-wrap img {
-  width: min(1200px, 85vw);
-  height: auto;
-  border-radius: 12px;
-  border: 1px solid rgba(255,0,0,0.4);
-  display: block;
-}
-
-.hero-img-wrap::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--red), transparent, var(--red));
-  z-index: -1;
-  opacity: 0.5;
-  animation: rotateBorder 4s linear infinite;
-}
-
-@keyframes rotateBorder {
-  0% { background: linear-gradient(0deg, var(--red), transparent, var(--red3)); }
-  100% { background: linear-gradient(360deg, var(--red), transparent, var(--red3)); }
-}
-
-.hero-img-glow {
-  position: absolute;
-  inset: -30px;
-  background: radial-gradient(ellipse, rgba(255,0,0,0.15) 0%, transparent 70%);
-  border-radius: 50%;
-  z-index: -2;
-  animation: breathe 4s ease-in-out infinite;
-}
-
-@keyframes breathe {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); }
-}
-
-.hero-btns {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fadeUp 0.8s 0.4s ease both;
-}
-
-.btn-primary {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #000;
-  background: var(--red);
-  border: 2px solid var(--red);
-  padding: 14px 32px;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.25s;
-  display: inline-block;
-}
-
-.btn-primary:hover {
-  background: #ff3333;
-  box-shadow: 0 0 30px rgba(255,0,0,0.6);
-  letter-spacing: 3px;
-}
-
-.btn-outline {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #fff;
-  background: transparent;
-  border: 2px solid rgba(255,255,255,0.2);
-  padding: 14px 32px;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.25s;
-  display: inline-block;
-}
-
-.btn-outline:hover {
-  border-color: var(--red);
-  color: var(--red);
-  box-shadow: 0 0 20px rgba(255,0,0,0.2);
-  letter-spacing: 3px;
-}
-
-/* Scroll indicator */
-.scroll-hint {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  opacity: 0.4;
-  animation: bounce 2s ease-in-out infinite;
-}
-
-.scroll-hint span {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: var(--red2);
-}
-
-.scroll-hint::after {
-  content: '';
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, var(--red), transparent);
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
-}
-
-/* ─── SECTION BASE ─────────────────────────────────────────── */
-.section {
-  padding: 100px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 5px;
-  color: var(--red2);
-  margin-bottom: 12px;
-  display: block;
-}
-
-.section-title {
-  font-family: var(--display);
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 16px;
-  color: #fff;
-}
-
-.section-title span { color: var(--red); }
-
-.section-line {
-  width: 60px;
-  height: 2px;
-  background: var(--red);
-  margin-bottom: 50px;
-  box-shadow: 0 0 8px rgba(255,0,0,0.6);
-}
-
-/* Section divider */
-.divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,0,0,0.3), transparent);
-  margin: 0;
-}
-
-/* ─── ABOUT ────────────────────────────────────────────────── */
-#about .about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-}
-
-#about .about-text p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 16px;
-  font-family: var(--body);
-}
-
-#about .about-text p strong {
-  color: var(--red2);
-  font-weight: 600;
-}
-
-.about-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.stat-card {
-  background: rgba(255,0,0,0.04);
-  border: 1px solid rgba(255,0,0,0.15);
-  border-radius: 8px;
-  padding: 24px;
-  text-align: center;
-  transition: all 0.3s;
-}
-
-.stat-card:hover {
-  background: rgba(255,0,0,0.08);
-  border-color: rgba(255,0,0,0.4);
-  box-shadow: 0 0 20px rgba(255,0,0,0.1);
-}
-
-.stat-number {
-  font-family: var(--display);
-  font-size: 36px;
-  font-weight: 900;
-  color: var(--red);
-  display: block;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.stat-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.4);
-  text-transform: uppercase;
-}
-
-.team-single {
-  padding: 100px 20px;
-  background: rgba(255, 0, 0, 0.03);
-  text-align: center;
-}
-
-.team-overlay {
-  max-width: 1000px;
-  margin: auto;
-}
-
-.team-image-box {
-  margin-top: 30px;
-}
-
-.team-image-box img {
-  width: 100%;
-  max-width: 1100px;
-  border-radius: 20px;
-  border: 2px solid red;
-  box-shadow: 0 0 25px rgba(255,0,0,0.5);
-}
-
-.team-desc {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #fff;
-  opacity: 0.9;
-}
-
-.section-label {
-  color: red;
-  font-size: 14px;
-  letter-spacing: 2px;
-}
-
-.section-title {
-  font-size: 40px;
-  color: white;
-}
-
-.section-title span {
-  color: red;
-}
-
-.section-line {
-  width: 80px;
-  height: 3px;
-  background: red;
-  margin: 10px auto;
-}
-
-/* ─── PROJECTS / GALLERY COMBINED ─────────────────────────── */
-/* ─── PROJECTS / GALLERY FULL CSS (NORMAL PHOTO FIT) ───────────────── */
-
-/* GRID LAYOUT */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
-}
-
-/* CARD */
-.project-card {
-  background: rgba(10, 0, 0, 0.92);
-  border: 1px solid rgba(255, 0, 0, 0.12);
-  border-radius: 18px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-}
-
-.project-card:hover {
-  border-color: rgba(255, 0, 80, 0.4);
-  transform: translateY(-8px);
-  box-shadow: 0 18px 34px rgba(255, 0, 60, 0.25);
-}
-
-/* ─── IMAGE CONTAINER ─────────────────────────────────────── */
-.project-img,
-.project-img.gallery-card {
-  width: 100%;
-  height: 220px;
-  overflow: hidden;
-  border-radius: 18px 18px 0 0;
-  background: #111;
-  position: relative;
-  border-bottom: 2px solid red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* NORMAL IMAGE DISPLAY */
-.project-img img,
-.project-img.gallery-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* full image visible */
-  padding: 8px;
-  background: #111;
-  transition: filter 0.4s ease;
-}
-
-/* REMOVE ZOOM, KEEP CLEAN */
-.project-card:hover .project-img img,
-.project-card:hover .project-img.gallery-card img {
-  transform: none;
-  filter: brightness(1.05);
-}
-
-/* SUBTLE FRAME */
-.project-img::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  pointer-events: none;
-}
-
-/* ─── BODY ────────────────────────────────────────────────── */
-/* ─── DARK CYBER GALLERY CARD (CB-STYLE LAYOUT, ORIGINAL COLORS) ─── */
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 24px;
-  justify-items: center;
-}
-
-/* CARD */
-.project-card {
-  width: 230px;
-  background: rgba(10, 0, 0, 0.92);
-  border: 1px solid rgba(255, 0, 0, 0.15);
-  border-radius: 15px;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  transition: 0.3s ease;
-}
-
-/* HOVER */
-.project-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(255, 0, 0, 0.4);
-  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.15);
-}
-
-/* IMAGE */
-.project-img {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-bottom: 2px solid red;
-  background: #111;
-}
-
-.project-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-/* IMAGE HOVER */
-.project-card:hover .project-img img {
-  transform: scale(1.08);
-}
-
-/* TEXT AREA */
-.project-body {
-  padding: 15px;
-}
-
-/* TAG */
-.project-tag {
-  display: inline-block;
-  font-size: 10px;
-  color: var(--red2);
-  border: 1px solid rgba(255, 0, 0, 0.3);
-  padding: 3px 10px;
-  border-radius: 20px;
-  margin-bottom: 10px;
-  font-family: var(--mono);
-  letter-spacing: 1px;
-}
-
-/* TITLE */
-.project-title {
-  font-size: 16px;
-  color: #fff;
-  margin-bottom: 10px;
-  font-family: var(--display);
-}
-
-/* DESCRIPTION */
-.project-desc {
-  font-size: 13px;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.6;
-  margin-bottom: 15px;
-  font-family: var(--body);
-}
-
-/* LINK */
-.project-link {
-  font-size: 10px;
-  color: var(--red2);
-  text-decoration: none;
-  font-family: var(--mono);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.project-link:hover {
-  color: #fff;
-}
-/* ─── SECTION HEADER ──────────────────────────────────────── */
-.section-label {
-  color: #ff0000;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.section-title {
-  font-size: 2rem;
-  color: #fff;
-  margin: 10px 0;
-}
-
-.section-title span {
-  color: #ff0000;
-}
-
-.section-line {
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(to right, #ff2e63, transparent);
-  margin-top: 10px;
-  border-radius: 10px;
-}
-
-/* ─── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .project-img {
-    height: 200px;
-  }
-
-  .section-title {
-    font-size: 1.8rem;
-  }
-}
-
-/* ─── CODE EDITOR ──────────────────────────────────────────── */
-#playground {
-  background: rgba(255,0,0,0.02);
-}
-
-.editor-wrap {
-  background: rgba(5,0,0,0.95);
-  border: 1px solid rgba(255,0,0,0.25);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 60px rgba(255,0,0,0.06);
-}
-
-.editor-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: rgba(255,0,0,0.05);
-  border-bottom: 1px solid rgba(255,0,0,0.15);
-}
-
-.editor-dot {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-}
-
-.editor-dot.r { background: var(--red); }
-.editor-dot.y { background: #ffd600; }
-.editor-dot.g { background: #00d26a; }
-
-.editor-filename {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: rgba(255,255,255,0.3);
-  margin-left: 8px;
-  letter-spacing: 1px;
-}
-
-.editor-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.editor-pane {
-  padding: 20px;
-}
-
-.editor-pane:first-child {
-  border-right: 1px solid rgba(255,0,0,0.1);
-}
-
-.editor-pane label {
-  display: block;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: var(--red2);
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-
-.editor-pane textarea {
-  width: 100%;
-  height: 220px;
-  background: transparent;
-  color: #fe0808;
-  border: none;
-  outline: none;
-  font-family: var(--mono);
-  font-size: 13px;
-  line-height: 1.6;
-  resize: vertical;
-  caret-color: var(--red);
-}
-
-.editor-pane iframe {
-  width: 100%;
-  height: 220px;
-  border: none;
-  background: #fff;
-  border-radius: 6px;
-}
-
-.editor-footer {
-  padding: 14px 20px;
-  border-top: 1px solid rgba(255,0,0,0.1);
-  display: flex;
-  gap: 12px;
-}
-
-.run-btn {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #000;
-  background: var(--red);
-  border: none;
-  padding: 10px 24px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.run-btn:hover {
-  background: #f00606;
-  box-shadow: 0 0 20px rgba(255,0,0,0.5);
-}
-
-.clear-btn {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 10px 24px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.clear-btn:hover {
-  border-color: rgba(255,0,0,0.3);
-  color: var(--red2);
-}
-
-/* ─── CONTACT ──────────────────────────────────────────────── */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: start;
-}
-
-.contact-info p {
-  font-size: 15px;
-  line-height: 1.8;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 30px;
-  font-family: var(--body);
-}
-
-.contact-links {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.contact-link {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  text-decoration: none;
-  color: rgba(255,255,255,0.6);
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 1px;
-  padding: 14px 18px;
-  border: 1px solid rgba(255,0,0,0.1);
-  border-radius: 6px;
-  transition: all 0.25s;
-}
-
-.contact-link:hover {
-  color: #fff;
-  border-color: rgba(255, 0, 0, 0.914);
-  background: rgba(255,0,0,0.05);
-  padding-left: 24px;
-}
-
-.contact-link-icon {
-  font-size: 18px;
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-group label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--red2);
-  text-transform: uppercase;
-}
-
-.form-group input,
-.form-group textarea {
-  background: rgba(255,0,0,0.03);
-  border: 1px solid rgba(255,0,0,0.15);
-  border-radius: 6px;
-  color: #fff;
-  font-family: var(--mono);
-  font-size: 13px;
-  padding: 12px 16px;
-  outline: none;
-  transition: border-color 0.2s;
-  width: 100%;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: rgba(255, 0, 0, 0.896);
-  background: rgba(255,0,0,0.05);
-}
-
-.form-group textarea {
-  height: 120px;
-  resize: vertical;
-}
-
-/* ─── FOOTER ───────────────────────────────────────────────── */
-footer {
-  border-top: 1px solid rgba(255, 0, 0, 0.941);
-  padding: 40px;
-  text-align: center;
-  background: rgba(0,0,0,0.6);
-}
-
-.footer-logo {
-  font-family: var(--display);
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--red);
-  letter-spacing: 4px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px rgba(255, 5, 5, 0.977);
-}
-
-.footer-sub {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: rgba(255,255,255,0.2);
-  margin-bottom: 24px;
-}
-
-.footer-links {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.3);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover { color: var(--red2); }
-
-.footer-copy {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: rgba(255,255,255,0.15);
-  letter-spacing: 1px;
-}
-
-/* ─── ANIMATIONS ───────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ─── RESPONSIVE ───────────────────────────────────────────── */
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-
-  #home { padding: 100px 20px 60px; }
-  .section { padding: 70px 20px; }
-
-  #about .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .about-stats { grid-template-columns: 1fr 1fr; }
-
-  .editor-body { grid-template-columns: 1fr; }
-  .editor-pane:first-child { border-right: none; border-bottom: 1px solid rgba(255,0,0,0.1); }
-
-  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-
-  footer { padding: 30px 20px; }
-}
-
-@media (max-width: 480px) {
-  .about-stats { grid-template-columns: 1fr; }
-  .hero-btns { flex-direction: column; align-items: center; }
-}
-
-.padrogani{
-display: flex;
-  justify-content: center;       /* Center horizontally */
-  padding: 2em;
-  margin: 2em auto;
-
-}
-
-.padrogani-content{
-  display: flex;                  /* Side by side */
-  align-items: 1px;            /* Vertically center text */
-  justify-content: center;        /* Center horizontally */
-  gap: 20px;                      /* Space between image and text */
-  padding: 20px;
-  border: 2px solid red;          /* Border around the container */
-  border-radius: 15px;
-  background-image: url("8.png");
-  background-position: center;
-  max-width: 90000px;
-  margin: 2em auto;               /* Center on page */
-}
-
-.padrogani-content img{
-  width: 200px;
-  border-radius: 15px;
-  border: 3px solid red;
-}
-
-.padrogani-text{
-  text-align: left;
-}
-
-.padrogani-text h3{
-  color: white ;
-}
-
-/* Container style */
-.f {
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 30px 35px;
-  border-radius: 20px;
-
-  /* Gradient background (Code Red theme 🔴) */
-  background: linear-gradient(135deg, #000, #ff0000);
-
-  box-shadow: 0 10px 25px rgb(255, 252, 252);
-  text-align: center;
-  font-family: Arial, sans-serif;
-
-  transition: 0.3s;
-}
-
-/* Hover effect */
-.f:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-}
-
-/* Title */
-.f h2 {
-  font-size: 28px;
-  color: #ff0000;
-  margin-bottom: 15px;
-  letter-spacing: 1.5px;
-}
-
-/* Motto quote */
-.f .quote {
-  font-size: 24px;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 20px;
-  font-style: italic;
-
-  /* Highlight effect */
-  background: rgba(192, 57, 43, 0.1);
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* Description text */
-.f p {
-  font-size: 19px;
-  color: #fff;
-  line-height: 1.8;
-}
-
-/* Accent line */
-.f::before {
-  content: "";
-  display: block;
-  width: 70px;
-  height: 5px;
-  background: #ff0000;
-  margin: 0 auto 20px;
-  border-radius: 5px;
-}
-
-/* Optional subtle animation */
-.f {
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#ff0000;--red2:#ff2222;--red3:#cc0000;
+  --dark:#050000;
+  --mono:'Share Tech Mono',monospace;
+  --display:'Orbitron',monospace;
+  --body:'Rajdhani',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:#fff;font-family:var(--body);overflow-x:hidden;cursor:none;}
+
+#video-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3;overflow:hidden;pointer-events:none;}
+#bg-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;}
+#video-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.76);z-index:1;}
+
+#matrixCanvas{position:fixed;top:0;left:0;z-index:-2;opacity:0.1;pointer-events:none;}
+
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);pointer-events:none;z-index:9990;}
+
+.cursor{position:fixed;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s;mix-blend-mode:screen;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,0,0,0.6);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .1s;}
+
+#arrowmode-indicator{position:fixed;bottom:60px;right:20px;background:rgba(5,0,0,0.9);border:1px solid rgba(255,0,0,0.5);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:10px;color:var(--red2);letter-spacing:1px;z-index:9996;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;line-height:1.6;}
+#arrowmode-indicator.show{opacity:1;}
+#arrowmode-indicator .kbd{display:inline-block;background:rgba(255,0,0,0.15);border:1px solid rgba(255,0,0,0.4);border-radius:3px;padding:1px 5px;font-size:9px;margin:0 2px;}
+
+#visitor-hud{position:fixed;top:70px;right:16px;z-index:9997;background:rgba(3,0,0,0.93);border:1px solid rgba(255,0,0,0.35);border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:10px;color:rgba(255,80,80,0.85);min-width:220px;max-width:260px;backdrop-filter:blur(12px);transform:translateX(280px);transition:transform .4s cubic-bezier(.4,0,.2,1);line-height:1.8;}
+#visitor-hud.visible{transform:translateX(0);}
+#visitor-hud .hud-title{font-size:9px;letter-spacing:4px;color:var(--red);margin-bottom:10px;border-bottom:1px solid rgba(255,0,0,0.2);padding-bottom:6px;display:flex;align-items:center;gap:6px;}
+#visitor-hud .hud-title::before{content:'';width:6px;height:6px;background:var(--red);border-radius:50%;display:inline-block;animation:pulse-dot 1s ease-in-out infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,0,0,.6);}50%{opacity:.6;box-shadow:0 0 0 4px rgba(255,0,0,0);}}
+#visitor-hud .hud-row{display:flex;justify-content:space-between;gap:8px;margin:2px 0;}
+#visitor-hud .hud-key{color:rgba(255,255,255,.35);font-size:9px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+#visitor-hud .hud-val{color:rgba(255,130,130,.9);font-size:10px;text-align:right;word-break:break-all;}
+#visitor-hud .hud-cursor{margin-top:10px;border-top:1px solid rgba(255,0,0,0.15);padding-top:8px;}
+#hud-toggle{position:fixed;top:70px;right:16px;z-index:9998;background:rgba(3,0,0,0.92);border:1px solid rgba(255,0,0,0.4);border-radius:6px;padding:7px 12px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--red2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+#hud-toggle:hover{background:rgba(255,0,0,.1);color:#fff;}
+#hud-toggle .dot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse-dot 1s infinite;}
+
+.beat-el{transition:box-shadow .06s ease-out,border-color .06s ease-out,transform .06s ease-out;}
+.beat-el.bang{box-shadow:0 0 20px 6px rgba(255,0,0,0.95),0 0 50px 14px rgba(255,0,0,0.5),inset 0 0 20px rgba(255,0,0,0.4)!important;border-color:rgba(255,100,100,1)!important;}
+.beat-title.bang{text-shadow:0 0 30px #f00,0 0 70px rgba(255,0,0,0.8),0 0 120px rgba(255,0,0,0.4)!important;transform:scale(1.018)!important;}
+.beat-line.bang{width:130px!important;box-shadow:0 0 28px rgba(255,0,0,1),0 0 56px rgba(255,0,0,0.6)!important;}
+.beat-divider.bang{background:linear-gradient(90deg,transparent,rgba(255,30,30,0.95),transparent)!important;height:2px!important;}
+.beat-nav.bang{border-bottom-color:rgba(255,60,60,1)!important;box-shadow:0 3px 35px rgba(255,0,0,0.55)!important;}
+.beat-footer.bang{border-top-color:rgba(255,60,60,1)!important;box-shadow:0 -4px 35px rgba(255,0,0,0.45)!important;}
+
+#beat-bar{position:fixed;bottom:0;left:0;right:0;height:4px;z-index:9995;display:flex;gap:2px;pointer-events:none;}
+.bseg{flex:1;height:4px;background:rgba(255,0,0,0.12);border-radius:2px;transition:background .05s,height .05s;}
+.bseg.lit{background:rgba(255,0,0,1);box-shadow:0 0 8px rgba(255,0,0,0.9);}
+
+nav.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(3,0,0,0.92);border-bottom:1px solid rgba(255,0,0,0.35);backdrop-filter:blur(16px);}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo-ring{width:40px;height:40px;border-radius:50%;border:2px solid var(--red);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.nav-logo-ring img{width:115%;height:115%;object-fit:contain;}
+.nav-brand-text{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:3px;color:#fff;line-height:1.1;}
+.nav-brand-text small{display:block;font-size:8px;color:var(--red);letter-spacing:4px;font-weight:400;}
+.nav-links{list-style:none;margin:0;padding:0;display:flex;gap:2px;}
+.nav-links a{font-family:var(--mono);font-size:13px;letter-spacing:2px;color:rgba(255,80,80,0.85);text-decoration:none;padding:7px 14px;border-radius:3px;transition:color .2s;position:relative;display:block;text-transform:uppercase;}
+.nav-links a::after{content:'';position:absolute;bottom:2px;left:14px;right:14px;height:1px;background:var(--red);transform:scaleX(0);transition:transform .2s;}
+.nav-links a:hover{color:#fff;}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-links a.active{color:var(--red);background:rgba(255,0,0,0.08);}
+
+.dropdown{position:relative;}
+.dropdown-menu{display:none;position:absolute;top:46px;left:0;background:rgba(5,0,0,0.98);min-width:210px;max-height:320px;overflow-y:auto;border:1px solid rgba(255,0,0,0.4);box-shadow:0 0 30px rgba(255,0,0,0.25);z-index:999;border-radius:4px;}
+.dropdown.show .dropdown-menu{display:block;}
+.dropdown-menu a{padding:11px 14px;color:rgba(255,90,90,0.85);display:block;border-bottom:1px solid rgba(255,0,0,0.08);border-left:2px solid transparent;font-family:var(--mono);font-size:11px;letter-spacing:1px;text-decoration:none;transition:.2s;}
+.dropdown-menu a:hover{background:rgba(255,0,0,0.1);border-left-color:red;color:#fff;padding-left:20px;}
+.dropdown-menu::-webkit-scrollbar{width:5px;}
+.dropdown-menu::-webkit-scrollbar-thumb{background:red;border-radius:10px;}
+.dropdown-menu::-webkit-scrollbar-track{background:#000;}
+.arrow{font-size:12px;margin-left:5px;transition:.3s;color:red;display:inline-block;}
+.arrow.rotate{transform:rotate(180deg);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--red);transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+#home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 40px 60px;position:relative;text-align:center;}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:5px;color:var(--red2);margin-bottom:20px;animation:fadeUp .8s ease both;}
+.hero-title{font-family:var(--display);font-size:clamp(72px,16vw,190px);font-weight:900;line-height:.95;letter-spacing:-2px;margin-bottom:6px;animation:fadeUp .8s .1s ease both;}
+.hero-title .team{color:rgba(255,255,255,0.13);}
+.hero-title .code{color:#fff;}
+.hero-title .red-word{color:var(--red);}
+.hero-img-wrap{position:relative;display:inline-block;margin-bottom:40px;animation:fadeUp .8s .3s ease both;}
+.hero-img-wrap img{width:min(1100px,85vw);height:auto;border-radius:12px;border:1px solid rgba(255,0,0,0.4);display:block;}
+.hero-img-wrap::before{content:'';position:absolute;inset:-2px;border-radius:14px;background:linear-gradient(135deg,var(--red),transparent,var(--red3));z-index:-1;opacity:.45;animation:rotateBorder 4s linear infinite;}
+@keyframes rotateBorder{0%{background:linear-gradient(0deg,var(--red),transparent,var(--red3));}100%{background:linear-gradient(360deg,var(--red),transparent,var(--red3));}}
+.hero-img-glow{position:absolute;inset:-30px;background:radial-gradient(ellipse,rgba(255,0,0,0.18) 0%,transparent 70%);border-radius:50%;z-index:-2;}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .4s ease both;}
+.btn-primary{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#000;background:var(--red);border:2px solid var(--red);padding:14px 32px;border-radius:4px;text-decoration:none;transition:all .25s;display:inline-block;}
+.btn-primary:hover{background:#ff3333;letter-spacing:3px;}
+.btn-outline{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:transparent;border:2px solid rgba(255,255,255,.2);padding:14px 32px;border-radius:4px;text-decoration:none;transition:all .25s;display:inline-block;}
+.btn-outline:hover{border-color:var(--red);color:var(--red);letter-spacing:3px;}
+.scroll-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.4;animation:bounce 2s ease-in-out infinite;}
+.scroll-hint span{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--red2);}
+.scroll-hint::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,var(--red),transparent);}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+
+.section{padding:100px 40px;max-width:1200px;margin:0 auto;}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:5px;color:var(--red2);margin-bottom:12px;display:block;text-transform:uppercase;}
+.section-title{font-family:var(--display);font-size:clamp(26px,4vw,46px);font-weight:700;line-height:1.1;margin-bottom:16px;color:#fff;}
+.section-title span{color:var(--red);}
+.section-line{height:2px;background:var(--red);margin-bottom:50px;width:60px;box-shadow:0 0 6px rgba(255,0,0,0.5);transition:width .08s,box-shadow .08s;}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,0,0,0.3),transparent);transition:background .08s,height .08s;}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.about-text p{font-size:16px;line-height:1.8;color:rgba(255,255,255,.68);margin-bottom:16px;}
+.about-text p strong{color:var(--red2);font-weight:600;}
+
+.team-single{padding:100px 20px;text-align:center;background:rgba(255,0,0,0.02);}
+.team-overlay{max-width:1000px;margin:auto;}
+.team-image-box{margin-top:30px;}
+.team-image-box img{width:100%;max-width:1100px;border-radius:20px;border:2px solid red;box-shadow:0 0 20px rgba(255,0,0,0.3);}
+.team-desc{margin-top:24px;font-size:17px;color:rgba(255,255,255,.85);}
+
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px;justify-items:center;margin-top:40px;}
+.project-card{width:230px;background:rgba(10,0,0,0.92);border:1px solid rgba(255,0,0,0.18);border-radius:15px;overflow:hidden;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:transform .3s;}
+.project-card:hover{transform:translateY(-8px);}
+.project-img{width:100%;height:200px;overflow:hidden;border-bottom:2px solid red;background:#111;}
+.project-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.project-card:hover .project-img img{transform:scale(1.08);}
+.project-body{padding:15px;}
+.project-tag{display:inline-block;font-size:10px;color:var(--red2);border:1px solid rgba(255,0,0,0.3);padding:3px 10px;border-radius:20px;margin-bottom:10px;font-family:var(--mono);letter-spacing:1px;}
+.project-title{font-size:16px;color:#fff;margin-bottom:10px;font-family:var(--display);}
+.project-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:15px;}
+.project-link{font-size:10px;color:var(--red2);text-decoration:none;font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;}
+.project-link:hover{color:#fff;}
+
+.padrogani-content{display:flex;align-items:flex-start;gap:24px;padding:24px;border:2px solid rgba(255,0,0,0.4);border-radius:15px;background:rgba(8,0,0,0.82);max-width:1000px;margin:40px auto;box-shadow:0 0 20px rgba(255,0,0,0.1);}
+.padrogani-content img{width:200px;flex-shrink:0;border-radius:15px;border:3px solid red;}
+.padrogani-text{text-align:left;}
+.padrogani-text h4{margin-bottom:16px;}
+.padrogani-text p{font-size:15px;color:rgba(255,255,255,.75);line-height:1.8;}
+
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.contact-info p{font-size:15px;line-height:1.8;color:rgba(255,255,255,.55);margin-bottom:30px;}
+.contact-links{display:flex;flex-direction:column;gap:12px;}
+.contact-link{display:flex;align-items:center;gap:14px;text-decoration:none;color:rgba(255,255,255,.6);font-family:var(--mono);font-size:12px;letter-spacing:1px;padding:14px 18px;border:1px solid rgba(255,0,0,0.18);border-radius:6px;transition:all .25s;box-shadow:0 0 4px rgba(255,0,0,0.08);}
+.contact-link:hover{color:#fff;border-color:rgba(255,0,0,.9);background:rgba(255,0,0,.05);padding-left:24px;}
+.contact-link-icon{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
+.contact-form{display:flex;flex-direction:column;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--red2);text-transform:uppercase;}
+.form-group input,.form-group textarea{background:rgba(255,0,0,0.03);border:1px solid rgba(255,0,0,0.18);border-radius:6px;color:#fff;font-family:var(--mono);font-size:13px;padding:12px 16px;outline:none;transition:border-color .2s;width:100%;}
+.form-group input:focus,.form-group textarea:focus{border-color:rgba(255,0,0,.8);background:rgba(255,0,0,.04);}
+.form-group textarea{height:120px;resize:vertical;}
+
+footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;background:rgba(0,0,0,.72);transition:border-color .08s,box-shadow .08s;}
+.footer-logo{font-family:var(--display);font-size:20px;font-weight:900;color:var(--red);letter-spacing:4px;margin-bottom:10px;}
+.footer-sub{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.2);margin-bottom:24px;}
+.footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+.footer-links a{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.3);text-decoration:none;text-transform:uppercase;transition:color .2s;}
+.footer-links a:hover{color:var(--red2);}
+.footer-copy{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.15);letter-spacing:1px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ═══════════ SCRS STYLES ═══════════ */
+#scrs-app{background:rgba(4,0,0,0.97);border:1px solid rgba(255,0,0,0.3);border-radius:16px;overflow:hidden;box-shadow:0 0 60px rgba(255,0,0,0.12);margin-top:40px;}
+.scrs-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(255,0,0,0.06);border-bottom:1px solid rgba(255,0,0,0.2);}
+.scrs-header-left{display:flex;align-items:center;gap:10px;}
+.scrs-dots{display:flex;gap:7px;}
+.scrs-dot{width:13px;height:13px;border-radius:50%;}
+.scrs-dot.r{background:#ff453a;}.scrs-dot.y{background:#ffd60a;}.scrs-dot.g{background:#30d158;}
+.scrs-title-text{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);}
+.scrs-badge{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--red);border:1px solid rgba(255,0,0,0.35);padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:6px;}
+.scrs-badge::before{content:'';width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse-dot 1s infinite;}
+
+.scrs-auth-wrap{display:flex;align-items:center;justify-content:center;min-height:560px;padding:40px 20px;}
+.scrs-card{background:rgba(8,0,0,0.95);border:1px solid rgba(255,0,0,0.25);border-radius:14px;padding:40px;width:100%;max-width:440px;box-shadow:0 0 40px rgba(255,0,0,0.08);}
+.scrs-card-icon{width:64px;height:64px;border-radius:50%;background:rgba(255,0,0,0.08);border:2px solid rgba(255,0,0,0.35);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 20px;}
+.scrs-card h2{font-family:var(--display);font-size:22px;font-weight:700;color:#fff;text-align:center;margin-bottom:6px;letter-spacing:2px;}
+.scrs-card p{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35);text-align:center;margin-bottom:28px;letter-spacing:1px;}
+.scrs-input-group{margin-bottom:16px;}
+.scrs-input-group label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--red2);margin-bottom:7px;text-transform:uppercase;}
+.scrs-input-group input,.scrs-input-group select,.scrs-input-group textarea{width:100%;background:rgba(255,0,0,0.03);border:1px solid rgba(255,0,0,0.2);border-radius:6px;color:#fff;font-family:var(--mono);font-size:13px;padding:12px 16px;outline:none;transition:border-color .2s;}
+.scrs-input-group input:focus,.scrs-input-group select:focus,.scrs-input-group textarea:focus{border-color:rgba(255,0,0,.7);}
+.scrs-input-group select option{background:#0a0000;color:#fff;}
+.scrs-input-group textarea{resize:vertical;min-height:100px;}
+.scrs-btn{width:100%;font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#000;background:var(--red);border:none;padding:14px;border-radius:6px;cursor:pointer;transition:all .25s;margin-top:8px;}
+.scrs-btn:hover{background:#ff3333;box-shadow:0 0 24px rgba(255,0,0,0.5);}
+.scrs-btn.secondary{background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,0,0,0.2);}
+.scrs-btn.secondary:hover{border-color:var(--red);color:var(--red);}
+.scrs-btn.danger{background:#cc0000;color:#fff;}
+.scrs-btn.danger:hover{background:#ff0000;}
+.scrs-btn.success{background:#006633;color:#fff;}
+.scrs-btn.success:hover{background:#00994d;}
+.scrs-btn.warn{background:#886600;color:#fff;}
+.scrs-btn.warn:hover{background:#aa8800;}
+.scrs-link{display:block;text-align:center;margin-top:16px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px;}
+.scrs-link span{color:var(--red2);cursor:pointer;}
+.scrs-link span:hover{color:var(--red);}
+.scrs-divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.scrs-divider::before,.scrs-divider::after{content:'';flex:1;height:1px;background:rgba(255,0,0,0.15);}
+.scrs-divider span{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;}
+
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.role-btn{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.2);border-radius:8px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s;}
+.role-btn:hover,.role-btn.selected{background:rgba(255,0,0,0.1);border-color:var(--red);box-shadow:0 0 16px rgba(255,0,0,0.2);}
+.role-btn .role-icon{font-size:22px;margin-bottom:6px;}
+.role-btn .role-name{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;}
+
+.scrs-layout{display:flex;min-height:600px;}
+.scrs-sidebar{width:220px;flex-shrink:0;border-right:1px solid rgba(255,0,0,0.15);background:rgba(5,0,0,0.9);padding:20px 0;}
+.scrs-nav-user{padding:16px 20px 20px;border-bottom:1px solid rgba(255,0,0,0.1);margin-bottom:8px;}
+.scrs-nav-user .nav-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,0,0,0.1);border:2px solid rgba(255,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
+.scrs-nav-user .nav-name{font-family:var(--mono);font-size:11px;color:#fff;letter-spacing:1px;}
+.scrs-nav-user .nav-role{font-family:var(--mono);font-size:9px;color:var(--red2);letter-spacing:2px;text-transform:uppercase;}
+.scrs-nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.4);text-transform:uppercase;transition:all .2s;border-left:2px solid transparent;}
+.scrs-nav-item:hover{color:rgba(255,255,255,.8);background:rgba(255,0,0,0.04);}
+.scrs-nav-item.active{color:var(--red2);border-left-color:var(--red);background:rgba(255,0,0,0.06);}
+.scrs-nav-item .nav-icon{font-size:14px;width:18px;text-align:center;}
+.scrs-nav-badge{margin-left:auto;background:var(--red);color:#000;font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
+.scrs-main{flex:1;overflow:hidden;}
+.scrs-panel{display:none;padding:28px;height:100%;}
+.scrs-panel.active{display:block;}
+
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.dash-stat{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.15);border-radius:10px;padding:18px;text-align:center;}
+.dash-stat .ds-num{font-family:var(--display);font-size:28px;font-weight:900;color:var(--red);line-height:1;}
+.dash-stat .ds-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.35);margin-top:4px;text-transform:uppercase;}
+.dash-stat.blue .ds-num{color:#4fc3f7;}
+.dash-stat.green .ds-num{color:#4caf50;}
+.dash-stat.yellow .ds-num{color:#ffd600;}
+.activity-list{background:rgba(255,0,0,0.02);border:1px solid rgba(255,0,0,0.12);border-radius:10px;overflow:hidden;}
+.activity-header{padding:14px 18px;border-bottom:1px solid rgba(255,0,0,0.1);font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--red2);text-transform:uppercase;}
+.activity-item{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid rgba(255,0,0,0.06);transition:background .2s;}
+.activity-item:hover{background:rgba(255,0,0,0.04);}
+.activity-item:last-child{border-bottom:none;}
+.ai-icon{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.ai-icon.red{background:rgba(255,0,0,0.12);}
+.ai-icon.blue{background:rgba(79,195,247,0.12);}
+.ai-icon.green{background:rgba(76,175,80,0.12);}
+.ai-icon.yellow{background:rgba(255,214,0,0.12);}
+.ai-body{flex:1;}
+.ai-title{font-family:var(--mono);font-size:11px;color:#fff;letter-spacing:.5px;}
+.ai-sub{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.3);margin-top:2px;letter-spacing:1px;}
+.ai-time{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);}
+
+.status{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+.status.pending{background:rgba(255,214,0,0.12);color:#ffd600;border:1px solid rgba(255,214,0,0.3);}
+.status.reviewed{background:rgba(79,195,247,0.12);color:#4fc3f7;border:1px solid rgba(79,195,247,0.3);}
+.status.resolved{background:rgba(76,175,80,0.12);color:#4caf50;border:1px solid rgba(76,175,80,0.3);}
+.status.rejected{background:rgba(255,0,0,0.12);color:#ff5555;border:1px solid rgba(255,0,0,0.3);}
+.status.blocked{background:rgba(120,0,0,0.25);color:#ff4444;border:1px solid rgba(180,0,0,0.5);}
+
+.scrs-table-wrap{overflow-x:auto;}
+.scrs-table{width:100%;border-collapse:collapse;}
+.scrs-table th{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.3);text-transform:uppercase;padding:12px 14px;border-bottom:1px solid rgba(255,0,0,0.15);text-align:left;white-space:nowrap;}
+.scrs-table td{padding:13px 14px;border-bottom:1px solid rgba(255,0,0,0.06);font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.7);vertical-align:middle;}
+.scrs-table tr:hover td{background:rgba(255,0,0,0.03);}
+.scrs-table tr:last-child td{border-bottom:none;}
+.report-id{color:var(--red2);font-size:10px;}
+
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.panel-header h3{font-family:var(--display);font-size:18px;font-weight:700;color:#fff;letter-spacing:2px;}
+.panel-tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.panel-tab{font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:7px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .2s;border:1px solid rgba(255,0,0,0.2);color:rgba(255,255,255,.4);}
+.panel-tab:hover{border-color:rgba(255,0,0,.5);color:rgba(255,255,255,.7);}
+.panel-tab.active{background:rgba(255,0,0,0.1);border-color:var(--red);color:var(--red2);}
+
+.submit-form{max-width:600px;}
+.priority-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.empty-state{text-align:center;padding:60px 20px;font-family:var(--mono);}
+.empty-state .es-icon{font-size:48px;margin-bottom:16px;opacity:.3;}
+.empty-state p{font-size:12px;color:rgba(255,255,255,.25);letter-spacing:2px;}
+
+#scrs-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(5,0,0,0.97);border:1px solid rgba(255,0,0,0.4);border-radius:8px;padding:14px 24px;font-family:var(--mono);font-size:12px;letter-spacing:1px;color:#fff;z-index:99999;transition:transform .3s;white-space:nowrap;box-shadow:0 0 30px rgba(255,0,0,0.2);}
+#scrs-toast.show{transform:translateX(-50%) translateY(0);}
+#scrs-toast.success{border-color:rgba(76,175,80,0.6);color:#4caf50;}
+#scrs-toast.error{border-color:rgba(255,0,0,0.8);color:#ff5555;}
+#scrs-toast.info{border-color:rgba(79,195,247,0.6);color:#4fc3f7;}
+
+.scrs-modal-bg{display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+.scrs-modal-bg.open{display:flex;}
+.scrs-modal{background:rgba(6,0,0,0.99);border:1px solid rgba(255,0,0,0.4);border-radius:14px;padding:32px;width:100%;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 0 60px rgba(255,0,0,0.2);}
+.scrs-modal h3{font-family:var(--display);font-size:18px;color:#fff;margin-bottom:6px;letter-spacing:2px;}
+.scrs-modal .modal-id{font-family:var(--mono);font-size:10px;color:var(--red2);margin-bottom:20px;letter-spacing:2px;}
+.modal-field{margin-bottom:14px;}
+.modal-field label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:5px;text-transform:uppercase;}
+.modal-field .mf-val{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.8);background:rgba(255,0,0,0.03);border:1px solid rgba(255,0,0,0.1);border-radius:6px;padding:10px 14px;word-break:break-word;}
+.modal-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+
+/* ── VISITOR LOG TABLE ── */
+.visitor-log-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px;}
+.visitor-log-table th{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,0,0,0.2);color:rgba(255,255,255,.3);letter-spacing:2px;font-size:9px;text-transform:uppercase;}
+.visitor-log-table td{padding:10px 12px;border-bottom:1px solid rgba(255,0,0,0.06);color:rgba(255,255,255,.65);vertical-align:top;}
+.visitor-log-table tr:hover td{background:rgba(255,0,0,0.03);}
+.visitor-online{color:#4caf50;font-size:9px;}
+.visitor-offline{color:rgba(255,255,255,.3);font-size:9px;}
+
+/* ── ADMIN REQUEST QUEUE ── */
+.req-card{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.2);border-radius:10px;padding:18px;margin-bottom:14px;}
+.req-card-title{font-family:var(--display);font-size:13px;color:var(--red2);letter-spacing:2px;margin-bottom:6px;}
+.req-card-info{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.5);margin-bottom:12px;line-height:1.8;}
+.req-actions{display:flex;gap:8px;}
+
+/* ── DM / MESSAGING ── */
+.msg-layout{display:flex;height:480px;border:1px solid rgba(255,0,0,0.15);border-radius:10px;overflow:hidden;}
+.msg-list{width:220px;border-right:1px solid rgba(255,0,0,0.12);overflow-y:auto;background:rgba(5,0,0,0.6);}
+.msg-list-item{padding:13px 14px;border-bottom:1px solid rgba(255,0,0,0.07);cursor:pointer;transition:background .2s;}
+.msg-list-item:hover{background:rgba(255,0,0,0.06);}
+.msg-list-item.active{background:rgba(255,0,0,0.1);border-left:2px solid var(--red);}
+.msg-list-name{font-family:var(--mono);font-size:11px;color:#fff;letter-spacing:.5px;}
+.msg-list-preview{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.msg-unread{display:inline-block;width:7px;height:7px;background:var(--red);border-radius:50%;margin-left:5px;flex-shrink:0;}
+.msg-chat{flex:1;display:flex;flex-direction:column;}
+.msg-chat-header{padding:14px 16px;border-bottom:1px solid rgba(255,0,0,0.1);font-family:var(--mono);font-size:11px;color:var(--red2);letter-spacing:2px;background:rgba(255,0,0,0.04);}
+.msg-chat-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.msg-bubble{max-width:75%;padding:10px 14px;border-radius:10px;font-family:var(--mono);font-size:11px;line-height:1.6;}
+.msg-bubble.from-admin{align-self:flex-start;background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.15);color:rgba(255,255,255,.8);}
+.msg-bubble.from-me{align-self:flex-end;background:rgba(255,0,0,0.18);border:1px solid rgba(255,0,0,0.35);color:#fff;}
+.msg-bubble-time{font-size:9px;color:rgba(255,255,255,.25);margin-top:4px;}
+.msg-input-row{display:flex;gap:8px;padding:12px 14px;border-top:1px solid rgba(255,0,0,0.1);}
+.msg-input-row input{flex:1;background:rgba(255,0,0,0.03);border:1px solid rgba(255,0,0,0.2);border-radius:6px;color:#fff;font-family:var(--mono);font-size:12px;padding:10px 14px;outline:none;}
+.msg-input-row input:focus{border-color:rgba(255,0,0,.6);}
+.msg-send-btn{background:var(--red);border:none;border-radius:6px;color:#000;font-family:var(--mono);font-size:12px;padding:10px 16px;cursor:pointer;letter-spacing:1px;}
+.msg-send-btn:hover{background:#ff3333;}
+.msg-empty{display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.2);letter-spacing:2px;}
+
+.scrs-main::-webkit-scrollbar,.scrs-modal::-webkit-scrollbar{width:4px;}
+.scrs-main::-webkit-scrollbar-thumb,.scrs-modal::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.3);border-radius:2px;}
+
+@media(max-width:768px){
+  nav.topbar{padding:0 20px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  #home{padding:100px 20px 60px;}
+  .section{padding:70px 20px;}
+  .about-grid{grid-template-columns:1fr;gap:40px;}
+  .contact-grid{grid-template-columns:1fr;gap:40px;}
+  .padrogani-content{flex-direction:column;align-items:center;}
+  footer{padding:30px 20px;}
+  #visitor-hud,#hud-toggle{display:none;}
+  .scrs-layout{flex-direction:column;}
+  .scrs-sidebar{width:100%;border-right:none;border-bottom:1px solid rgba(255,0,0,0.15);padding:10px 0;display:flex;flex-wrap:wrap;}
+  .scrs-nav-user{display:none;}
+  .scrs-nav-item{padding:8px 14px;font-size:9px;}
+  .dash-stats{grid-template-columns:1fr 1fr;}
+  .priority-row{grid-template-columns:1fr;}
+  .msg-layout{flex-direction:column;height:auto;}
+  .msg-list{width:100%;height:150px;}
+}
+@media(max-width:480px){.hero-btns{flex-direction:column;align-items:center;}.dash-stats{grid-template-columns:1fr 1fr;}}
 
 /* NAV BASE */
 .nav-links {
@@ -1408,43 +495,52 @@ display: flex;
   50% { transform: translateX(2px); opacity: 0.7; }
   100% { transform: translateX(-2px); opacity: 1; }
 }
- 
+
 </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
+<div id="video-bg">
+  <video id="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="Recording_2026-05-17_212539.mp4" type="video/mp4">
+  </video>
+  <div id="video-overlay"></div>
+</div>
+
+<canvas id="matrixCanvas"></canvas>
+<div id="beat-bar"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<div id="arrowmode-indicator"><div>⌨ ARROW KEY MODE</div><div style="margin-top:4px;"><span class="kbd">↑</span><span class="kbd">↓</span><span class="kbd">←</span><span class="kbd">→</span> = Move Cursor</div></div>
 
-<!-- Matrix rain background -->
-<canvas id="matrixCanvas"></canvas>
-
-
-
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
+<button id="hud-toggle" onclick="toggleHud()" title="Toggle Visitor Tracker"><span class="dot"></span> VISITOR HUD</button>
+<div id="visitor-hud">
+  <div class="hud-title">LIVE VISITOR DATA</div>
+  <div class="hud-row"><span class="hud-key">IP</span><span class="hud-val" id="hud-ip">Fetching...</span></div>
+  <div class="hud-row"><span class="hud-key">City</span><span class="hud-val" id="hud-city">—</span></div>
+  <div class="hud-row"><span class="hud-key">Region</span><span class="hud-val" id="hud-region">—</span></div>
+  <div class="hud-row"><span class="hud-key">Country</span><span class="hud-val" id="hud-country">—</span></div>
+  <div class="hud-row"><span class="hud-key">ISP</span><span class="hud-val" id="hud-isp">—</span></div>
+  <div class="hud-row"><span class="hud-key">Browser</span><span class="hud-val" id="hud-browser">—</span></div>
+  <div class="hud-row"><span class="hud-key">Device</span><span class="hud-val" id="hud-device">—</span></div>
+  <div class="hud-row"><span class="hud-key">Entered</span><span class="hud-val" id="hud-time">—</span></div>
+  <div class="hud-cursor">
+    <div class="hud-row"><span class="hud-key">Cursor X</span><span class="hud-val" id="hud-cx">—</span></div>
+    <div class="hud-row"><span class="hud-key">Cursor Y</span><span class="hud-val" id="hud-cy">—</span></div>
+    <div class="hud-row"><span class="hud-key">Section</span><span class="hud-val" id="hud-section">—</span></div>
+    <div class="hud-row"><span class="hud-key">Mode</span><span class="hud-val" id="hud-inputmode">MOUSE</span></div>
   </div>
-</nav>
+</div>
 
-
-
-
-
-<!-- ── NAVBAR ── -->
-<nav class="topbar">
-  <a href="#hero" class="nav-brand">
-    <div class="nav-logo-ring">
-      <img src="logo.png" alt="Code Red Logo"
-        onerror="this.parentElement.innerHTML='<span style=\'font-family:Orbitron,monospace;font-size:13px;font-weight:900;color:#ff0000;\'>CR</span>'">
+<nav class="topbar beat-el beat-nav" id="mainNav">
+  <a href="#home" class="nav-brand">
+    <div class="nav-logo-ring beat-el">
+      <img src="logo.png" alt="CR" onerror="this.parentElement.innerHTML='<span style=\'font-family:Orbitron,monospace;font-size:13px;font-weight:900;color:#ff0000;\'>CR</span>'">
     </div>
-    <div class="nav-brand-text">
-      CODE-RED
-      <small>TECH CAPSTONE</small>
-    </div>
+    <div class="nav-brand-text">CODE-RED<small>TECH CAPSTONE</small></div>
   </a>
-  
-  <ul class="nav-links">
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+<ul class="nav-links">
     <li><a href="index.html" class="active">HOME</a></li>
     <li><a href="About Us.html">About Us </a></li>
     <li class="dropdown">
@@ -1464,683 +560,1476 @@ display: flex;
   </ul>
 </nav>
 
-
-<!-- ─── HERO ─── -->
 <section id="home">
   <div class="hero-eyebrow">WELCOME TO TEAM CODE RED!</div>
-
-  <h1 class="hero-title">
-    <span class="team">TEAM</span><br>
-    <span class="code">CODE</span><span class="red-word">-RED</span>
-  </h1>
-  <br>
-<br>
-
-  <div class="hero-img-wrap">
+  <h1 class="hero-title beat-el beat-title"><span class="team">TEAM</span><br><span class="code">CODE</span><span class="red-word">-RED</span></h1>
+  <br><br>
+  <div class="hero-img-wrap beat-el">
     <div class="hero-img-glow"></div>
-    <img src="6.png" alt="Team Code-Red"
-      onerror="this.style.cssText='width:200px;height:200px;display:flex;align-items:center;justify-content:center;background:rgba(255,0,0,0.06);border-radius:12px;border:1px solid rgba(255,0,0,0.4);font-family:Orbitron,monospace;font-size:48px;font-weight:900;color:var(--red);'">
+    <img src="6.png" alt="Team Code-Red" onerror="this.style.cssText='width:160px;height:160px;background:rgba(255,0,0,0.06);border-radius:12px;border:1px solid rgba(255,0,0,0.4);display:block;'">
   </div>
-<h3 class="section-title">"When The Signal<span> Turn Red, We Act"</span>?</h3>
-<br>
+  <h3 class="section-title" style="margin-bottom:24px;">"When The Signal<span> Turn Red, We Act"</span></h3>
   <div class="hero-btns">
-    <a href="#projects" class="btn-primary">View Logo</a>
-    <a href="#team" class="btn-outline">Meet the Team</a>
+    <a href="#logo" class="btn-primary beat-el">View Logo</a>
+    <a href="#team" class="btn-outline beat-el">Meet the Team</a>
   </div>
-
-  <div class="scroll-hint">
-    <span>SCROLL</span>
-  </div>
+  <div class="scroll-hint"><span>SCROLL</span></div>
 </section>
 
-<div class="divider"></div>
+<div class="divider beat-el beat-divider"></div>
 
-<!-- ─── ABOUT ─── -->
 <section id="about">
   <div class="section reveal">
     <span class="section-label">TEAM CODE-RED</span>
-    <h2 class="section-title">Who is <span>Code-Red</span>?</h2>
-    <div class="section-line"></div>
-
+    <h2 class="section-title beat-el beat-title">Who is <span>Code-Red</span>?</h2>
+    <div class="section-line beat-el beat-line"></div>
     <div class="about-grid">
       <div class="about-text">
         <p>We are <strong>Team Code-Red</strong> — a squad of passionate developers, designers, and problem solvers united by a single mission: push the boundaries of what's possible with code.</p>
         <p>From hackathons to real-world projects, we operate at the intersection of <strong>creativity and engineering</strong>. Every line of code we write is deliberate. Every project we ship is built to last.</p>
         <p>Red isn't just our color — it's our energy. Our urgency. Our commitment to being <strong>first, fastest, and fiercest</strong>.</p>
-        <a href="#team" class="btn-outline" style="margin-top:10px;">Meet the TEAM </a>
+        <a href="#team" class="btn-outline beat-el" style="margin-top:10px;">Meet the TEAM</a>
       </div>
+    </div>
+  </div>
 </section>
 
-<div class="divider"></div>
-<!-- ─── TEAM ─── -->
+<div class="divider beat-el beat-divider"></div>
+
 <section id="team" class="team-single">
-
   <div class="team-overlay">
-
-    <span class="section-label">99% THE Team</span>
-    <h2 class="section-title">Meet the <span>Team</span></h2>
-    <div class="section-line"></div>
-
-    <!-- ONE IMAGE ONLY -->
-    <div class="team-image-box">
-      <img src="34.png" alt="Team Code Red">
-    </div>
-
-    <!-- OPTIONAL DESCRIPTION -->
-    <h1 class="team-desc">
-      Team Code Red is composed of dedicated members working together as one unit
-      with different roles in development, design, and leadership.
-    </h1>
-
+    <span class="section-label">99% THE TEAM</span>
+    <h2 class="section-title beat-el beat-title">Meet the <span>Team</span></h2>
+    <div class="section-line beat-el beat-line"></div>
+    <div class="team-image-box"><img src="34.png" alt="Team Code Red" class="beat-el"></div>
+    <p class="team-desc">Team Code Red is composed of dedicated members working together as one unit with different roles in development, design, and leadership.</p>
   </div>
-  
-
 </section>
 
-<!-- ─── ABOUT ─── -->
-<section id="about">
-  <div class="section reveal">
-    <span class="section-label">who we are</span>
-    <h2 class="section-title"> WHO <span>WE ARE?</span>?</h2>
-    <div class="section-line"></div>
+<div class="divider beat-el beat-divider"></div>
 
+<section id="whoweare">
+  <div class="section reveal">
+    <span class="section-label">WHO WE ARE</span>
+    <h2 class="section-title beat-el beat-title">WHO <span>WE ARE?</span></h2>
+    <div class="section-line beat-el beat-line"></div>
     <div class="about-grid">
       <div class="about-text">
-        <h3><p>We are <strong>of passionate students who work together to create smart</strong> , creative, and reliable solutions through team work. Each with a specific role: Hacker, Hipster, Hustler, and a Handler. As a team, we aim to work with clear communication, responsibility, efficiently, and cooperatively.</p></h3>
-        <a href="#team" class="btn-outline" style="margin-top:10px;">Meet the Team</a>
+        <p>We are <strong>passionate students who work together to create smart</strong>, creative, and reliable solutions through teamwork. Each with a specific role: Hacker, Hipster, Hustler, and a Handler. As a team, we aim to work with clear communication, responsibility, efficiently, and cooperatively.</p>
+        <a href="#team" class="btn-outline beat-el" style="margin-top:10px;">Meet the Team</a>
       </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ─── PROJECTS ─── -->
-<section id="projects">
-  <div class="section reveal"></div>
-     <a href="#" class="project-link">View my logo</a>
-    <div class="section-line"></div>
-
-      <!-- MEMBER 1 -->
-<div class="padrogani-content">
-
-  <!-- Logo on top -->
-  <img src="logo.png" alt="logo name">
-
-  <!-- Motto section below the image -->
-  <div class="padrogani-text">
-    <h4 class="section-title">LET'S EXPLORE THE MEANING <span>OF OUR TEAM LOGO </span></h4>
-
-     <g>
-      Our logo represents alertness, teamwork, and responsibility in technology.
-The red circular design symbolizes urgency and readiness. Red is commonly associated with warnings and important signals, which reflects our team's ability to respond quickly and effectively to challenges just like a real "code red" situation. 
-
-At the center of the logo is a warning triangle with an exclamation mark. This symbolizes awareness, caution, and problem recognition. It represents our team's mindset of identifying issues early and finding smart, ethical solutions before they become bigger problems.
-The circuit-like patterns surrounding the logo represent technology, coding, and digital systems. 
-The repeated text "TEAM CODE RED" around the logo emphasizes unity and collaboration. It shows that every member plays an important role and that teamwork is at the core of our success.
-     </g>
-  </div>
-        </div>
-      </div>
-
-
-
-
     </div>
   </div>
 </section>
 
-      <!-- ─── ABOUT ─── -->
-<section id="about">
-  <div class="section reveal">
-    <span class="section-label">01% — OUR MOTTO</span>
-    <h2 class="section-title"> MEANING BEHIND <span>OUR MOTTO</span>?</h2>
-        <h2 class="section-title"> "When The Signal <span>Turn Red, We Act"</span>?</h2>
-    <div class="section-line"></div>
+<div class="divider beat-el beat-divider"></div>
 
-    <div class="about-grid">
-      <div class="about-text">
-        <h3><p>Our motto <strong>symbolizes urgency and responsibility. The "red signal represents critical moments, warnings, or challenges</strong>that require immediate attention. Instead of ignoring the signal or waiting, we act by staying focused, working together, and finding effective solutions. 
-This reflects TEAM CODE RED'S mindset of being proactive. When problems arise, we respond with team work, quick thinking, and responsible action to achieve positive results.</p></h3>
-        <a href="#team" class="btn-outline" style="margin-top:10px;">Meet the Team</a>
-      </div>
-</div>
+<section id="logo">
+  <div class="section reveal">
+    <span class="section-label">OUR IDENTITY</span>
+    <h2 class="section-title beat-el beat-title">Our <span>Logo</span></h2>
+    <div class="section-line beat-el beat-line"></div>
+  </div>
+  <div class="padrogani-content beat-el">
+    <img src="logo.png" alt="Team Code Red Logo" class="beat-el">
+    <div class="padrogani-text">
+      <h4 class="section-title" style="font-size:clamp(16px,2.2vw,26px);margin-bottom:16px;">LET'S EXPLORE THE MEANING <span>OF OUR TEAM LOGO</span></h4>
+      <p>Our logo represents alertness, teamwork, and responsibility in technology. The red circular design symbolizes urgency and readiness. Red is commonly associated with warnings and important signals, which reflects our team's ability to respond quickly and effectively to challenges just like a real "code red" situation. At the center of the logo is a warning triangle with an exclamation mark. This symbolizes awareness, caution, and problem recognition. <br><br>
+      It represents our team's mindset of identifying issues early and finding smart, ethical solutions before they become bigger problems. The circuit-like patterns surrounding the logo represent technology, coding, and digital systems. The repeated text "TEAM CODE RED" around the logo emphasizes unity and collaboration. It shows that every member plays an important role and that teamwork is at the core of our success.</p>
+    </div>
+  </div>
 </section>
 
+<div class="divider beat-el beat-divider"></div>
 
+<section id="motto">
+  <div class="section reveal">
+    <span class="section-label"> OUR MOTTO</span>
+    <h2 class="section-title beat-el beat-title">MEANING BEHIND <span>OUR MOTTO</span></h2>
+    <h2 class="section-title" style="margin-top:8px;font-size:clamp(20px,3vw,36px);">"When The Signal <span>Turn Red, We Act"</span></h2>
+    <div class="section-line beat-el beat-line"></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Our motto <strong>symbolizes urgency and responsibility. The "red signal" represents critical moments, warnings, or challenges</strong> that require immediate attention. Instead of ignoring the signal or waiting, we act by staying focused, working together, and finding effective solutions. This reflects TEAM CODE RED'S mindset of being proactive. When problems arise, we respond with team work, quick thinking, and responsible action to achieve positive results.</p>
+        <a href="#team" class="btn-outline beat-el" style="margin-top:10px;">Meet the Team</a>
+      </div>
+    </div>
+  </div>
+</section>
 
+<div class="divider beat-el beat-divider"></div>
 
-<!-- ─── PROJECTS ─── -->
 <section id="projects">
   <div class="section reveal">
-    <span class="section-label">// 03 — IKAW TO</span>
-    <h2 class="section-title">HIGH<span>LIGHT</span></h2>
-    <div class="section-line"></div>
-
+    <span class="section-label">HIGHLIGHTS</span>
+    <h2 class="section-title beat-el beat-title">HIGH<span>LIGHTS</span></h2>
+    <div class="section-line beat-el beat-line"></div>
     <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-img gallery-card">
-          <img src="1.png" alt="RedShield Auth">
-        </div>
-        <div class="project-body">
-          <span class="project-tag">SECURITY</span>
-          <h1> <div class="project-title">Fast Responders</div></h1>
-          <h2><p class="project-desc">We adapt quickly to challenges and deadlines.</p></h2>
-          <a href="#" class="project-link">View Project</a>
-        </div>
+      <div class="project-card beat-el">
+        <div class="project-img"><img src="1.png" alt="Fast Responders"></div>
+        <div class="project-body"><span class="project-tag">SECURITY</span><div class="project-title">Fast Responders</div><p class="project-desc">We adapt quickly to challenges and deadlines.</p><a href="#" class="project-link">View Project</a></div>
       </div>
-
-      <div class="project-card">
-        <div class="project-img gallery-card">
-          <img src="2.png" alt="Code-Red AI">
-        </div>
-        <div class="project-body">
-          <span class="project-tag">AI / ML</span>
-          <div class="project-title">Code-Red AI</div>
-          <p class="project-desc">An AI-powered code review tool that detects bugs, security vulnerabilities, and style issues in real time.</p>
-          <a href="#" class="project-link">View Project</a>
-        </div>
+      <div class="project-card beat-el">
+        <div class="project-img"><img src="2.png" alt="Code-Red AI"></div>
+        <div class="project-body"><span class="project-tag">AI / ML</span><div class="project-title">Code-Red AI</div><p class="project-desc">An AI-powered code review tool that detects bugs, security vulnerabilities, and style issues in real time.</p><a href="#" class="project-link">View Project</a></div>
       </div>
-
-      <div class="project-card">
-        <div class="project-img gallery-card">
-          <img src="3.png" alt="RedNet Monitor">
-        </div>
-        <div class="project-body">
-          <span class="project-tag">IOT</span>
-          <div class="project-title">RedNet Monitor</div>
-          <p class="project-desc">Real-time IoT network monitoring dashboard with anomaly detection and instant alerts.</p>
-          <a href="#" class="project-link">View Project</a>
-        </div>
+      <div class="project-card beat-el">
+        <div class="project-img"><img src="3.png" alt="RedNet Monitor"></div>
+        <div class="project-body"><span class="project-tag">IOT</span><div class="project-title">RedNet Monitor</div><p class="project-desc">Real-time IoT network monitoring dashboard with anomaly detection and instant alerts.</p><a href="#" class="project-link">View Project</a></div>
       </div>
-
-      <div class="project-card">
-        <div class="project-img gallery-card">
-          <img src="4.png" alt="Crimson Runner">
-        </div>
-        <div class="project-body">
-          <span class="project-tag">GAME DEV</span>
-          <div class="project-title">Crimson Runner</div>
-          <p class="project-desc">A browser-based endless runner game built with Canvas API — no libraries, pure JS.</p>
-          <a href="#" class="project-link">View Project</a>
-        </div>
-      </div>
-
-</section>
-
-<div class="divider"></div>
-
-<!-- ─── CODE PLAYGROUND ─── -->
-<section id="playground" style="background:rgba(255,0,0,0.015);">
-  <div class="section reveal">
-    <span class="section-label">CODE EDITOR taberna</span>
-    <h2 class="section-title">Web-Based School Concern <span>and<span> Reporting System</span></h2>
-    <div class="section-line"></div>
-
-    <div class="editor-wrap">
-      <div class="editor-bar">
-        <div class="editor-dot r"></div>
-        <div class="editor-dot y"></div>
-        <div class="editor-dot g"></div>
-        <span class="editor-filename">index.html — Code-Red Editor</span>
-      </div>
-
-      <div class="editor-body">
-        <div class="editor-pane">
-          <label>HTML / CSS / JS</label>
-          <textarea id="codeInput" spellcheck="false" placeholder="// Write your code here...">
-<<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>CODE-RED Auto Terminal</title>
-
-<style>
-body {
-    background: black;
-    color: #ff1a1a;
-    font-family: monospace;
-    margin: 0;
-}
-
-/* Terminal */
-#terminal {
-    padding: 20px;
-    height: 100vh;
-    overflow-y: auto;
-    color: #ff1a1a;
-}
-
-/* Input */
-input {
-    background: black;
-    border: none;
-    color: #ff1a1a;
-    font-family: monospace;
-    width: 90%;
-    outline: none;
-}
-
-/* Lines */
-.line {
-    margin-bottom: 5px;
-    text-shadow: 0 0 5px #ff1a1a, 0 0 10px #8b0000;
-}
-
-/* Glow */
-#terminal, input {
-    text-shadow: 0 0 6px #ff1a1a;
-}
-</style>
-</head>
-
-<body>
-
-<div id="terminal"></div>
-
-<script>
-const terminal = document.getElementById("terminal");
-
-let user = null;
-let role = "student";
-let reports = JSON.parse(localStorage.getItem("reports")) || [];
-
-/* PRINT TEXT */
-function print(text, speed = 15) {
-    const div = document.createElement("div");
-    div.className = "line";
-    terminal.appendChild(div);
-
-    let i = 0;
-    function type() {
-        if (i < text.length) {
-            div.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    type();
-
-    terminal.scrollTop = terminal.scrollHeight;
-}
-
-/* INPUT */
-function inputLine(callback) {
-    const div = document.createElement("div");
-    div.innerHTML = "> <input autofocus />";
-    terminal.appendChild(div);
-
-    const input = div.querySelector("input");
-
-    input.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            const value = input.value;
-            div.innerHTML = "> " + value;
-            callback(value);
-        }
-    });
-
-    input.focus();
-}
-
-/* BOOT SYSTEM */
-function bootSystem() {
-    print("Booting CODE-RED System...", 25);
-    setTimeout(() => print("Initializing modules...", 25), 500);
-    setTimeout(() => print("System Ready.", 25), 1000);
-    setTimeout(loginStep, 1500);
-}
-
-/* LOGIN */
-function loginStep() {
-    print("Enter your name:");
-    inputLine(name => {
-        user = name;
-        print("Welcome " + user);
-        showMenu();
-    });
-}
-
-/* MENU (FIXED) */
-function showMenu() {
-    print("");
-    print("================================");
-    print("        CODE-RED MAIN MENU");
-    print("================================");
-    print("1 - Submit Report");
-    print("2 - View Reports");
-    print("3 - Admin Mode");
-    print("4 - Clear Screen");
-    print("================================");
-
-    inputLine(choice => {
-        switch(choice) {
-            case "1":
-                submitReport();
-                break;
-
-            case "2":
-                viewReports();
-                setTimeout(showMenu, 500);
-                break;
-
-            case "3":
-                role = "admin";
-                print("Admin mode activated");
-                setTimeout(showMenu, 500);
-                break;
-
-            case "4":
-                terminal.innerHTML = "";
-                setTimeout(showMenu, 300);
-                break;
-
-            default:
-                print("Invalid option");
-                setTimeout(showMenu, 500);
-        }
-    });
-}
-
-/* SUBMIT REPORT */
-function submitReport() {
-    print("Enter category:");
-    inputLine(category => {
-        print("Enter concern:");
-        inputLine(concern => {
-
-            reports.push({
-                user,
-                category,
-                concern,
-                status: "Pending"
-            });
-
-            localStorage.setItem("reports", JSON.stringify(reports));
-
-            print("Report submitted successfully.");
-            setTimeout(showMenu, 800);
-        });
-    });
-}
-
-/* VIEW REPORTS */
-function viewReports() {
-    if (reports.length === 0) {
-        print("No reports found.");
-        return;
-    }
-
-    reports.forEach((r, i) => {
-        print(`[${i + 1}] ${r.user} | ${r.category} | ${r.concern} | ${r.status}`);
-    });
-}
-
-/* START */
-bootSystem();
-
-</script>
-
-</body>
-</html>
-  <h1>🔴 TEAM CODE-RED</h1>
-</body>
-</html></textarea>
-        </div>
-
-        <div class="editor-pane">
-          <label>Preview</label>
-          <iframe id="preview" title="Live Preview"></iframe>
-        </div>
-      </div>
-
-      <div class="editor-footer">
-        <button class="run-btn" onclick="runCode()">▶ Run Code</button>
-        <button class="clear-btn" onclick="clearCode()">✕ Clear</button>
+      <div class="project-card beat-el">
+        <div class="project-img"><img src="4.png" alt="Crimson Runner"></div>
+        <div class="project-body"><span class="project-tag">GAME DEV</span><div class="project-title">Crimson Runner</div><p class="project-desc">A browser-based endless runner game built with Canvas API — no libraries, pure JS.</p><a href="#" class="project-link">View Project</a></div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="divider beat-el beat-divider"></div>
 
-<!-- ─── CONTACT ─── -->
+
+<!-- ═══════════════════════ SCRS APP ═══════════════════════ -->
+<section id="playground">
+  <div class="section reveal">
+    <span class="section-label">🤫🫣</span>
+    <h2 class="section-title beat-el beat-title">Web-Based School <span>Concern &amp; Reporting System</span></h2>
+    <div class="section-line beat-el beat-line"></div>
+    <p style="font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.4);letter-spacing:1px;margin-bottom:30px;line-height:1.8;">
+     WELCOME TO CODE-RED SYSTEM
+    </p>
+  </div>
+
+  <div id="scrs-app" class="beat-el" style="max-width:1200px;margin:0 auto 80px;">
+    <div class="scrs-header">
+      <div class="scrs-header-left">
+        <div class="scrs-dots"><div class="scrs-dot r"></div><div class="scrs-dot y"></div><div class="scrs-dot g"></div></div>
+        <span class="scrs-title-text">WBSCRS — Web-Based School Concern &amp; Reporting System</span>
+      </div>
+      <div class="scrs-badge">LIVE SYSTEM</div>
+    </div>
+
+    <!-- ROLE PICKER -->
+    <div id="scrs-role-screen" class="scrs-auth-wrap">
+      <div class="scrs-card">
+        <div class="scrs-card-icon">🏫</div>
+        <h2>WELCOME TO MY SYSTEM</h2>
+        <p>WITH TEAM CODE-RED</p>
+        <div class="role-grid">
+          <div class="role-btn selected" id="role-student" onclick="selectRole('student')">
+            <div class="role-icon">👤👨‍🎓👩‍🎓</div>
+            <div class="role-name">Student login</div>
+          </div>
+          <div class="role-btn" id="role-admin" onclick="selectRole('admin')">
+            <div class="role-icon">🛡️🧑‍💻👩‍💻</div>
+            <div class="role-name">Administrator login</div>
+          </div>
+        </div>
+        <button class="scrs-btn" onclick="proceedToLogin()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="scrs-login-screen" class="scrs-auth-wrap" style="display:none;">
+      <div class="scrs-card">
+        <div class="scrs-card-icon" id="login-icon">🎓</div>
+        <h2 id="login-title">STUDENT LOGIN</h2>
+        <p id="login-sub">ENTER YOUR CREDENTIALS</p>
+        <div id="admin-req-notice" style="display:none;background:rgba(255,214,0,0.07);border:1px solid rgba(255,214,0,0.3);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-family:var(--mono);font-size:10px;color:#ffd600;letter-spacing:1px;line-height:1.7;">
+          ⚠ ADMIN accounts require approval.<br>You must send a request and wait for the current admin to grant permission.
+        </div>
+        <div class="scrs-input-group">
+          <label>Username</label>
+          <input type="text" id="login-user" placeholder="Enter your username" autocomplete="off">
+        </div>
+        <div class="scrs-input-group">
+          <label>Password</label>
+          <input type="password" id="login-pass" placeholder="Enter your password">
+        </div>
+        <button class="scrs-btn" onclick="doLogin()">Login →</button>
+        <div class="scrs-divider"><span>OR</span></div>
+        <button class="scrs-btn secondary" id="register-btn" onclick="showRegister()">Create Account</button>
+        <p class="scrs-link"><span onclick="backToRole()">← Change Role</span></p>
+        <p style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.18);text-align:center;margin-top:16px;letter-spacing:1px;" id="admin-hint-text">
+          ADMIN: username <span style="color:var(--red2);">created by charles</span> · pass <span style="color:var(--red2);">🔒</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- REGISTER STUDENT -->
+    <div id="scrs-register-screen" class="scrs-auth-wrap" style="display:none;">
+      <div class="scrs-card">
+        <div class="scrs-card-icon">📝</div>
+        <h2>REGISTER</h2>
+        <p>CREATE A NEW STUDENT ACCOUNT</p>
+        <div class="scrs-input-group"><label>Full Name</label><input type="text" id="reg-name" placeholder="Enter your full name"></div>
+        <div class="scrs-input-group"><label>Student ID</label><input type="text" id="reg-id" placeholder="24-00064"></div>
+        <div class="scrs-input-group"><label>Grade &amp; Section</label><input type="text" id="reg-grade" placeholder="Grade 12 — STEM A"></div>
+        <div class="scrs-input-group"><label>Username</label><input type="text" id="reg-user" placeholder="Enter your username"></div>
+        <div class="scrs-input-group"><label>Password</label><input type="password" id="reg-pass" placeholder="Enter your password"></div>
+        <button class="scrs-btn" onclick="doRegister()">Register →</button>
+        <p class="scrs-link"><span onclick="showLogin()">← Back to Login</span></p>
+      </div>
+    </div>
+
+    <!-- REGISTER ADMIN REQUEST -->
+    <div id="scrs-adminreq-screen" class="scrs-auth-wrap" style="display:none;">
+      <div class="scrs-card">
+        <div class="scrs-card-icon">🛡️</div>
+        <h2>ADMIN REQUEST</h2>
+        <p>SEND A REQUEST TO BECOME AN ADMINISTRATOR</p>
+        <div style="background:rgba(255,0,0,0.05);border:1px solid rgba(255,0,0,0.2);border-radius:8px;padding:12px 14px;margin-bottom:20px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.45);letter-spacing:1px;line-height:1.8;">
+          Your request will be reviewed by the current admin. Once approved, you can log in as Administrator.
+        </div>
+        <div class="scrs-input-group"><label>Full Name</label><input type="text" id="adreq-name" placeholder="Enter your full name"></div>
+        <div class="scrs-input-group"><label> Username</label><input type="text" id="adreq-user" placeholder="Enter your username"></div>
+        <div class="scrs-input-group"><label>Password</label><input type="password" id="adreq-pass" placeholder="Enter your password"></div>
+        <div class="scrs-input-group"><label>Reason / Justification</label><textarea id="adreq-reason" placeholder="Why do you need admin access? (e.g. Guidance Counselor, School Head...)" style="min-height:80px;"></textarea></div>
+        <button class="scrs-btn" onclick="doAdminRequest()">Submit Request →</button>
+        <p class="scrs-link"><span onclick="showLogin()">← Back to Login</span></p>
+      </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="scrs-main-app" style="display:none;">
+      <div class="scrs-layout">
+        <div class="scrs-sidebar" id="scrs-sidebar">
+          <div class="scrs-nav-user" id="sidebar-user">
+            <div class="nav-avatar" id="sidebar-avatar">🎓</div>
+            <div class="nav-name" id="sidebar-name">—</div>
+            <div class="nav-role" id="sidebar-role">—</div>
+          </div>
+          <div id="nav-student" style="display:none;">
+            <div class="scrs-nav-item active" onclick="showPanel('dash-student',this)"><span class="nav-icon">📊</span>Dashboard</div>
+            <div class="scrs-nav-item" onclick="showPanel('submit-concern',this)"><span class="nav-icon">✉️</span>Submit Concern</div>
+            <div class="scrs-nav-item" onclick="showPanel('my-reports',this)"><span class="nav-icon">📋</span>My Reports</div>
+            <div class="scrs-nav-item" onclick="showPanel('student-messages',this)"><span class="nav-icon">💬</span>Messages <span class="scrs-nav-badge" id="student-msg-badge" style="display:none;">!</span></div>
+            <div class="scrs-nav-item" onclick="showPanel('faq-panel',this)"><span class="nav-icon">❓</span>FAQ</div>
+          </div>
+          <div id="nav-admin" style="display:none;">
+            <div class="scrs-nav-item active" onclick="showPanel('dash-admin',this)"><span class="nav-icon">📊</span>Dashboard</div>
+            <div class="scrs-nav-item" onclick="showPanel('all-reports',this)"><span class="nav-icon">📋</span>All Reports <span class="scrs-nav-badge" id="pending-badge">0</span></div>
+            <div class="scrs-nav-item" onclick="showPanel('manage-users',this)"><span class="nav-icon">👥</span>Students</div>
+            <div class="scrs-nav-item" onclick="showPanel('admin-messages',this)"><span class="nav-icon">💬</span>Messages <span class="scrs-nav-badge" id="admin-msg-badge" style="display:none;">!</span></div>
+            <div class="scrs-nav-item" onclick="showPanel('admin-requests',this)"><span class="nav-icon">🔐</span>Admin Requests <span class="scrs-nav-badge" id="req-badge">0</span></div>
+            <div class="scrs-nav-item" onclick="showPanel('blocked-users',this)"><span class="nav-icon">🚫</span>Blocked Users</div>
+            <div class="scrs-nav-item" onclick="showPanel('visitor-log',this)"><span class="nav-icon">👁️</span>Visitor Log</div>
+            <div class="scrs-nav-item" onclick="showPanel('announcements',this)"><span class="nav-icon">📢</span>Announcements</div>
+          </div>
+          <div class="scrs-nav-item" style="margin-top:auto;color:rgba(255,80,80,.5);" onclick="doLogout()"><span class="nav-icon">🚪</span>Logout</div>
+        </div>
+
+        <div class="scrs-main">
+
+          <!-- STUDENT DASHBOARD -->
+          <div id="panel-dash-student" class="scrs-panel active">
+            <div class="panel-header">
+              <h3>DASHBOARD</h3>
+              <span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);" id="dash-student-date"></span>
+            </div>
+            <!-- Who is logged in card -->
+            <div id="student-login-info" style="background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.18);border-radius:10px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+              <div style="font-size:28px;">🎓</div>
+              <div>
+                <div style="font-family:var(--display);font-size:13px;color:var(--red2);letter-spacing:2px;" id="sl-name">—</div>
+                <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:1px;" id="sl-details">—</div>
+              </div>
+              <div style="margin-left:auto;text-align:right;">
+                <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);">SESSION STARTED</div>
+                <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);" id="sl-time">—</div>
+              </div>
+            </div>
+            <div class="dash-stats">
+              <div class="dash-stat"><div class="ds-num" id="ds-total">0</div><div class="ds-lbl">Total Reports</div></div>
+              <div class="dash-stat yellow"><div class="ds-num" id="ds-pending">0</div><div class="ds-lbl">Pending</div></div>
+              <div class="dash-stat blue"><div class="ds-num" id="ds-reviewed">0</div><div class="ds-lbl">Reviewed</div></div>
+              <div class="dash-stat green"><div class="ds-num" id="ds-resolved">0</div><div class="ds-lbl">Resolved</div></div>
+            </div>
+            <div class="activity-list" id="student-activity">
+              <div class="activity-header">RECENT ACTIVITY</div>
+              <div class="empty-state"><div class="es-icon">📭</div><p>NO REPORTS YET — SUBMIT YOUR FIRST CONCERN</p></div>
+            </div>
+          </div>
+
+          <!-- SUBMIT CONCERN -->
+          <div id="panel-submit-concern" class="scrs-panel">
+            <div class="panel-header"><h3>SUBMIT A CONCERN</h3></div>
+            <div class="submit-form">
+              <div class="scrs-input-group">
+                <label>Category</label>
+                <select id="sc-category">
+                  <option value="">— Select Category —</option>
+                  <option>Academic Issue</option>
+                  <option>Bullying / Harassment</option>
+                  <option>Facilities &amp; Infrastructure</option>
+                  <option>Teacher / Staff Concern</option>
+                  <option>Health &amp; Safety</option>
+                  <option>Financial / Scholarship</option>
+                  <option>Lost &amp; Found</option>
+                  <option>Suggestion / Feedback</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="priority-row">
+                <div class="scrs-input-group">
+                  <label>Priority Level</label>
+                  <select id="sc-priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                    <option value="Urgent">Urgent</option>
+                  </select>
+                </div>
+                <div class="scrs-input-group">
+                  <label>Visibility</label>
+                  <select id="sc-visibility">
+                    <option value="Private">Private (Only Me &amp; Admin)</option>
+                    <option value="Anonymous">Anonymous</option>
+                  </select>
+                </div>
+              </div>
+              <div class="scrs-input-group">
+                <label>Subject / Title</label>
+                <input type="text" id="sc-subject" placeholder="Brief title of your concern">
+              </div>
+              <div class="scrs-input-group">
+                <label>Detailed Description</label>
+                <textarea id="sc-desc" placeholder="Please describe your concern in detail..." style="min-height:140px;"></textarea>
+              </div>
+              <div class="scrs-input-group">
+                <label>Location / Where did this happen?</label>
+                <input type="text" id="sc-location" placeholder="e.g. Room 201, Canteen, Online, etc.">
+              </div>
+              <button class="scrs-btn" style="width:auto;padding:14px 36px;" onclick="submitConcern()">Submit Concern →</button>
+            </div>
+          </div>
+
+          <!-- MY REPORTS -->
+          <div id="panel-my-reports" class="scrs-panel">
+            <div class="panel-header"><h3>MY REPORTS</h3></div>
+            <div class="panel-tabs">
+              <div class="panel-tab active" onclick="filterMyReports('all',this)">All</div>
+              <div class="panel-tab" onclick="filterMyReports('Pending',this)">Pending</div>
+              <div class="panel-tab" onclick="filterMyReports('Reviewed',this)">Reviewed</div>
+              <div class="panel-tab" onclick="filterMyReports('Resolved',this)">Resolved</div>
+            </div>
+            <div class="scrs-table-wrap">
+              <table class="scrs-table">
+                <thead><tr><th>Report ID</th><th>Category</th><th>Subject</th><th>Priority</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+                <tbody id="my-reports-body"></tbody>
+              </table>
+            </div>
+            <div id="my-reports-empty" class="empty-state" style="display:none;"><div class="es-icon">📋</div><p>NO REPORTS FOUND</p></div>
+          </div>
+
+          <!-- STUDENT MESSAGES -->
+          <div id="panel-student-messages" class="scrs-panel">
+            <div class="panel-header"><h3>MESSAGES</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);">DIRECT MESSAGE WITH ADMIN</span></div>
+            <div class="msg-layout">
+              <div class="msg-list" id="student-thread-list">
+                <div style="padding:12px 14px;border-bottom:1px solid rgba(255,0,0,0.1);font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:2px;">CONVERSATIONS</div>
+                <div class="msg-list-item active" onclick="openStudentThread()">
+                  <div class="msg-list-name">🛡️ Administrator</div>
+                  <div class="msg-list-preview" id="stu-preview">No messages yet</div>
+                </div>
+              </div>
+              <div class="msg-chat">
+                <div class="msg-chat-header">ADMIN — System Administrator</div>
+                <div class="msg-chat-body" id="student-chat-body">
+                  <div class="msg-empty">NO MESSAGES YET — START A CONVERSATION</div>
+                </div>
+                <div class="msg-input-row">
+                  <input type="text" id="student-msg-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendStudentMessage()">
+                  <button class="msg-send-btn" onclick="sendStudentMessage()">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div id="panel-faq-panel" class="scrs-panel">
+            <div class="panel-header"><h3>FREQUENTLY ASKED QUESTIONS</h3></div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div style="border:1px solid rgba(255,0,0,0.15);border-radius:8px;overflow:hidden;">
+                <div style="padding:16px 18px;background:rgba(255,0,0,0.05);font-family:var(--mono);font-size:12px;color:var(--red2);letter-spacing:1px;">How do I submit a concern?</div>
+                <div style="padding:14px 18px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);line-height:1.8;">Click on "Submit Concern" in the sidebar. Fill out the category, priority, subject, and description fields, then click Submit. You will receive a unique Report ID.</div>
+              </div>
+              <div style="border:1px solid rgba(255,0,0,0.15);border-radius:8px;overflow:hidden;">
+                <div style="padding:16px 18px;background:rgba(255,0,0,0.05);font-family:var(--mono);font-size:12px;color:var(--red2);letter-spacing:1px;">How long does it take to get a response?</div>
+                <div style="padding:14px 18px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);line-height:1.8;">Urgent and High priority concerns are addressed within 24–48 hours. Medium and Low priority concerns may take 3–5 working days.</div>
+              </div>
+              <div style="border:1px solid rgba(255,0,0,0.15);border-radius:8px;overflow:hidden;">
+                <div style="padding:16px 18px;background:rgba(255,0,0,0.05);font-family:var(--mono);font-size:12px;color:var(--red2);letter-spacing:1px;">Can I submit anonymously?</div>
+                <div style="padding:14px 18px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);line-height:1.8;">Yes. Select "Anonymous" under Visibility when submitting. Your name will not be shown to the administrator.</div>
+              </div>
+              <div style="border:1px solid rgba(255,0,0,0.15);border-radius:8px;overflow:hidden;">
+                <div style="padding:16px 18px;background:rgba(255,0,0,0.05);font-family:var(--mono);font-size:12px;color:var(--red2);letter-spacing:1px;">What do the status labels mean?</div>
+                <div style="padding:14px 18px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);line-height:1.8;">
+                  <span class="status pending">Pending</span> — Received, awaiting review.<br>
+                  <span class="status reviewed" style="margin:0 4px;">Reviewed</span> — Admin is taking action.<br>
+                  <span class="status resolved" style="margin:0 4px;">Resolved</span> — Addressed and closed.<br>
+                  <span class="status rejected" style="margin:0 4px;">Rejected</span> — Not approved (reason noted).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN DASHBOARD -->
+          <div id="panel-dash-admin" class="scrs-panel">
+            <div class="panel-header">
+              <h3>ADMIN DASHBOARD</h3>
+              <span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);" id="dash-admin-date"></span>
+            </div>
+            <!-- Who is logged in -->
+            <div id="admin-login-info" style="background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.18);border-radius:10px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+              <div style="font-size:28px;">🛡️</div>
+              <div>
+                <div style="font-family:var(--display);font-size:13px;color:var(--red2);letter-spacing:2px;" id="al-name">—</div>
+                <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:1px;" id="al-details">ADMINISTRATOR ACCESS</div>
+              </div>
+              <div style="margin-left:auto;text-align:right;">
+                <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);">SESSION STARTED</div>
+                <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);" id="al-time">—</div>
+              </div>
+            </div>
+            <div class="dash-stats">
+              <div class="dash-stat"><div class="ds-num" id="adm-total">0</div><div class="ds-lbl">Total Reports</div></div>
+              <div class="dash-stat yellow"><div class="ds-num" id="adm-pending">0</div><div class="ds-lbl">Pending</div></div>
+              <div class="dash-stat blue"><div class="ds-num" id="adm-reviewed">0</div><div class="ds-lbl">Reviewed</div></div>
+              <div class="dash-stat green"><div class="ds-num" id="adm-resolved">0</div><div class="ds-lbl">Resolved</div></div>
+            </div>
+            <div class="activity-list" id="admin-activity">
+              <div class="activity-header">RECENT CONCERNS — ALL STUDENTS</div>
+              <div class="empty-state"><div class="es-icon">📭</div><p>NO REPORTS SUBMITTED YET</p></div>
+            </div>
+          </div>
+
+          <!-- ALL REPORTS (ADMIN) -->
+          <div id="panel-all-reports" class="scrs-panel">
+            <div class="panel-header"><h3>ALL REPORTS</h3></div>
+            <div class="panel-tabs">
+              <div class="panel-tab active" onclick="filterAllReports('all',this)">All</div>
+              <div class="panel-tab" onclick="filterAllReports('Pending',this)">Pending</div>
+              <div class="panel-tab" onclick="filterAllReports('Reviewed',this)">Reviewed</div>
+              <div class="panel-tab" onclick="filterAllReports('Resolved',this)">Resolved</div>
+              <div class="panel-tab" onclick="filterAllReports('Rejected',this)">Rejected</div>
+            </div>
+            <div class="scrs-table-wrap">
+              <table class="scrs-table">
+                <thead><tr><th>Report ID</th><th>Student</th><th>Category</th><th>Subject</th><th>Priority</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+                <tbody id="all-reports-body"></tbody>
+              </table>
+            </div>
+            <div id="all-reports-empty" class="empty-state" style="display:none;"><div class="es-icon">📋</div><p>NO REPORTS FOUND</p></div>
+          </div>
+
+          <!-- MANAGE STUDENTS (ADMIN) -->
+          <div id="panel-manage-users" class="scrs-panel">
+            <div class="panel-header"><h3>REGISTERED STUDENTS</h3></div>
+            <div class="scrs-table-wrap">
+              <table class="scrs-table">
+                <thead><tr><th>#</th><th>Full Name</th><th>Student ID</th><th>Grade &amp; Section</th><th>Username</th><th>Reports</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="users-body"></tbody>
+              </table>
+            </div>
+            <div id="users-empty" class="empty-state" style="display:none;"><div class="es-icon">👥</div><p>NO STUDENTS REGISTERED YET</p></div>
+          </div>
+
+          <!-- ADMIN MESSAGES -->
+          <div id="panel-admin-messages" class="scrs-panel">
+            <div class="panel-header"><h3>MESSAGES</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);">MESSAGE STUDENTS DIRECTLY</span></div>
+            <div class="msg-layout">
+              <div class="msg-list" id="admin-thread-list">
+                <div style="padding:12px 14px;border-bottom:1px solid rgba(255,0,0,0.1);font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:2px;">STUDENTS</div>
+              </div>
+              <div class="msg-chat" id="admin-chat-area">
+                <div class="msg-chat-header" id="admin-chat-header">SELECT A STUDENT</div>
+                <div class="msg-chat-body" id="admin-chat-body">
+                  <div class="msg-empty">SELECT A STUDENT FROM THE LEFT TO START MESSAGING</div>
+                </div>
+                <div class="msg-input-row" id="admin-msg-input-row" style="display:none;">
+                  <input type="text" id="admin-msg-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendAdminMessage()">
+                  <button class="msg-send-btn" onclick="sendAdminMessage()">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN REQUESTS -->
+          <div id="panel-admin-requests" class="scrs-panel">
+            <div class="panel-header"><h3>ADMIN ACCESS REQUESTS</h3></div>
+            <div id="admin-requests-list">
+              <div class="empty-state"><div class="es-icon">🔐</div><p>NO PENDING ADMIN REQUESTS</p></div>
+            </div>
+          </div>
+
+          <!-- BLOCKED USERS -->
+          <div id="panel-blocked-users" class="scrs-panel">
+            <div class="panel-header"><h3>BLOCKED USERS</h3></div>
+            <div class="scrs-table-wrap">
+              <table class="scrs-table">
+                <thead><tr><th>#</th><th>Full Name</th><th>Username</th><th>Role</th><th>Blocked On</th><th>Action</th></tr></thead>
+                <tbody id="blocked-body"></tbody>
+              </table>
+            </div>
+            <div id="blocked-empty" class="empty-state"><div class="es-icon">🚫</div><p>NO BLOCKED USERS</p></div>
+          </div>
+
+          <!-- VISITOR LOG -->
+          <div id="panel-visitor-log" class="scrs-panel">
+            <div class="panel-header">
+              <h3>VISITOR LOG</h3>
+              <span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);">WHO OPENED THIS SITE</span>
+            </div>
+            <div class="scrs-table-wrap">
+              <table class="visitor-log-table">
+                <thead><tr><th>#</th><th>IP Address</th><th>City / Region</th><th>Country</th><th>ISP</th><th>Browser</th><th>Device</th><th>Time Entered</th><th>Status</th></tr></thead>
+                <tbody id="visitor-log-body"></tbody>
+              </table>
+            </div>
+            <div id="visitor-log-empty" class="empty-state" style="display:none;"><div class="es-icon">👁️</div><p>NO VISITOR DATA YET</p></div>
+          </div>
+
+          <!-- ANNOUNCEMENTS (ADMIN) -->
+          <div id="panel-announcements" class="scrs-panel">
+            <div class="panel-header"><h3>ANNOUNCEMENTS</h3></div>
+            <div class="submit-form">
+              <div class="scrs-input-group"><label>Announcement Title</label><input type="text" id="ann-title" placeholder="e.g. System Maintenance Notice"></div>
+              <div class="scrs-input-group"><label>Message</label><textarea id="ann-body" placeholder="Write your announcement here..." style="min-height:100px;"></textarea></div>
+              <button class="scrs-btn" style="width:auto;padding:14px 36px;" onclick="postAnnouncement()">Post Announcement →</button>
+            </div>
+            <div style="margin-top:28px;" id="ann-list">
+              <div class="activity-header" style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--red2);padding:14px 0;border-bottom:1px solid rgba(255,0,0,0.1);">POSTED ANNOUNCEMENTS</div>
+            </div>
+          </div>
+
+        </div><!-- /scrs-main -->
+      </div><!-- /scrs-layout -->
+    </div><!-- /scrs-main-app -->
+  </div><!-- /scrs-app -->
+</section>
+
+<div class="divider beat-el beat-divider"></div>
+
 <section id="contact">
   <div class="section reveal">
     <span class="section-label">GET IN TOUCH</span>
-    <h2 class="section-title">Contact <span>Us</span></h2>
-    <div class="section-line"></div>
-
+    <h2 class="section-title beat-el beat-title">Contact <span>Us</span></h2>
+    <div class="section-line beat-el beat-line"></div>
     <div class="contact-grid">
       <div class="contact-info">
-        <p>Have a project in mind? Want to collaborate? Or just want to say hi? We'd love to hear from you. Team Code-Red is always open to new challenges.</p>
-
+        <p>Have a project in mind? Want to collaborate? Or just want to say hi? We'd love to hear from you.</p>
         <div class="contact-links">
-          <a href="mailto:coderedteam@email.com" class="contact-link">
-            <span class="contact-link-icon">✉</span>
-            put the gmail.com.com
-          </a>
-          <a href="https://github.com" class="contact-link" target="_blank">
-            <span class="contact-link-icon">⌥</span>
-            github.com/team-code-red
-          </a>
-          <a href="https://discord.gg" class="contact-link" target="_blank">
-            <span class="contact-link-icon">◈</span>
-           put your name
-          </a>
-          <a href="#" class="contact-link">
-            <span class="contact-link-icon">◎</span>
-            @teamcoderedofficial
-          </a>
+          <a href="mailto:coderedteam@gmail.com" class="contact-link beat-el"><span class="contact-link-icon">✉</span>coderedteam@gmail.com</a>
+          <a href="https://github.com" class="contact-link beat-el" target="_blank"><span class="contact-link-icon">⌥</span>github.com/team-code-red</a>
+          <a href="https://discord.gg" class="contact-link beat-el" target="_blank"><span class="contact-link-icon">◈</span>discord.gg/team-code-red</a>
+          <a href="#" class="contact-link beat-el"><span class="contact-link-icon">◎</span>@teamcoderedofficial</a>
         </div>
       </div>
-
       <form class="contact-form" onsubmit="submitForm(event)">
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" placeholder="FULL NAME " required>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="GMAIL.com" required>
-        </div>
-        <div class="form-group">
-          <label>Message</label>
-          <textarea placeholder="Tell us about your project or idea..." required></textarea>
-        </div>
-        <button type="submit" class="btn-primary" style="width:fit-content;border:none;cursor:pointer;">Send Message →</button>
+        <div class="form-group"><label>Your Name</label><input type="text" placeholder="FULL NAME" required></div>
+        <div class="form-group"><label>Email Address</label><input type="email" placeholder="yourmail@gmail.com" required></div>
+        <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your project or idea..." required></textarea></div>
+        <button type="submit" class="btn-primary beat-el" style="width:fit-content;border:none;cursor:pointer;">Send Message →</button>
       </form>
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
-<footer>
+<footer class="beat-el beat-footer">
   <div class="footer-logo">CODE-RED</div>
   <div class="footer-sub">ELITE DEVELOPMENT SQUAD — BUILT DIFFERENT</div>
   <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#team">Team</a>
-    <a href="#projects">Projects</a>
-    <a href="#playground">Playground</a>
-    <a href="#contact">Contact</a>
+    <a href="#home">Home</a><a href="#about">About</a><a href="#team">Team</a>
+    <a href="#projects">Projects</a><a href="#playground">System</a><a href="#contact">Contact</a>
   </div>
   <div class="footer-copy">© 2025 Team Code-Red. All rights reserved.</div>
 </footer>
 
-<!-- ─── SCRIPTS ─── -->
+<!-- REPORT DETAIL MODAL -->
+<div class="scrs-modal-bg" id="report-modal">
+  <div class="scrs-modal">
+    <h3 id="modal-subject">—</h3>
+    <div class="modal-id" id="modal-id">—</div>
+    <div class="modal-field"><label>Category</label><div class="mf-val" id="modal-category">—</div></div>
+    <div class="modal-field"><label>Priority</label><div class="mf-val" id="modal-priority">—</div></div>
+    <div class="modal-field"><label>Status</label><div class="mf-val" id="modal-status-val">—</div></div>
+    <div class="modal-field"><label>Location</label><div class="mf-val" id="modal-location">—</div></div>
+    <div class="modal-field"><label>Description</label><div class="mf-val" id="modal-desc" style="white-space:pre-wrap;">—</div></div>
+    <div class="modal-field" id="modal-remark-wrap" style="display:none;"><label>Admin Remark</label><div class="mf-val" id="modal-remark">—</div></div>
+    <div class="modal-field"><label>Submitted By</label><div class="mf-val" id="modal-by">—</div></div>
+    <div class="modal-field"><label>Date Submitted</label><div class="mf-val" id="modal-date">—</div></div>
+    <div id="modal-admin-controls" style="display:none;margin-top:18px;">
+      <div class="scrs-input-group"><label>Update Status</label>
+        <select id="modal-new-status">
+          <option value="Pending">Pending</option>
+          <option value="Reviewed">Reviewed</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="scrs-input-group"><label>Admin Remark (optional)</label>
+        <textarea id="modal-remark-input" placeholder="Add a remark or response..." style="min-height:70px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="scrs-btn" style="width:auto;padding:11px 28px;display:none;" id="modal-update-btn" onclick="updateReportStatus()">Update Status</button>
+      <button class="scrs-btn danger" style="width:auto;padding:11px 28px;display:none;" id="modal-delete-btn" onclick="deleteReport()">Delete Report</button>
+      <button class="scrs-btn secondary" style="width:auto;padding:11px 28px;" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="scrs-toast"></div>
+
 <script>
+/* ══════════════════ BEAT ENGINE ══════════════════ */
+const BEATS=[0.186,0.65,1.161,1.625,2.136,2.601,3.111,3.622,4.087,4.598,5.062,5.573,6.084,6.548,7.059,7.523,8.034,8.545,9.009,9.52,9.985,10.495,11.006,11.471,11.981,12.446,12.957,13.421,13.932,14.443,14.907,15.418,15.882,16.393,16.904,17.369,17.879,18.39,18.855,19.319,19.83,20.341,20.805,21.316,21.827,22.291,22.802,23.266,23.777,24.288,24.752,25.263,25.728,26.239,26.703,27.028,27.678,28.189,28.7,29.211,29.675,30.186,30.65,31.161,31.626,32.136,32.601,33.112,33.622,34.133,34.598,35.062,35.573,36.037,36.548,37.059,37.523,37.849,38.499,38.824,39.242,39.799,40.449,40.96,41.471,41.935,42.446,42.771,43.189,43.7,44.397,44.722,45.186,45.697,46.393,46.858,47.369,47.88,48.344,48.855,49.366,49.83,50.294,50.805,51.316,51.78,52.291,52.802,53.267,53.777,54.242,54.567,54.985,55.449,55.821,56.192,56.75,57.632,58.096,58.561,58.932,59.443,60.511,61.161,61.626,62.137,62.647,63.112,63.623,64.087,64.598,65.062,65.573,66.084,66.548,67.059,67.524,68.034,68.545,69.01,69.521,69.985,70.496,70.96,71.471,71.935,72.26,72.957,73.421,73.932,74.397,74.908,75.418,75.883,76.394,76.904,77.369,77.88,78.344,78.855,79.319,79.83,80.295,80.805,81.27,81.781,82.292,82.802,83.267,83.731,84.242,84.753,85.217,85.728,86.239,86.703,87.214,87.679,88.004,88.422,88.932,89.675,90.14,90.651,91.115,91.672,92.137,92.601,93.112,93.576,94.087,94.552,94.877,95.573,96.038,96.549,97.059,97.524,98.035];
+const FLASH_MS=130;let bIdx=0,flashing=false;
+const allBeat=document.querySelectorAll('.beat-el');
+const titleBeat=document.querySelectorAll('.beat-title');
+const lineBeat=document.querySelectorAll('.beat-line');
+const divBeat=document.querySelectorAll('.beat-divider');
+const bar=document.getElementById('beat-bar');
+const N=44;
+for(let i=0;i<N;i++){const s=document.createElement('div');s.className='bseg';bar.appendChild(s);}
+const segs=bar.querySelectorAll('.bseg');
+const cursorRingEl=document.getElementById('cursorRing');
+function bang(){
+  if(flashing)return;flashing=true;
+  allBeat.forEach(e=>e.classList.add('bang'));
+  titleBeat.forEach(e=>e.classList.add('bang'));
+  lineBeat.forEach(e=>e.classList.add('bang'));
+  divBeat.forEach(e=>e.classList.add('bang'));
+  const n=Math.floor(N*(0.45+Math.random()*0.45));
+  const idx=[];for(let i=0;i<N;i++)idx.push(i);idx.sort(()=>Math.random()-.5);
+  const lit=new Set(idx.slice(0,n));
+  segs.forEach((s,i)=>s.classList.toggle('lit',lit.has(i)));
+  if(cursorRingEl){cursorRingEl.style.borderColor='rgba(255,0,0,1)';cursorRingEl.style.width='64px';cursorRingEl.style.height='64px';}
+  setTimeout(()=>{
+    allBeat.forEach(e=>e.classList.remove('bang'));
+    titleBeat.forEach(e=>e.classList.remove('bang'));
+    lineBeat.forEach(e=>e.classList.remove('bang'));
+    divBeat.forEach(e=>e.classList.remove('bang'));
+    segs.forEach(s=>s.classList.remove('lit'));
+    if(cursorRingEl){cursorRingEl.style.borderColor='rgba(255,0,0,0.6)';cursorRingEl.style.width='36px';cursorRingEl.style.height='36px';}
+    flashing=false;
+  },FLASH_MS);
+}
+const vid=document.getElementById('bg-video');
+function beatLoop(){
+  const t=vid.currentTime||0;
+  if(t<0.5&&bIdx>5)bIdx=0;
+  while(bIdx<BEATS.length&&BEATS[bIdx]<t-0.06)bIdx++;
+  if(bIdx<BEATS.length&&Math.abs(BEATS[bIdx]-t)<0.08){bang();bIdx++;}
+  requestAnimationFrame(beatLoop);
+}
+vid.addEventListener('canplay',()=>{vid.play().catch(()=>{});beatLoop();});
+vid.addEventListener('error',()=>{
+  const IV=510;let t0=performance.now();
+  function tfb(){if((performance.now()-t0)%IV<90&&!flashing)bang();requestAnimationFrame(tfb);}tfb();
+});
+if(vid.readyState>=3){vid.play().catch(()=>{});beatLoop();}
 
-   
-function toggleDrop(event) {
-  const dropdown = event.target.closest(".dropdown");
-  const menu = document.getElementById("dropMenu");
-  const arrow = document.getElementById("arrow");
+/* ── MATRIX ── */
+const cv=document.getElementById('matrixCanvas');const ctx=cv.getContext('2d');
+function rsz(){cv.width=innerWidth;cv.height=innerHeight;}rsz();addEventListener('resize',rsz);
+const CHR='TEAMCODEREDABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>{}[]#@!%$';
+const FS=13;let COLS=Math.floor(cv.width/FS);let DR=Array(COLS).fill(1);
+function mx(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,cv.width,cv.height);ctx.font=FS+'px Share Tech Mono,monospace';for(let i=0;i<DR.length;i++){ctx.fillStyle=i%4===0?'#ff4444':'#880000';ctx.fillText(CHR[Math.floor(Math.random()*CHR.length)],i*FS,DR[i]*FS);if(DR[i]*FS>cv.height&&Math.random()>.975)DR[i]=0;DR[i]++;}}
+addEventListener('resize',()=>{COLS=Math.floor(cv.width/FS);DR=Array(COLS).fill(1);});
+setInterval(mx,55);
 
-  dropdown.classList.toggle("show");
-  menu.classList.toggle("show");
-  arrow.classList.toggle("rotate");
+/* ── CURSOR ── */
+const curEl=document.getElementById('cursor');
+let curX=window.innerWidth/2,curY=window.innerHeight/2,rx=curX,ry=curY;
+let arrowMode=false,arrowModeTimer=null;
+const ARROW_STEP=8;const ARROW_KEYS=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+function showArrowModeIndicator(){
+  const ind=document.getElementById('arrowmode-indicator');
+  ind.classList.add('show');clearTimeout(arrowModeTimer);
+  arrowModeTimer=setTimeout(()=>{ind.classList.remove('show');},2000);
+}
+document.addEventListener('keydown',function(e){
+  if(!ARROW_KEYS.includes(e.key))return;
+  const tag=document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
+  e.preventDefault();arrowMode=true;
+  document.getElementById('hud-inputmode').textContent='ARROW KEYS';
+  showArrowModeIndicator();
+  switch(e.key){
+    case 'ArrowUp':    curY=Math.max(0,curY-ARROW_STEP);break;
+    case 'ArrowDown':  curY=Math.min(window.innerHeight,curY+ARROW_STEP);break;
+    case 'ArrowLeft':  curX=Math.max(0,curX-ARROW_STEP);break;
+    case 'ArrowRight': curX=Math.min(window.innerWidth,curX+ARROW_STEP);break;
+  }
+  curEl.style.left=curX+'px';curEl.style.top=curY+'px';
+  document.getElementById('hud-cx').textContent=Math.round(curX)+'px';
+  document.getElementById('hud-cy').textContent=Math.round(curY)+'px';
+});
+document.addEventListener('mousemove',function(e){
+  curX=e.clientX;curY=e.clientY;
+  curEl.style.left=curX+'px';curEl.style.top=curY+'px';
+  if(arrowMode){arrowMode=false;document.getElementById('hud-inputmode').textContent='MOUSE';}
+  document.getElementById('hud-cx').textContent=Math.round(curX)+'px';
+  document.getElementById('hud-cy').textContent=Math.round(curY)+'px';
+});
+function animRing(){rx+=(curX-rx)*.12;ry+=(curY-ry)*.12;cursorRingEl.style.left=rx+'px';cursorRingEl.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('a,button,.project-card,.scrs-btn,.role-btn,.scrs-nav-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{curEl.style.width='20px';curEl.style.height='20px';});
+  el.addEventListener('mouseleave',()=>{curEl.style.width='12px';curEl.style.height='12px';});
+});
+
+/* ── VISITOR HUD ── */
+let hudVisible=false;
+function toggleHud(){
+  hudVisible=!hudVisible;
+  document.getElementById('visitor-hud').classList.toggle('visible',hudVisible);
+  document.getElementById('hud-toggle').style.right=hudVisible?'256px':'16px';
+}
+function getBrowser(){const ua=navigator.userAgent;if(ua.includes('Edg'))return'Edge';if(ua.includes('OPR')||ua.includes('Opera'))return'Opera';if(ua.includes('Chrome')&&!ua.includes('Edg'))return'Chrome';if(ua.includes('Firefox'))return'Firefox';if(ua.includes('Safari')&&!ua.includes('Chrome'))return'Safari';return'Unknown';}
+function getDevice(){return/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'Mobile/Tablet':'Desktop';}
+const entryTime=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+document.getElementById('hud-browser').textContent=getBrowser();
+document.getElementById('hud-device').textContent=getDevice();
+document.getElementById('hud-time').textContent=entryTime;
+let visitorIP='Unknown',visitorCity='—',visitorRegion='—',visitorCountry='—',visitorISP='—';
+fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+  visitorIP=d.ip||'Hidden';visitorCity=d.city||'—';visitorRegion=d.region||'—';
+  visitorCountry=(d.country_name||'—')+(d.country_code?' ('+d.country_code+')':'');
+  visitorISP=d.org||'—';
+  document.getElementById('hud-ip').textContent=visitorIP;
+  document.getElementById('hud-city').textContent=visitorCity;
+  document.getElementById('hud-region').textContent=visitorRegion;
+  document.getElementById('hud-country').textContent=visitorCountry;
+  document.getElementById('hud-isp').textContent=visitorISP;
+  logVisitor();
+}).catch(()=>{document.getElementById('hud-ip').textContent='Unavailable';logVisitor();});
+const SECS2=document.querySelectorAll('section[id]');
+function updateSection(){let c='home';SECS2.forEach(s=>{if(scrollY>=s.offsetTop-120)c=s.id;});document.getElementById('hud-section').textContent='#'+c;}
+addEventListener('scroll',updateSection);updateSection();
+
+function logVisitor(){
+  const logs=loadData('visitor_logs',[]);
+  const entry={
+    id:Date.now(),ip:visitorIP,city:visitorCity,region:visitorRegion,
+    country:visitorCountry,isp:visitorISP,
+    browser:getBrowser(),device:getDevice(),
+    time:new Date().toLocaleString('en-PH'),
+    status:'Online'
+  };
+  const dup=logs.find(l=>l.ip===visitorIP&&(Date.now()-new Date(l.time).getTime())<60000);
+  if(!dup){logs.push(entry);saveData('visitor_logs',logs);}
 }
 
-/* close when clicking outside */
-window.onclick = function(e) {
-  if (!e.target.closest(".dropdown")) {
-    document.querySelector(".dropdown").classList.remove("show");
-    document.getElementById("dropMenu").classList.remove("show");
-    document.getElementById("arrow").classList.remove("rotate");
+/* ── SCROLL REVEAL ── */
+document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)el.classList.add('visible');});},{threshold:0.1}).observe(el));
+
+/* ── ACTIVE NAV ── */
+const SECS=document.querySelectorAll('section[id]');
+const NLS=document.querySelectorAll('.nav-links a');
+addEventListener('scroll',()=>{let c='';SECS.forEach(s=>{if(scrollY>=s.offsetTop-100)c=s.id;});NLS.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));});
+
+/* ── DROPDOWN ── */
+function toggleDrop(e){e.preventDefault();const dd=e.target.closest('.dropdown');dd.classList.toggle('show');document.getElementById('arrow').classList.toggle('rotate');}
+onclick=e=>{if(!e.target.closest('.dropdown')&&!e.target.closest('#hud-toggle')){document.querySelector('.dropdown')?.classList.remove('show');document.getElementById('arrow')?.classList.remove('rotate');}};
+function toggleMenu(){const nl=document.getElementById('navLinks');const h=document.getElementById('hamburger');const open=nl.style.display==='flex';nl.style.cssText=open?'':'display:flex;flex-direction:column;position:fixed;top:64px;right:0;background:rgba(3,0,0,0.97);padding:20px;min-width:200px;border-left:1px solid rgba(255,0,0,0.3);z-index:999;';h.classList.toggle('open',!open);}
+
+/* ── CONTACT FORM ── */
+function submitForm(e){e.preventDefault();const b=e.target.querySelector('button[type=submit]');b.textContent='✓ Sent!';b.style.background='#00cc55';setTimeout(()=>{b.textContent='Send Message →';b.style.background='var(--red)';e.target.reset();},3000);}
+
+/* ══════════════════════════════════════════════════════
+   WBSCRS FULL SYSTEM LOGIC
+   ══════════════════════════════════════════════════════ */
+
+function loadData(key,def){try{const v=localStorage.getItem('scrs_'+key);return v?JSON.parse(v):def;}catch{return def;}}
+function saveData(key,val){localStorage.setItem('scrs_'+key,JSON.stringify(val));}
+
+/* Seed admin */
+(function(){
+  let users=loadData('users',[]);
+  if(!users.find(u=>u.username==='admin')){
+    users.push({username:'admin',password:'admin123',role:'admin',name:'Administrator',studentId:'ADM-001',grade:'N/A',blocked:false,createdAt:new Date().toLocaleString('en-PH')});
+    saveData('users',users);
+  }
+})();
+
+let currentUser=null;
+let selectedRole='student';
+let currentReportId=null;
+let activeAdminChatUser=null;
+let sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+let toastTimer=null;
+function toast(msg,type=''){
+  const t=document.getElementById('scrs-toast');
+  t.textContent=msg;t.className='show '+(type||'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.className='';},3500);
+}
+
+/* ── Role Selection ── */
+function selectRole(r){
+  selectedRole=r;
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('role-'+r).classList.add('selected');
+}
+
+function proceedToLogin(){
+  if(!document.querySelector('.role-btn.selected')){toast('Please select a role first.','error');return;}
+  showScreen('login');
+  const isAdmin=selectedRole==='admin';
+  document.getElementById('login-title').textContent=isAdmin?'ADMIN LOGIN':'STUDENT LOGIN';
+  document.getElementById('login-icon').textContent=isAdmin?'🛡️':'🎓';
+  document.getElementById('login-sub').textContent=isAdmin?'ADMINISTRATOR ACCESS':'ENTER YOUR CREDENTIALS';
+  document.getElementById('admin-req-notice').style.display=isAdmin?'block':'none';
+  document.getElementById('admin-hint-text').style.display=isAdmin?'block':'none';
+  document.getElementById('register-btn').textContent=isAdmin?'Request Admin Access':'Create Account';
+}
+
+function backToRole(){showScreen('role');}
+
+function showScreen(s){
+  ['scrs-role-screen','scrs-login-screen','scrs-register-screen','scrs-adminreq-screen','scrs-main-app'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+  const map={role:'scrs-role-screen',login:'scrs-login-screen',reg:'scrs-register-screen',adminreq:'scrs-adminreq-screen',app:'scrs-main-app'};
+  const el=document.getElementById(map[s]);
+  if(el)el.style.display=(s==='app')?'block':(s==='role'||s==='login'||s==='reg'||s==='adminreq')?'flex':'block';
+}
+
+function showLogin(){showScreen('login');}
+function showRegister(){
+  if(selectedRole==='admin'){showScreen('adminreq');return;}
+  showScreen('reg');
+}
+
+/* ── Register Student ── */
+function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const sid=document.getElementById('reg-id').value.trim();
+  const grade=document.getElementById('reg-grade').value.trim();
+  const user=document.getElementById('reg-user').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  if(!name||!sid||!grade||!user||!pass){toast('Please fill in all fields.','error');return;}
+  if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
+  let users=loadData('users',[]);
+  if(users.find(u=>u.username===user)){toast('Username already exists.','error');return;}
+  users.push({username:user,password:pass,role:'student',name,studentId:sid,grade,blocked:false,createdAt:new Date().toLocaleString('en-PH')});
+  saveData('users',users);
+  toast('Account created! Please log in.','success');
+  showLogin();
+}
+
+/* ── Admin Request ── */
+function doAdminRequest(){
+  const name=document.getElementById('adreq-name').value.trim();
+  const user=document.getElementById('adreq-user').value.trim();
+  const pass=document.getElementById('adreq-pass').value;
+  const reason=document.getElementById('adreq-reason').value.trim();
+  if(!name||!user||!pass||!reason){toast('Please fill in all fields.','error');return;}
+  if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
+  const users=loadData('users',[]);
+  if(users.find(u=>u.username===user)){toast('Username already taken.','error');return;}
+  const reqs=loadData('admin_requests',[]);
+  if(reqs.find(r=>r.username===user&&r.status==='Pending')){toast('A request with this username is already pending.','error');return;}
+  reqs.push({id:'REQ-'+Date.now().toString(36).toUpperCase(),name,username:user,password:pass,reason,status:'Pending',date:new Date().toLocaleString('en-PH')});
+  saveData('admin_requests',reqs);
+  document.getElementById('adreq-name').value='';
+  document.getElementById('adreq-user').value='';
+  document.getElementById('adreq-pass').value='';
+  document.getElementById('adreq-reason').value='';
+  toast('✓ Request submitted! Wait for admin approval.','success');
+  showLogin();
+}
+
+/* ── Login ── */
+function doLogin(){
+  const user=document.getElementById('login-user').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  if(!user||!pass){toast('Please enter credentials.','error');return;}
+  const users=loadData('users',[]);
+  const found=users.find(u=>u.username===user&&u.password===pass&&u.role===selectedRole);
+  if(!found){toast('Invalid credentials or wrong role.','error');return;}
+  if(found.blocked){toast('Your account has been blocked. Contact the administrator.','error');return;}
+  currentUser=found;
+  sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  launchApp();
+}
+
+function doLogout(){
+  currentUser=null;activeAdminChatUser=null;
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+  showScreen('role');
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('role-student').classList.add('selected');
+  selectedRole='student';
+  toast('Logged out.');
+}
+
+/* ── Launch App ── */
+function launchApp(){
+  showScreen('app');
+  document.getElementById('sidebar-name').textContent=currentUser.name;
+  document.getElementById('sidebar-role').textContent=currentUser.role.toUpperCase()+(currentUser.studentId?' · '+currentUser.studentId:'');
+  document.getElementById('sidebar-avatar').textContent=currentUser.role==='admin'?'🛡️':'🎓';
+  const now=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  if(currentUser.role==='admin'){
+    document.getElementById('nav-admin').style.display='block';
+    document.getElementById('nav-student').style.display='none';
+    document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-dash-admin').classList.add('active');
+    setNavActive(document.querySelectorAll('#nav-admin .scrs-nav-item')[0]);
+    document.getElementById('al-name').textContent=currentUser.name;
+    document.getElementById('al-details').textContent='ADMINISTRATOR · '+currentUser.studentId;
+    document.getElementById('al-time').textContent=sessionStart;
+    if(document.getElementById('dash-admin-date'))document.getElementById('dash-admin-date').textContent=now;
+    refreshAdminDash();
+    refreshReqBadge();
+  } else {
+    document.getElementById('nav-student').style.display='block';
+    document.getElementById('nav-admin').style.display='none';
+    document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-dash-student').classList.add('active');
+    setNavActive(document.querySelectorAll('#nav-student .scrs-nav-item')[0]);
+    document.getElementById('sl-name').textContent=currentUser.name;
+    document.getElementById('sl-details').textContent=currentUser.studentId+' · '+currentUser.grade;
+    document.getElementById('sl-time').textContent=sessionStart;
+    if(document.getElementById('dash-student-date'))document.getElementById('dash-student-date').textContent=now;
+    refreshStudentDash();
+    refreshStudentMsgBadge();
   }
 }
 
-function toggleDropdown() {
-  const menu = document.getElementById("dropdownMenu");
-  const arrow = document.getElementById("arrow");
-
-  menu.classList.toggle("show");
-  arrow.classList.toggle("rotate");
+function setNavActive(el){
+  if(!el)return;
+  const container=el.closest('#nav-student,#nav-admin');
+  if(container)container.querySelectorAll('.scrs-nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
 }
 
-
-// ── Matrix Rain ──────────────────────────────────────────────
-const canvas = document.getElementById('matrixCanvas');
-const ctx = canvas.getContext('2d');
-
-function resizeMatrix() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+/* ── Panel Navigation ── */
+function showPanel(name,navEl){
+  document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('panel-'+name);
+  if(panel)panel.classList.add('active');
+  if(navEl)setNavActive(navEl);
+  if(name==='dash-student')refreshStudentDash();
+  if(name==='my-reports')renderMyReports('all');
+  if(name==='dash-admin'){refreshAdminDash();refreshReqBadge();}
+  if(name==='all-reports')renderAllReports('all');
+  if(name==='manage-users')renderUsers();
+  if(name==='announcements')renderAnnouncements();
+  if(name==='admin-requests')renderAdminRequests();
+  if(name==='blocked-users')renderBlockedUsers();
+  if(name==='visitor-log')renderVisitorLog();
+  if(name==='admin-messages')renderAdminThreadList();
+  if(name==='student-messages'){renderStudentMessages();refreshStudentMsgBadge();}
 }
-resizeMatrix();
-window.addEventListener('resize', resizeMatrix);
 
-const chars = 'DRAGABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789DRAGABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789DRAGABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>{}[]()#@!%$';
-const fontSize = 14;
-let columns = Math.floor(canvas.width / fontSize);
-let drops = Array(columns).fill(1);
+function genId(){return 'CR-'+Date.now().toString(36).toUpperCase();}
 
-function drawMatrix() {
-  ctx.fillStyle = 'rgba(0,0,0,0.05)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#ff0000';
-  ctx.font = fontSize + 'px Share Tech Mono, monospace';
+/* ── Submit Concern ── */
+function submitConcern(){
+  const cat=document.getElementById('sc-category').value;
+  const prio=document.getElementById('sc-priority').value;
+  const vis=document.getElementById('sc-visibility').value;
+  const sub=document.getElementById('sc-subject').value.trim();
+  const desc=document.getElementById('sc-desc').value.trim();
+  const loc=document.getElementById('sc-location').value.trim();
+  if(!cat){toast('Please select a category.','error');return;}
+  if(!sub){toast('Please enter a subject.','error');return;}
+  if(!desc){toast('Please enter a description.','error');return;}
+  const reports=loadData('reports',[]);
+  const id=genId();
+  reports.push({
+    id,studentUsername:currentUser.username,
+    studentName:vis==='Anonymous'?'Anonymous':currentUser.name,
+    studentId:vis==='Anonymous'?'—':currentUser.studentId,
+    grade:currentUser.grade,category:cat,priority:prio,visibility:vis,
+    subject:sub,description:desc,location:loc||'Not specified',
+    status:'Pending',remark:'',date:new Date().toLocaleString('en-PH')
+  });
+  saveData('reports',reports);
+  ['sc-subject','sc-desc','sc-location'].forEach(id2=>{document.getElementById(id2).value='';});
+  document.getElementById('sc-category').selectedIndex=0;
+  toast('✓ Concern submitted! Report ID: '+id,'success');
+  refreshStudentDash();
+}
 
-  for (let i = 0; i < drops.length; i++) {
-    const char = chars[Math.floor(Math.random() * chars.length)];
-    ctx.fillStyle = i % 5 === 0 ? '#ff6666' : '#cc0000';
-    ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
+/* ── Student Dashboard ── */
+function refreshStudentDash(){
+  const reports=loadData('reports',[]).filter(r=>r.studentUsername===currentUser.username);
+  document.getElementById('ds-total').textContent=reports.length;
+  document.getElementById('ds-pending').textContent=reports.filter(r=>r.status==='Pending').length;
+  document.getElementById('ds-reviewed').textContent=reports.filter(r=>r.status==='Reviewed').length;
+  document.getElementById('ds-resolved').textContent=reports.filter(r=>r.status==='Resolved').length;
+  const act=document.getElementById('student-activity');
+  act.innerHTML='<div class="activity-header">RECENT ACTIVITY</div>';
+  if(!reports.length){act.innerHTML+='<div class="empty-state"><div class="es-icon">📭</div><p>NO REPORTS YET</p></div>';return;}
+  reports.slice().reverse().slice(0,6).forEach(r=>{
+    const col=r.status==='Pending'?'yellow':r.status==='Reviewed'?'blue':r.status==='Resolved'?'green':'red';
+    const icon=r.status==='Pending'?'⏳':r.status==='Reviewed'?'🔍':r.status==='Resolved'?'✅':'❌';
+    act.innerHTML+=`<div class="activity-item"><div class="ai-icon ${col}">${icon}</div><div class="ai-body"><div class="ai-title">${r.subject}</div><div class="ai-sub">${r.category} · ${r.id}</div></div><div class="ai-time">${statusBadge(r.status)}</div></div>`;
+  });
+}
+
+/* ── Admin Dashboard ── */
+function refreshAdminDash(){
+  const reports=loadData('reports',[]);
+  document.getElementById('adm-total').textContent=reports.length;
+  document.getElementById('adm-pending').textContent=reports.filter(r=>r.status==='Pending').length;
+  document.getElementById('adm-reviewed').textContent=reports.filter(r=>r.status==='Reviewed').length;
+  document.getElementById('adm-resolved').textContent=reports.filter(r=>r.status==='Resolved').length;
+  const pending=reports.filter(r=>r.status==='Pending').length;
+  document.getElementById('pending-badge').textContent=pending;
+  document.getElementById('pending-badge').style.display=pending?'inline':'none';
+  const act=document.getElementById('admin-activity');
+  act.innerHTML='<div class="activity-header">RECENT CONCERNS — ALL STUDENTS</div>';
+  if(!reports.length){act.innerHTML+='<div class="empty-state"><div class="es-icon">📭</div><p>NO REPORTS YET</p></div>';return;}
+  reports.slice().reverse().slice(0,8).forEach(r=>{
+    const col=r.status==='Pending'?'yellow':r.status==='Reviewed'?'blue':r.status==='Resolved'?'green':'red';
+    const icon=r.status==='Pending'?'⏳':r.status==='Reviewed'?'🔍':r.status==='Resolved'?'✅':'❌';
+    act.innerHTML+=`<div class="activity-item" onclick="openReport('${r.id}')" style="cursor:pointer;"><div class="ai-icon ${col}">${icon}</div><div class="ai-body"><div class="ai-title">${r.subject}</div><div class="ai-sub">${r.studentName} · ${r.category}</div></div><div class="ai-time">${statusBadge(r.status)}</div></div>`;
+  });
+}
+
+function statusBadge(s){
+  const map={Pending:'pending',Reviewed:'reviewed',Resolved:'resolved',Rejected:'rejected'};
+  return `<span class="status ${map[s]||'pending'}">${s}</span>`;
+}
+function prioBadge(p){
+  const colors={Low:'rgba(76,175,80,0.7)',Medium:'rgba(255,214,0,0.7)',High:'rgba(255,120,0,0.7)',Urgent:'rgba(255,0,0,0.9)'};
+  return `<span style="font-family:var(--mono);font-size:9px;color:${colors[p]||'#fff'};letter-spacing:1px;">${p||'—'}</span>`;
+}
+
+/* ── My Reports ── */
+function renderMyReports(filter){
+  let reports=loadData('reports',[]).filter(r=>r.studentUsername===currentUser.username);
+  if(filter!=='all')reports=reports.filter(r=>r.status===filter);
+  const tbody=document.getElementById('my-reports-body');
+  tbody.innerHTML='';
+  const empty=document.getElementById('my-reports-empty');
+  if(!reports.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  reports.slice().reverse().forEach(r=>{
+    tbody.innerHTML+=`<tr>
+      <td class="report-id">${r.id}</td>
+      <td style="font-size:10px;">${r.category}</td>
+      <td>${r.subject}</td>
+      <td>${prioBadge(r.priority)}</td>
+      <td>${statusBadge(r.status)}</td>
+      <td style="font-size:10px;white-space:nowrap;">${r.date}</td>
+      <td><button class="scrs-btn secondary" style="padding:5px 12px;font-size:9px;width:auto;" onclick="openReport('${r.id}')">View</button></td>
+    </tr>`;
+  });
+}
+function filterMyReports(f,el){
+  document.querySelectorAll('#panel-my-reports .panel-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');renderMyReports(f);
+}
+
+/* ── All Reports (Admin) ── */
+function renderAllReports(filter){
+  let reports=loadData('reports',[]);
+  if(filter!=='all')reports=reports.filter(r=>r.status===filter);
+  const tbody=document.getElementById('all-reports-body');
+  tbody.innerHTML='';
+  const empty=document.getElementById('all-reports-empty');
+  if(!reports.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  reports.slice().reverse().forEach(r=>{
+    tbody.innerHTML+=`<tr>
+      <td class="report-id">${r.id}</td>
+      <td style="font-size:10px;">${r.studentName}<br><span style="color:rgba(255,255,255,.3);font-size:9px;">${r.grade}</span></td>
+      <td style="font-size:10px;">${r.category}</td>
+      <td>${r.subject}</td>
+      <td>${prioBadge(r.priority)}</td>
+      <td>${statusBadge(r.status)}</td>
+      <td style="font-size:10px;white-space:nowrap;">${r.date}</td>
+      <td style="display:flex;gap:6px;">
+        <button class="scrs-btn" style="padding:5px 10px;font-size:9px;width:auto;" onclick="openReport('${r.id}')">Manage</button>
+      </td>
+    </tr>`;
+  });
+}
+function filterAllReports(f,el){
+  document.querySelectorAll('#panel-all-reports .panel-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');renderAllReports(f);
+}
+
+/* ── Render Students ── */
+function renderUsers(){
+  const users=loadData('users',[]).filter(u=>u.role==='student');
+  const reports=loadData('reports',[]);
+  const tbody=document.getElementById('users-body');
+  tbody.innerHTML='';
+  const empty=document.getElementById('users-empty');
+  if(!users.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  users.forEach((u,i)=>{
+    const count=reports.filter(r=>r.studentUsername===u.username).length;
+    const blocked=u.blocked;
+    tbody.innerHTML+=`<tr>
+      <td>${i+1}</td>
+      <td>${u.name}</td>
+      <td style="color:var(--red2);">${u.studentId||'—'}</td>
+      <td style="font-size:10px;">${u.grade||'—'}</td>
+      <td style="color:rgba(255,255,255,.5);">${u.username}</td>
+      <td style="text-align:center;">${count}</td>
+      <td>${blocked?'<span class="status blocked">Blocked</span>':'<span class="status resolved">Active</span>'}</td>
+      <td style="display:flex;gap:6px;">
+        <button class="scrs-btn ${blocked?'success':'danger'}" style="padding:5px 10px;font-size:9px;width:auto;" onclick="${blocked?'unblockUser':'blockUser'}('${u.username}')">${blocked?'Unblock':'Block'}</button>
+        <button class="scrs-btn secondary" style="padding:5px 10px;font-size:9px;width:auto;" onclick="msgStudent('${u.username}','${u.name}')">Message</button>
+      </td>
+    </tr>`;
+  });
+}
+
+/* ── Block / Unblock ── */
+function blockUser(username){
+  if(!confirm('Block user "'+username+'"? They will not be able to log in.'))return;
+  const users=loadData('users',[]);
+  const idx=users.findIndex(u=>u.username===username);
+  if(idx===-1)return;
+  users[idx].blocked=true;
+  // record in blocked list
+  const blocked=loadData('blocked_users',[]);
+  if(!blocked.find(b=>b.username===username)){
+    blocked.push({username,name:users[idx].name,role:users[idx].role,blockedAt:new Date().toLocaleString('en-PH')});
+    saveData('blocked_users',blocked);
   }
+  saveData('users',users);
+  toast('User "'+username+'" has been blocked.','error');
+  renderUsers();
+}
+function unblockUser(username){
+  const users=loadData('users',[]);
+  const idx=users.findIndex(u=>u.username===username);
+  if(idx===-1)return;
+  users[idx].blocked=false;
+  saveData('users',users);
+  const blocked=loadData('blocked_users',[]).filter(b=>b.username!==username);
+  saveData('blocked_users',blocked);
+  toast('User "'+username+'" has been unblocked.','success');
+  renderUsers();
 }
 
-window.addEventListener('resize', () => {
-  columns = Math.floor(canvas.width / fontSize);
-  drops = Array(columns).fill(1);
-});
-
-setInterval(drawMatrix, 50);
-
-// ── Custom Cursor ────────────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
-
-function animateRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animateRing);
-}
-animateRing();
-
-document.querySelectorAll('a, button, .team-card, .project-card').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.width = '20px';
-    cursor.style.height = '20px';
-    ring.style.width = '56px';
-    ring.style.height = '56px';
+/* ── Blocked Users Panel ── */
+function renderBlockedUsers(){
+  const blocked=loadData('blocked_users',[]);
+  const tbody=document.getElementById('blocked-body');
+  const empty=document.getElementById('blocked-empty');
+  tbody.innerHTML='';
+  if(!blocked.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  blocked.forEach((b,i)=>{
+    tbody.innerHTML+=`<tr>
+      <td>${i+1}</td>
+      <td>${b.name}</td>
+      <td style="color:var(--red2);">${b.username}</td>
+      <td style="font-size:10px;">${b.role}</td>
+      <td style="font-size:10px;">${b.blockedAt}</td>
+      <td><button class="scrs-btn success" style="padding:5px 12px;font-size:9px;width:auto;" onclick="unblockUser('${b.username}');renderBlockedUsers()">Unblock</button></td>
+    </tr>`;
   });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.width = '12px';
-    cursor.style.height = '12px';
-    ring.style.width = '36px';
-    ring.style.height = '36px';
+}
+
+/* ── Visitor Log Panel ── */
+function renderVisitorLog(){
+  const logs=loadData('visitor_logs',[]);
+  const tbody=document.getElementById('visitor-log-body');
+  const empty=document.getElementById('visitor-log-empty');
+  tbody.innerHTML='';
+  if(!logs.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  logs.slice().reverse().forEach((l,i)=>{
+    tbody.innerHTML+=`<tr>
+      <td>${i+1}</td>
+      <td style="color:var(--red2);">${l.ip}</td>
+      <td>${l.city}, ${l.region}</td>
+      <td>${l.country}</td>
+      <td style="font-size:10px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${l.isp}</td>
+      <td>${l.browser}</td>
+      <td>${l.device}</td>
+      <td style="font-size:10px;">${l.time}</td>
+      <td><span class="${l.status==='Online'?'visitor-online':'visitor-offline'}">${l.status}</span></td>
+    </tr>`;
   });
-});
+}
 
-// ── Scroll Reveal ────────────────────────────────────────────
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-    }
+/* ── Admin Requests ── */
+function refreshReqBadge(){
+  const reqs=loadData('admin_requests',[]).filter(r=>r.status==='Pending');
+  const badge=document.getElementById('req-badge');
+  badge.textContent=reqs.length;
+  badge.style.display=reqs.length?'inline':'none';
+}
+function renderAdminRequests(){
+  const reqs=loadData('admin_requests',[]);
+  const list=document.getElementById('admin-requests-list');
+  list.innerHTML='';
+  if(!reqs.length){list.innerHTML='<div class="empty-state"><div class="es-icon">🔐</div><p>NO ADMIN REQUESTS</p></div>';return;}
+  reqs.slice().reverse().forEach(req=>{
+    const isPending=req.status==='Pending';
+    list.innerHTML+=`<div class="req-card">
+      <div class="req-card-title">${req.name} <span style="font-size:9px;color:rgba(255,255,255,.3);">· ${req.id}</span></div>
+      <div class="req-card-info">
+        Username: <span style="color:var(--red2);">${req.username}</span><br>
+        Reason: ${req.reason}<br>
+        Submitted: ${req.date}<br>
+        Status: ${req.status==='Pending'?'<span class="status pending">Pending</span>':req.status==='Approved'?'<span class="status resolved">Approved</span>':'<span class="status rejected">Rejected</span>'}
+      </div>
+      ${isPending?`<div class="req-actions">
+        <button class="scrs-btn success" style="width:auto;padding:8px 20px;font-size:10px;" onclick="approveAdminReq('${req.id}')">Approve</button>
+        <button class="scrs-btn danger" style="width:auto;padding:8px 20px;font-size:10px;" onclick="rejectAdminReq('${req.id}')">Reject</button>
+      </div>`:''}
+    </div>`;
   });
-}, { threshold: 0.1 });
-reveals.forEach(el => observer.observe(el));
+}
+function approveAdminReq(id){
+  const reqs=loadData('admin_requests',[]);
+  const idx=reqs.findIndex(r=>r.id===id);
+  if(idx===-1)return;
+  const req=reqs[idx];
+  reqs[idx].status='Approved';
+  saveData('admin_requests',reqs);
+  // create admin user
+  let users=loadData('users',[]);
+  if(!users.find(u=>u.username===req.username)){
+    users.push({username:req.username,password:req.password,role:'admin',name:req.name,studentId:'ADM-'+Date.now().toString(36).toUpperCase().slice(-4),grade:'N/A',blocked:false,createdAt:new Date().toLocaleString('en-PH')});
+    saveData('users',users);
+  }
+  toast('✓ Admin request approved. "'+req.username+'" can now log in as admin.','success');
+  renderAdminRequests();refreshReqBadge();
+}
+function rejectAdminReq(id){
+  const reqs=loadData('admin_requests',[]);
+  const idx=reqs.findIndex(r=>r.id===id);
+  if(idx===-1)return;
+  reqs[idx].status='Rejected';
+  saveData('admin_requests',reqs);
+  toast('Admin request rejected.','error');
+  renderAdminRequests();refreshReqBadge();
+}
 
-// ── Active nav link ──────────────────────────────────────────
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
+/* ── Open Report Modal ── */
+function openReport(id){
+  const reports=loadData('reports',[]);
+  const r=reports.find(r=>r.id===id);
+  if(!r)return;
+  currentReportId=id;
+  document.getElementById('modal-subject').textContent=r.subject;
+  document.getElementById('modal-id').textContent=r.id+' · Submitted '+r.date;
+  document.getElementById('modal-category').textContent=r.category;
+  document.getElementById('modal-priority').textContent=r.priority;
+  document.getElementById('modal-status-val').innerHTML=statusBadge(r.status);
+  document.getElementById('modal-location').textContent=r.location;
+  document.getElementById('modal-desc').textContent=r.description;
+  document.getElementById('modal-by').textContent=r.studentName+(r.grade&&r.grade!=='N/A'?' · '+r.grade:'');
+  document.getElementById('modal-date').textContent=r.date;
+  const remarkWrap=document.getElementById('modal-remark-wrap');
+  if(r.remark){remarkWrap.style.display='block';document.getElementById('modal-remark').textContent=r.remark;}
+  else remarkWrap.style.display='none';
+  const isAdmin=currentUser&&currentUser.role==='admin';
+  document.getElementById('modal-admin-controls').style.display=isAdmin?'block':'none';
+  document.getElementById('modal-update-btn').style.display=isAdmin?'block':'none';
+  document.getElementById('modal-delete-btn').style.display=isAdmin?'block':'none';
+  if(isAdmin)document.getElementById('modal-new-status').value=r.status;
+  if(isAdmin)document.getElementById('modal-remark-input').value=r.remark||'';
+  document.getElementById('report-modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('report-modal').classList.remove('open');
+  currentReportId=null;
+}
+function updateReportStatus(){
+  if(!currentReportId)return;
+  const newStatus=document.getElementById('modal-new-status').value;
+  const remark=document.getElementById('modal-remark-input').value.trim();
+  const reports=loadData('reports',[]);
+  const idx=reports.findIndex(r=>r.id===currentReportId);
+  if(idx===-1)return;
+  reports[idx].status=newStatus;reports[idx].remark=remark;
+  saveData('reports',reports);
+  closeModal();
+  toast('✓ Report '+currentReportId+' updated to '+newStatus+'.','success');
+  refreshAdminDash();renderAllReports('all');
+  document.querySelectorAll('#panel-all-reports .panel-tab').forEach((t,i)=>{t.classList.toggle('active',i===0);});
+}
+function deleteReport(){
+  if(!currentReportId)return;
+  if(!confirm('Permanently delete report "'+currentReportId+'"? This cannot be undone.'))return;
+  let reports=loadData('reports',[]);
+  reports=reports.filter(r=>r.id!==currentReportId);
+  saveData('reports',reports);
+  closeModal();
+  toast('Report deleted.','info');
+  refreshAdminDash();renderAllReports('all');
+}
 
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+/* ── MESSAGING SYSTEM ── */
+function getMsgKey(userA,userB){return 'msg_'+[userA,userB].sort().join('__');}
+
+function sendStudentMessage(){
+  const input=document.getElementById('student-msg-input');
+  const text=input.value.trim();
+  if(!text)return;
+  const key=getMsgKey(currentUser.username,'admin');
+  const msgs=loadData(key,[]);
+  msgs.push({from:currentUser.username,to:'admin',text,time:new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit'})});
+  saveData(key,msgs);
+  input.value='';
+  renderStudentMessages();
+  updateStudentPreview(text);
+}
+
+function renderStudentMessages(){
+  const key=getMsgKey(currentUser.username,'admin');
+  const msgs=loadData(key,[]);
+  const body=document.getElementById('student-chat-body');
+  if(!msgs.length){body.innerHTML='<div class="msg-empty">NO MESSAGES YET — START A CONVERSATION</div>';return;}
+  body.innerHTML='';
+  msgs.forEach(m=>{
+    const isMe=m.from===currentUser.username;
+    body.innerHTML+=`<div>
+      <div class="msg-bubble ${isMe?'from-me':'from-admin'}">${m.text}<div class="msg-bubble-time">${m.time}</div></div>
+    </div>`;
   });
-  navLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  body.scrollTop=body.scrollHeight;
+}
+
+function updateStudentPreview(text){
+  const el=document.getElementById('stu-preview');
+  if(el)el.textContent=text.length>28?text.slice(0,28)+'...':text;
+}
+
+function openStudentThread(){renderStudentMessages();}
+
+function refreshStudentMsgBadge(){
+  const key=getMsgKey(currentUser.username,'admin');
+  const msgs=loadData(key,[]);
+  const unread=msgs.filter(m=>m.from==='admin'&&!m.read);
+  const badge=document.getElementById('student-msg-badge');
+  if(badge){badge.style.display=unread.length?'inline':'none';}
+}
+
+/* Admin messaging */
+function renderAdminThreadList(){
+  const users=loadData('users',[]).filter(u=>u.role==='student');
+  const list=document.getElementById('admin-thread-list');
+  list.innerHTML='<div style="padding:12px 14px;border-bottom:1px solid rgba(255,0,0,0.1);font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:2px;">STUDENTS</div>';
+  if(!users.length){list.innerHTML+='<div style="padding:14px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.2);">No students registered.</div>';return;}
+  users.forEach(u=>{
+    const key=getMsgKey('admin',u.username);
+    const msgs=loadData(key,[]);
+    const last=msgs.length?msgs[msgs.length-1].text:'No messages yet';
+    const unread=msgs.filter(m=>m.from===u.username&&!m.read).length;
+    list.innerHTML+=`<div class="msg-list-item ${activeAdminChatUser===u.username?'active':''}" onclick="selectAdminThread('${u.username}','${u.name}')">
+      <div class="msg-list-name" style="display:flex;align-items:center;">🎓 ${u.name}${unread?'<span class="msg-unread"></span>':''}</div>
+      <div class="msg-list-preview">${last.length>28?last.slice(0,28)+'...':last}</div>
+    </div>`;
   });
-});
-
-// ── Mobile menu ──────────────────────────────────────────────
-function toggleMenu() {
-  const menu = document.getElementById('mobileMenu');
-  const ham = document.getElementById('hamburger');
-  const open = menu.style.display === 'flex';
-  menu.style.display = open ? 'none' : 'flex';
-  ham.classList.toggle('open', !open);
+  updateAdminMsgBadge();
 }
 
-function closeMenu() {
-  document.getElementById('mobileMenu').style.display = 'none';
-  document.getElementById('hamburger').classList.remove('open');
+function selectAdminThread(username,name){
+  activeAdminChatUser=username;
+  document.getElementById('admin-chat-header').textContent='🎓 '+name;
+  document.getElementById('admin-msg-input-row').style.display='flex';
+  renderAdminChatBody(username);
+  renderAdminThreadList();
 }
 
-// ── Code Playground ──────────────────────────────────────────
-function runCode() {
-  const code = document.getElementById('codeInput').value;
-  const preview = document.getElementById('preview');
-  const doc = preview.contentDocument || preview.contentWindow.document;
-  doc.open(); doc.write(code); doc.close();
+function renderAdminChatBody(username){
+  const key=getMsgKey('admin',username);
+  const msgs=loadData(key,[]);
+  // mark as read
+  let changed=false;
+  msgs.forEach(m=>{if(m.from===username&&!m.read){m.read=true;changed=true;}});
+  if(changed)saveData(key,msgs);
+  const body=document.getElementById('admin-chat-body');
+  if(!msgs.length){body.innerHTML='<div class="msg-empty">NO MESSAGES YET</div>';return;}
+  body.innerHTML='';
+  msgs.forEach(m=>{
+    const isMe=m.from==='admin';
+    body.innerHTML+=`<div>
+      <div class="msg-bubble ${isMe?'from-me':'from-admin'}">${m.text}<div class="msg-bubble-time">${m.time}</div></div>
+    </div>`;
+  });
+  body.scrollTop=body.scrollHeight;
+  updateAdminMsgBadge();
 }
 
-function clearCode() {
-  document.getElementById('codeInput').value = '';
-  const preview = document.getElementById('preview');
-  const doc = preview.contentDocument || preview.contentWindow.document;
-  doc.open(); doc.write(''); doc.close();
+function sendAdminMessage(){
+  if(!activeAdminChatUser)return;
+  const input=document.getElementById('admin-msg-input');
+  const text=input.value.trim();
+  if(!text)return;
+  const key=getMsgKey('admin',activeAdminChatUser);
+  const msgs=loadData(key,[]);
+  msgs.push({from:'admin',to:activeAdminChatUser,text,time:new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit'})});
+  saveData(key,msgs);
+  input.value='';
+  renderAdminChatBody(activeAdminChatUser);
+  renderAdminThreadList();
 }
 
-// Auto-run on load
-window.addEventListener('load', runCode);
-
-// ── Contact form ─────────────────────────────────────────────
-function submitForm(e) {
-  e.preventDefault();
-  const btn = e.target.querySelector('button[type=submit]');
-  btn.textContent = '✓ Message Sent!';
-  btn.style.background = '#00cc55';
-  setTimeout(() => {
-    btn.textContent = 'Send Message →';
-    btn.style.background = 'var(--red)';
-    e.target.reset();
-  }, 3000);
+function msgStudent(username,name){
+  document.querySelectorAll('#nav-admin .scrs-nav-item').forEach(i=>i.classList.remove('active'));
+  const msgNav=document.querySelectorAll('#nav-admin .scrs-nav-item')[3];
+  if(msgNav)msgNav.classList.add('active');
+  document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-admin-messages').classList.add('active');
+  renderAdminThreadList();
+  selectAdminThread(username,name);
 }
+
+function updateAdminMsgBadge(){
+  const users=loadData('users',[]).filter(u=>u.role==='student');
+  let total=0;
+  users.forEach(u=>{
+    const key=getMsgKey('admin',u.username);
+    const msgs=loadData(key,[]);
+    total+=msgs.filter(m=>m.from===u.username&&!m.read).length;
+  });
+  const badge=document.getElementById('admin-msg-badge');
+  if(badge){badge.style.display=total?'inline':'none';badge.textContent=total||'!';}
+}
+
+/* ── Announcements ── */
+function renderAnnouncements(){
+  const anns=loadData('announcements',[]);
+  const list=document.getElementById('ann-list');
+  list.innerHTML='<div class="activity-header" style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--red2);padding:14px 0;border-bottom:1px solid rgba(255,0,0,0.1);">POSTED ANNOUNCEMENTS</div>';
+  if(!anns.length){list.innerHTML+='<div class="empty-state"><div class="es-icon">📢</div><p>NO ANNOUNCEMENTS YET</p></div>';return;}
+  anns.slice().reverse().forEach(a=>{
+    list.innerHTML+=`<div style="border:1px solid rgba(255,0,0,0.12);border-radius:8px;padding:16px 18px;margin-top:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <span style="font-family:var(--mono);font-size:12px;color:var(--red2);">${a.title}</span>
+        <span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);">${a.date}</span>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);line-height:1.7;">${a.body}</div>
+    </div>`;
+  });
+}
+function postAnnouncement(){
+  const title=document.getElementById('ann-title').value.trim();
+  const body=document.getElementById('ann-body').value.trim();
+  if(!title||!body){toast('Please fill in both fields.','error');return;}
+  const anns=loadData('announcements',[]);
+  anns.push({title,body,date:new Date().toLocaleString('en-PH'),by:currentUser.name});
+  saveData('announcements',anns);
+  document.getElementById('ann-title').value='';
+  document.getElementById('ann-body').value='';
+  renderAnnouncements();
+  toast('✓ Announcement posted.','success');
+}
+
+/* ── Modal close on bg ── */
+document.getElementById('report-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 </script>
 </body>
 </html>
