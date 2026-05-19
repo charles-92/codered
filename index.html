@@ -31,6 +31,65 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 #arrowmode-indicator.show{opacity:1;}
 #arrowmode-indicator .kbd{display:inline-block;background:rgba(255,0,0,0.15);border:1px solid rgba(255,0,0,0.4);border-radius:3px;padding:1px 5px;font-size:9px;margin:0 2px;}
 
+/* HUD LOGIN MODAL */
+#hud-login-modal{
+  display:none;position:fixed;inset:0;z-index:99998;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+}
+#hud-login-modal.open{display:flex;}
+.hud-login-card{
+  background:rgba(4,0,0,0.98);border:1px solid rgba(255,0,0,0.45);
+  border-radius:14px;padding:36px;width:100%;max-width:360px;
+  box-shadow:0 0 60px rgba(255,0,0,0.2);
+  animation:fadeUp .3s ease;
+}
+.hud-login-card .hud-lc-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(255,0,0,0.08);border:2px solid rgba(255,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin:0 auto 16px;
+}
+.hud-login-card h3{
+  font-family:var(--display);font-size:16px;font-weight:700;
+  color:#fff;text-align:center;margin-bottom:6px;letter-spacing:3px;
+}
+.hud-login-card p{
+  font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);
+  text-align:center;margin-bottom:24px;letter-spacing:1px;
+}
+.hud-lc-group{margin-bottom:14px;}
+.hud-lc-group label{
+  display:block;font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;color:var(--red2);margin-bottom:6px;text-transform:uppercase;
+}
+.hud-lc-group input{
+  width:100%;background:rgba(255,0,0,0.04);
+  border:1px solid rgba(255,0,0,0.2);border-radius:6px;
+  color:#fff;font-family:var(--mono);font-size:13px;
+  padding:11px 14px;outline:none;transition:border-color .2s;
+}
+.hud-lc-group input:focus{border-color:rgba(255,0,0,.7);}
+.hud-lc-btn{
+  width:100%;font-family:var(--mono);font-size:12px;letter-spacing:2px;
+  text-transform:uppercase;color:#000;background:var(--red);
+  border:none;padding:13px;border-radius:6px;cursor:pointer;
+  transition:all .25s;margin-top:6px;
+}
+.hud-lc-btn:hover{background:#ff3333;box-shadow:0 0 24px rgba(255,0,0,0.5);}
+.hud-lc-cancel{
+  display:block;text-align:center;margin-top:14px;
+  font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);
+  letter-spacing:1px;cursor:pointer;transition:color .2s;
+}
+.hud-lc-cancel:hover{color:var(--red2);}
+.hud-lc-error{
+  background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.3);
+  border-radius:6px;padding:8px 12px;margin-bottom:14px;
+  font-family:var(--mono);font-size:10px;color:#ff5555;
+  letter-spacing:1px;text-align:center;display:none;
+}
+
 /* ═══════════ LEFT-SIDE VISITOR HUD ═══════════ */
 #hud-toggle{
   position:fixed;top:76px;left:16px;z-index:9999;
@@ -73,15 +132,15 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hud-close-btn{background:none;border:none;color:rgba(255,80,80,0.5);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;transition:color .2s;}
 .hud-close-btn:hover{color:var(--red);}
 
-/* Tab switcher */
 .hud-tabs{display:flex;border-bottom:1px solid rgba(255,0,0,0.12);}
 .hud-tab{flex:1;padding:8px 4px;font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(255,80,80,0.4);border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
 .hud-tab:hover{color:rgba(255,120,120,0.8);}
 .hud-tab.active{color:var(--red2);border-bottom-color:var(--red);}
 
-/* Live data panel */
-.hud-panel{display:none;padding:12px 14px;}
+.hud-panel{display:none;padding:12px 14px;max-height:520px;overflow-y:auto;}
 .hud-panel.active{display:block;}
+.hud-panel::-webkit-scrollbar{width:3px;}
+.hud-panel::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.4);border-radius:2px;}
 
 .hud-online-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
 .hud-online-dot{width:5px;height:5px;background:#4caf50;border-radius:50%;animation:pulse-dot 1.5s ease-in-out infinite;flex-shrink:0;}
@@ -104,7 +163,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hud-val.hl{color:rgba(255,200,200,1);font-size:11px;}
 .hud-val.dm{color:rgba(255,80,80,0.5);font-size:9px;}
 
-/* Cursor block inside live panel */
 .hud-cursor-block{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.1);border-radius:6px;padding:8px 10px;margin-top:8px;}
 .hud-cursor-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.45);margin-bottom:7px;}
 .hud-coords-row{display:flex;gap:8px;margin-bottom:6px;}
@@ -114,12 +172,18 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hud-badge-row{display:flex;gap:6px;flex-wrap:wrap;}
 .hud-badge{background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.2);border-radius:3px;padding:2px 7px;font-size:9px;color:rgba(255,120,120,0.8);letter-spacing:1px;}
 
+.hud-map-block{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.1);border-radius:6px;padding:8px 10px;margin-top:8px;}
+.hud-map-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.45);margin-bottom:7px;}
+.hud-map-coords{display:flex;gap:8px;}
+.hud-map-coord-box{flex:1;background:rgba(255,0,0,0.06);border:1px solid rgba(255,0,0,0.15);border-radius:4px;padding:5px 7px;text-align:center;}
+.hud-map-coord-axis{font-size:8px;color:rgba(255,255,255,.25);letter-spacing:2px;display:block;margin-bottom:2px;}
+.hud-map-coord-val{font-size:10px;color:rgba(255,160,160,0.9);}
+
 /* ── ALL VISITORS PANEL ── */
-.hud-visitors-panel{display:none;max-height:420px;overflow-y:auto;}
+.hud-visitors-panel{display:none;max-height:480px;overflow-y:auto;}
 .hud-visitors-panel.active{display:block;}
 .hud-visitors-panel::-webkit-scrollbar{width:3px;}
 .hud-visitors-panel::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.4);border-radius:2px;}
-.hud-visitors-panel::-webkit-scrollbar-track{background:transparent;}
 
 .hvp-toolbar{
   display:flex;align-items:center;justify-content:space-between;
@@ -131,10 +195,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hvp-clear{background:none;border:1px solid rgba(255,0,0,0.2);border-radius:3px;color:rgba(255,80,80,0.5);font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 8px;cursor:pointer;transition:all .2s;}
 .hvp-clear:hover{border-color:rgba(255,0,0,0.6);color:var(--red2);}
 
-.hv-entry{
-  padding:10px 14px;border-bottom:1px solid rgba(255,0,0,0.07);
-  cursor:pointer;transition:background .2s;position:relative;
-}
+.hv-entry{padding:10px 14px;border-bottom:1px solid rgba(255,0,0,0.07);cursor:pointer;transition:background .2s;position:relative;}
 .hv-entry:hover{background:rgba(255,0,0,0.04);}
 .hv-entry.me{border-left:2px solid var(--red);}
 .hv-entry-top{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
@@ -154,7 +215,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hv-exp-row{display:flex;justify-content:space-between;gap:8px;margin:2px 0;}
 .hv-exp-key{font-size:8px;color:rgba(255,255,255,.25);letter-spacing:1px;text-transform:uppercase;}
 .hv-exp-val{font-size:9px;color:rgba(255,130,130,.8);text-align:right;word-break:break-all;}
-
 .hv-empty{padding:30px 14px;text-align:center;font-size:10px;color:rgba(255,255,255,.2);letter-spacing:2px;}
 
 /* beat elements */
@@ -176,22 +236,20 @@ nav.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;display:
 .nav-logo-ring img{width:115%;height:115%;object-fit:contain;}
 .nav-brand-text{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:3px;color:#fff;line-height:1.1;}
 .nav-brand-text small{display:block;font-size:8px;color:var(--red);letter-spacing:4px;font-weight:400;}
-.nav-links{list-style:none;margin:0;padding:0;display:flex;gap:2px;}
-.nav-links a{font-family:var(--mono);font-size:13px;letter-spacing:2px;color:rgba(255,80,80,0.85);text-decoration:none;padding:7px 14px;border-radius:3px;transition:color .2s;position:relative;display:block;text-transform:uppercase;}
-.nav-links a::after{content:'';position:absolute;bottom:2px;left:14px;right:14px;height:1px;background:var(--red);transform:scaleX(0);transition:transform .2s;}
-.nav-links a:hover{color:#fff;}
-.nav-links a:hover::after{transform:scaleX(1);}
-.nav-links a.active{color:var(--red);background:rgba(255,0,0,0.08);}
 
-.dropdown{position:relative;}
-.dropdown-menu{display:none;position:absolute;top:46px;left:0;background:rgba(5,0,0,0.98);min-width:210px;max-height:320px;overflow-y:auto;border:1px solid rgba(255,0,0,0.4);box-shadow:0 0 30px rgba(255,0,0,0.25);z-index:999;border-radius:4px;}
+.nav-links{list-style:none;margin:0;padding:0;display:flex;background:linear-gradient(90deg,#000,#0a0a0a);border-bottom:2px solid #ff0000;box-shadow:0 0 20px #ff0000;}
+.nav-links li{position:relative;}
+.nav-links a{display:block;padding:14px 18px;color:#ff3b3b;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:0.25s;position:relative;}
+.nav-links a:hover{background:#1a0000;color:#fff;text-shadow:0 0 10px red;box-shadow:inset 0 0 10px red;}
+.nav-links a.active{background:red;color:black;font-weight:bold;box-shadow:0 0 15px red;}
+.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#050505;min-width:45px;max-height:240px;overflow-y:auto;border:1px solid red;box-shadow:0 0 25px red;z-index:1000;}
 .dropdown.show .dropdown-menu{display:block;}
-.dropdown-menu a{padding:11px 14px;color:rgba(255,90,90,0.85);display:block;border-bottom:1px solid rgba(255,0,0,0.08);border-left:2px solid transparent;font-family:var(--mono);font-size:11px;letter-spacing:1px;text-decoration:none;transition:.2s;}
-.dropdown-menu a:hover{background:rgba(255,0,0,0.1);border-left-color:red;color:#fff;padding-left:20px;}
-.dropdown-menu::-webkit-scrollbar{width:5px;}
-.dropdown-menu::-webkit-scrollbar-thumb{background:red;border-radius:10px;}
-.dropdown-menu::-webkit-scrollbar-track{background:#000;}
-.arrow{font-size:12px;margin-left:5px;transition:.3s;color:red;display:inline-block;}
+.dropdown-menu a{padding:12px 14px;color:#ff3b3b;display:block;border-bottom:1px solid #1a0000;transition:0.2s;}
+.dropdown-menu a:hover{background:#300000;color:#fff;text-shadow:0 0 8px red;}
+.dropdown-menu::-webkit-scrollbar{width:6px;}
+.dropdown-menu::-webkit-scrollbar-thumb{background:red;box-shadow:0 0 10px red;border-radius:10px;}
+.dropdown-menu::-webkit-scrollbar-track{background:black;}
+.arrow{font-size:12px;margin-left:5px;transition:0.3s;color:red;display:inline-block;}
 .arrow.rotate{transform:rotate(180deg);}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
 .hamburger span{display:block;width:24px;height:2px;background:var(--red);transition:all .3s;}
@@ -281,7 +339,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 
-/* ═══════════ SCRS STYLES ═══════════ */
+/* SCRS STYLES */
 #scrs-app{background:rgba(4,0,0,0.97);border:1px solid rgba(255,0,0,0.3);border-radius:16px;overflow:hidden;box-shadow:0 0 60px rgba(255,0,0,0.12);margin-top:40px;}
 .scrs-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(255,0,0,0.06);border-bottom:1px solid rgba(255,0,0,0.2);}
 .scrs-header-left{display:flex;align-items:center;gap:10px;}
@@ -430,23 +488,6 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
 .scrs-main::-webkit-scrollbar,.scrs-modal::-webkit-scrollbar{width:4px;}
 .scrs-main::-webkit-scrollbar-thumb,.scrs-modal::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.3);border-radius:2px;}
 
-.nav-links{list-style:none;margin:0;padding:0;display:flex;background:linear-gradient(90deg,#000,#0a0a0a);border-bottom:2px solid #ff0000;box-shadow:0 0 20px #ff0000;}
-.nav-links li{position:relative;}
-.nav-links a{display:block;padding:14px 18px;color:#ff3b3b;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:0.25s;position:relative;}
-.nav-links a:hover{background:#1a0000;color:#fff;text-shadow:0 0 10px red;box-shadow:inset 0 0 10px red;}
-.nav-links a.active{background:red;color:black;font-weight:bold;box-shadow:0 0 15px red;}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#050505;min-width:45px;max-height:240px;overflow-y:auto;border:1px solid red;box-shadow:0 0 25px red;z-index:1000;}
-.dropdown.show .dropdown-menu{display:block;}
-.dropdown-menu a{padding:12px 14px;color:#ff3b3b;display:block;border-bottom:1px solid #1a0000;transition:0.2s;}
-.dropdown-menu a:hover{background:#300000;color:#fff;text-shadow:0 0 8px red;}
-.dropdown-menu::-webkit-scrollbar{width:6px;}
-.dropdown-menu::-webkit-scrollbar-thumb{background:red;box-shadow:0 0 10px red;border-radius:10px;}
-.dropdown-menu::-webkit-scrollbar-track{background:black;}
-.arrow{font-size:12px;margin-left:5px;transition:0.3s;color:red;}
-.rotate{transform:rotate(180deg);}
-.nav-links a:hover::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:red;animation:glitch 0.25s infinite;}
-@keyframes glitch{0%{transform:translateX(0);opacity:1;}50%{transform:translateX(2px);opacity:0.7;}100%{transform:translateX(-2px);opacity:1;}}
-
 @media(max-width:768px){
   nav.topbar{padding:0 20px;}
   .nav-links{display:none;}
@@ -472,6 +513,26 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
 </head>
 <body>
 
+<!-- HUD LOGIN MODAL -->
+<div id="hud-login-modal">
+  <div class="hud-login-card">
+    <div class="hud-lc-icon">🔐</div>
+    <h3>HUD ACCESS</h3>
+    <p>ENTER CREDENTIALS TO VIEW VISITOR DATA</p>
+    <div class="hud-lc-error" id="hud-lc-error">⚠ Invalid username or password.</div>
+    <div class="hud-lc-group">
+      <label>Username</label>
+      <input type="text" id="hud-lc-user" placeholder="Enter username" autocomplete="off" onkeydown="if(event.key==='Enter')doHudLogin()">
+    </div>
+    <div class="hud-lc-group">
+      <label>Password</label>
+      <input type="password" id="hud-lc-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doHudLogin()">
+    </div>
+    <button class="hud-lc-btn" onclick="doHudLogin()">Unlock HUD →</button>
+    <span class="hud-lc-cancel" onclick="closeHudLogin()">Cancel</span>
+  </div>
+</div>
+
 <div id="video-bg">
   <video id="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="Recording_2026-05-17_212539.mp4" type="video/mp4">
@@ -485,13 +546,12 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
 <div class="cursor-ring" id="cursorRing"></div>
 <div id="arrowmode-indicator"><div>⌨ ARROW KEY MODE</div><div style="margin-top:4px;"><span class="kbd">↑</span><span class="kbd">↓</span><span class="kbd">←</span><span class="kbd">→</span> = Move Cursor</div></div>
 
-<!-- ══════════ LEFT-SIDE VISITOR HUD ══════════ -->
+<!-- VISITOR HUD -->
 <button id="hud-toggle" onclick="toggleHud()" title="Toggle Visitor Tracker">
   <span class="dot"></span> VISITOR HUD
 </button>
 
 <div id="visitor-hud">
-  <!-- Header -->
   <div class="hud-header">
     <div class="hud-title-bar">
       <div class="hud-pulse-dot"></div>
@@ -499,59 +559,55 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
     </div>
     <button class="hud-close-btn" onclick="toggleHud()" title="Close">✕</button>
   </div>
-
-  <!-- Tab switcher -->
   <div class="hud-tabs">
     <button class="hud-tab active" onclick="switchHudTab('live',this)">📡 MY SESSION</button>
     <button class="hud-tab" onclick="switchHudTab('all',this)">👁 ALL VISITORS</button>
   </div>
-
-  <!-- LIVE SESSION PANEL -->
   <div id="hud-panel-live" class="hud-panel active">
-    <div class="hud-online-row">
-      <div class="hud-online-dot"></div>
-      <span class="hud-online-text">ONLINE · TRACKING ACTIVE</span>
-    </div>
-
-    <div class="hud-ip-badge" id="hud-ip">Fetching...</div>
-
+    <div class="hud-online-row"><div class="hud-online-dot"></div><span class="hud-online-text">ONLINE · TRACKING ACTIVE</span></div>
+    <div class="hud-ip-badge" id="hud-ip">Fetching IP...</div>
     <div class="hud-section-label">LOCATION</div>
     <div class="hud-row"><span class="hud-key">City</span><span class="hud-val" id="hud-city">—</span></div>
     <div class="hud-row"><span class="hud-key">Region</span><span class="hud-val" id="hud-region">—</span></div>
     <div class="hud-row"><span class="hud-key">Country</span><span class="hud-val hl" id="hud-country">—</span></div>
-
+    <div class="hud-row"><span class="hud-key">Latitude</span><span class="hud-val dm" id="hud-lat">—</span></div>
+    <div class="hud-row"><span class="hud-key">Longitude</span><span class="hud-val dm" id="hud-lon">—</span></div>
     <div class="hud-section-label">NETWORK</div>
     <div class="hud-row"><span class="hud-key">ISP</span><span class="hud-val dm" id="hud-isp">—</span></div>
-
+    <div class="hud-row"><span class="hud-key">ASN</span><span class="hud-val dm" id="hud-asn">—</span></div>
     <div class="hud-section-label">CLIENT</div>
     <div class="hud-row"><span class="hud-key">Browser</span><span class="hud-val" id="hud-browser">—</span></div>
     <div class="hud-row"><span class="hud-key">Device</span><span class="hud-val" id="hud-device">—</span></div>
+    <div class="hud-row"><span class="hud-key">Brand</span><span class="hud-val" id="hud-brand">—</span></div>
     <div class="hud-row"><span class="hud-key">OS</span><span class="hud-val" id="hud-os">—</span></div>
     <div class="hud-row"><span class="hud-key">Language</span><span class="hud-val" id="hud-lang">—</span></div>
     <div class="hud-row"><span class="hud-key">Screen</span><span class="hud-val" id="hud-screen">—</span></div>
+    <div class="hud-row"><span class="hud-key">Viewport</span><span class="hud-val" id="hud-viewport">—</span></div>
+    <div class="hud-row"><span class="hud-key">Touch</span><span class="hud-val" id="hud-touch">—</span></div>
     <div class="hud-row"><span class="hud-key">Timezone</span><span class="hud-val" id="hud-tz">—</span></div>
     <div class="hud-row"><span class="hud-key">Entered</span><span class="hud-val" id="hud-time">—</span></div>
-
     <div class="hud-cursor-block">
       <div class="hud-cursor-lbl">CURSOR TRACKING</div>
       <div class="hud-coords-row">
-        <div class="hud-coord-box">
-          <span class="hud-coord-axis">X AXIS</span>
-          <span class="hud-coord-val" id="hud-cx">—</span>
-        </div>
-        <div class="hud-coord-box">
-          <span class="hud-coord-axis">Y AXIS</span>
-          <span class="hud-coord-val" id="hud-cy">—</span>
-        </div>
+        <div class="hud-coord-box"><span class="hud-coord-axis">X AXIS</span><span class="hud-coord-val" id="hud-cx">—</span></div>
+        <div class="hud-coord-box"><span class="hud-coord-axis">Y AXIS</span><span class="hud-coord-val" id="hud-cy">—</span></div>
       </div>
       <div class="hud-badge-row">
         <div class="hud-badge" id="hud-section">—</div>
         <div class="hud-badge" id="hud-inputmode">MOUSE</div>
       </div>
     </div>
+    <div class="hud-map-block">
+      <div class="hud-map-lbl">GPS COORDINATES</div>
+      <div class="hud-map-coords">
+        <div class="hud-map-coord-box"><span class="hud-map-coord-axis">LAT</span><span class="hud-map-coord-val" id="hud-map-lat">—</span></div>
+        <div class="hud-map-coord-box"><span class="hud-map-coord-axis">LON</span><span class="hud-map-coord-val" id="hud-map-lon">—</span></div>
+      </div>
+      <div style="margin-top:8px;">
+        <a id="hud-map-link" href="#" target="_blank" onclick="openMapLink(event)" style="font-family:var(--mono);font-size:9px;color:var(--red2);letter-spacing:1px;text-decoration:none;display:flex;align-items:center;gap:5px;">📍 VIEW ON MAP</a>
+      </div>
+    </div>
   </div>
-
-  <!-- ALL VISITORS PANEL -->
   <div id="hud-panel-all" class="hud-visitors-panel">
     <div class="hvp-toolbar">
       <span class="hvp-count" id="hvp-count">0 VISITORS</span>
@@ -560,7 +616,6 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
     <div id="hvp-list"></div>
   </div>
 </div>
-<!-- ══════════ END VISITOR HUD ══════════ -->
 
 <nav class="topbar beat-el beat-nav" id="mainNav">
   <a href="#home" class="nav-brand">
@@ -664,7 +719,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
     <img src="logo.png" alt="Team Code Red Logo" class="beat-el">
     <div class="padrogani-text">
       <h4 class="section-title" style="font-size:clamp(16px,2.2vw,26px);margin-bottom:16px;">LET'S EXPLORE THE MEANING <span>OF OUR TEAM LOGO</span></h4>
-      <p>Our logo represents alertness, teamwork, and responsibility in technology. The red circular design symbolizes urgency and readiness. Red is commonly associated with warnings and important signals, which reflects our team's ability to respond quickly and effectively to challenges just like a real "code red" situation. At the center of the logo is a warning triangle with an exclamation mark. This symbolizes awareness, caution, and problem recognition. <br><br>
+      <p>Our logo represents alertness, teamwork, and responsibility in technology. The red circular design symbolizes urgency and readiness. Red is commonly associated with warnings and important signals, which reflects our team's ability to respond quickly and effectively to challenges just like a real "code red" situation. At the center of the logo is a warning triangle with an exclamation mark. This symbolizes awareness, caution, and problem recognition.<br><br>
       It represents our team's mindset of identifying issues early and finding smart, ethical solutions before they become bigger problems. The circuit-like patterns surrounding the logo represent technology, coding, and digital systems. The repeated text "TEAM CODE RED" around the logo emphasizes unity and collaboration. It shows that every member plays an important role and that teamwork is at the core of our success.</p>
     </div>
   </div>
@@ -729,7 +784,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
     <div class="scrs-header">
       <div class="scrs-header-left">
         <div class="scrs-dots"><div class="scrs-dot r"></div><div class="scrs-dot y"></div><div class="scrs-dot g"></div></div>
-        <span class="scrs-title-text">💁‍♀️ Web-Based School Concern &amp; Reporting System</span>
+        <span class="scrs-title-text">WBSCRS — Web-Based School Concern &amp; Reporting System</span>
       </div>
       <div class="scrs-badge">LIVE SYSTEM</div>
     </div>
@@ -822,12 +877,14 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             <div class="scrs-nav-item" onclick="showPanel('admin-requests',this)"><span class="nav-icon">🔐</span>Admin Requests <span class="scrs-nav-badge" id="req-badge">0</span></div>
             <div class="scrs-nav-item" onclick="showPanel('blocked-users',this)"><span class="nav-icon">🚫</span>Blocked Users</div>
             <div class="scrs-nav-item" onclick="showPanel('visitor-log',this)"><span class="nav-icon">👁️</span>Visitor Log</div>
+            <div class="scrs-nav-item" onclick="showPanel('login-location-log',this)"><span class="nav-icon">📍</span>Login Locations</div>
             <div class="scrs-nav-item" onclick="showPanel('announcements',this)"><span class="nav-icon">📢</span>Announcements</div>
           </div>
           <div class="scrs-nav-item" style="margin-top:auto;color:rgba(255,80,80,.5);" onclick="doLogout()"><span class="nav-icon">🚪</span>Logout</div>
         </div>
 
         <div class="scrs-main">
+          <!-- STUDENT DASHBOARD -->
           <div id="panel-dash-student" class="scrs-panel active">
             <div class="panel-header"><h3>DASHBOARD</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);" id="dash-student-date"></span></div>
             <div id="student-login-info" style="background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.18);border-radius:10px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
@@ -839,6 +896,13 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
               <div style="margin-left:auto;text-align:right;">
                 <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);">SESSION STARTED</div>
                 <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);" id="sl-time">—</div>
+              </div>
+            </div>
+            <div id="student-location-banner" style="background:rgba(0,80,0,0.12);border:1px solid rgba(0,200,80,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:rgba(100,255,150,0.85);">
+              <span style="font-size:16px;">📍</span>
+              <div>
+                <div style="letter-spacing:1px;margin-bottom:2px;">LOGIN LOCATION DETECTED</div>
+                <div id="student-location-text" style="color:rgba(255,255,255,.5);font-size:9px;letter-spacing:1px;">Fetching location...</div>
               </div>
             </div>
             <div class="dash-stats">
@@ -853,6 +917,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             </div>
           </div>
 
+          <!-- SUBMIT CONCERN -->
           <div id="panel-submit-concern" class="scrs-panel">
             <div class="panel-header"><h3>SUBMIT A CONCERN</h3></div>
             <div class="submit-form">
@@ -880,6 +945,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             </div>
           </div>
 
+          <!-- MY REPORTS -->
           <div id="panel-my-reports" class="scrs-panel">
             <div class="panel-header"><h3>MY REPORTS</h3></div>
             <div class="panel-tabs">
@@ -897,6 +963,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             <div id="my-reports-empty" class="empty-state" style="display:none;"><div class="es-icon">📋</div><p>NO REPORTS FOUND</p></div>
           </div>
 
+          <!-- STUDENT MESSAGES -->
           <div id="panel-student-messages" class="scrs-panel">
             <div class="panel-header"><h3>MESSAGES</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);">DIRECT MESSAGE WITH ADMIN</span></div>
             <div class="msg-layout">
@@ -918,6 +985,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             </div>
           </div>
 
+          <!-- FAQ -->
           <div id="panel-faq-panel" class="scrs-panel">
             <div class="panel-header"><h3>FREQUENTLY ASKED QUESTIONS</h3></div>
             <div style="display:flex;flex-direction:column;gap:14px;">
@@ -928,6 +996,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             </div>
           </div>
 
+          <!-- ADMIN DASHBOARD -->
           <div id="panel-dash-admin" class="scrs-panel">
             <div class="panel-header"><h3>ADMIN DASHBOARD</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);" id="dash-admin-date"></span></div>
             <div id="admin-login-info" style="background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.18);border-radius:10px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
@@ -939,6 +1008,13 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
               <div style="margin-left:auto;text-align:right;">
                 <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);">SESSION STARTED</div>
                 <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);" id="al-time">—</div>
+              </div>
+            </div>
+            <div id="admin-location-banner" style="background:rgba(0,80,0,0.12);border:1px solid rgba(0,200,80,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:rgba(100,255,150,0.85);">
+              <span style="font-size:16px;">📍</span>
+              <div>
+                <div style="letter-spacing:1px;margin-bottom:2px;">ADMIN LOGIN LOCATION</div>
+                <div id="admin-location-text" style="color:rgba(255,255,255,.5);font-size:9px;letter-spacing:1px;">Fetching location...</div>
               </div>
             </div>
             <div class="dash-stats">
@@ -953,6 +1029,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             </div>
           </div>
 
+          <!-- ALL REPORTS -->
           <div id="panel-all-reports" class="scrs-panel">
             <div class="panel-header"><h3>ALL REPORTS</h3></div>
             <div class="panel-tabs">
@@ -971,6 +1048,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             <div id="all-reports-empty" class="empty-state" style="display:none;"><div class="es-icon">📋</div><p>NO REPORTS FOUND</p></div>
           </div>
 
+          <!-- MANAGE USERS -->
           <div id="panel-manage-users" class="scrs-panel">
             <div class="panel-header"><h3>REGISTERED STUDENTS</h3></div>
             <div class="scrs-table-wrap">
@@ -982,6 +1060,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             <div id="users-empty" class="empty-state" style="display:none;"><div class="es-icon">👥</div><p>NO STUDENTS REGISTERED YET</p></div>
           </div>
 
+          <!-- ADMIN MESSAGES -->
           <div id="panel-admin-messages" class="scrs-panel">
             <div class="panel-header"><h3>MESSAGES</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);">MESSAGE STUDENTS DIRECTLY</span></div>
             <div class="msg-layout">
@@ -999,11 +1078,13 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             </div>
           </div>
 
+          <!-- ADMIN REQUESTS -->
           <div id="panel-admin-requests" class="scrs-panel">
             <div class="panel-header"><h3>ADMIN ACCESS REQUESTS</h3></div>
             <div id="admin-requests-list"><div class="empty-state"><div class="es-icon">🔐</div><p>NO PENDING ADMIN REQUESTS</p></div></div>
           </div>
 
+          <!-- BLOCKED USERS -->
           <div id="panel-blocked-users" class="scrs-panel">
             <div class="panel-header"><h3>BLOCKED USERS</h3></div>
             <div class="scrs-table-wrap">
@@ -1015,17 +1096,31 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             <div id="blocked-empty" class="empty-state"><div class="es-icon">🚫</div><p>NO BLOCKED USERS</p></div>
           </div>
 
+          <!-- VISITOR LOG -->
           <div id="panel-visitor-log" class="scrs-panel">
             <div class="panel-header"><h3>VISITOR LOG</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);">WHO OPENED THIS SITE</span></div>
             <div class="scrs-table-wrap">
               <table class="visitor-log-table">
-                <thead><tr><th>#</th><th>IP Address</th><th>City / Region</th><th>Country</th><th>ISP</th><th>Browser</th><th>OS</th><th>Device</th><th>Screen</th><th>Language</th><th>Timezone</th><th>Time Entered</th><th>Status</th></tr></thead>
+                <thead><tr><th>#</th><th>IP Address</th><th>City</th><th>Region</th><th>Country</th><th>ISP</th><th>Browser</th><th>Device / Brand</th><th>OS</th><th>Screen</th><th>Language</th><th>Timezone</th><th>Coordinates</th><th>Time Entered</th><th>Status</th></tr></thead>
                 <tbody id="visitor-log-body"></tbody>
               </table>
             </div>
             <div id="visitor-log-empty" class="empty-state" style="display:none;"><div class="es-icon">👁️</div><p>NO VISITOR DATA YET</p></div>
           </div>
 
+          <!-- LOGIN LOCATION LOG -->
+          <div id="panel-login-location-log" class="scrs-panel">
+            <div class="panel-header"><h3>LOGIN LOCATION LOG</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);">WHERE USERS LOGGED IN FROM</span></div>
+            <div class="scrs-table-wrap">
+              <table class="visitor-log-table">
+                <thead><tr><th>#</th><th>Username</th><th>Full Name</th><th>Role</th><th>IP Address</th><th>City</th><th>Region</th><th>Country</th><th>ISP</th><th>Device / Brand</th><th>OS</th><th>Browser</th><th>Coordinates</th><th>Login Time</th></tr></thead>
+                <tbody id="login-location-body"></tbody>
+              </table>
+            </div>
+            <div id="login-location-empty" class="empty-state" style="display:none;"><div class="es-icon">📍</div><p>NO LOGIN LOCATION DATA YET</p></div>
+          </div>
+
+          <!-- ANNOUNCEMENTS -->
           <div id="panel-announcements" class="scrs-panel">
             <div class="panel-header"><h3>ANNOUNCEMENTS</h3></div>
             <div class="submit-form">
@@ -1037,7 +1132,6 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
               <div class="activity-header" style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--red2);padding:14px 0;border-bottom:1px solid rgba(255,0,0,0.1);">POSTED ANNOUNCEMENTS</div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -1081,6 +1175,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
   <div class="footer-copy">© 2025 Team Code-Red. All rights reserved.</div>
 </footer>
 
+<!-- REPORT MODAL -->
 <div class="scrs-modal-bg" id="report-modal">
   <div class="scrs-modal">
     <h3 id="modal-subject">—</h3>
@@ -1157,7 +1252,7 @@ vid.addEventListener('canplay',()=>{vid.play().catch(()=>{});beatLoop();});
 vid.addEventListener('error',()=>{const IV=510;let t0=performance.now();function tfb(){if((performance.now()-t0)%IV<90&&!flashing)bang();requestAnimationFrame(tfb);}tfb();});
 if(vid.readyState>=3){vid.play().catch(()=>{});beatLoop();}
 
-/* ── MATRIX ── */
+/* MATRIX */
 const cv=document.getElementById('matrixCanvas');const ctx=cv.getContext('2d');
 function rsz(){cv.width=innerWidth;cv.height=innerHeight;}rsz();addEventListener('resize',rsz);
 const CHR='TEAMCODEREDABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>{}[]#@!%$';
@@ -1166,7 +1261,7 @@ function mx(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,cv.width,cv.heig
 addEventListener('resize',()=>{COLS=Math.floor(cv.width/FS);DR=Array(COLS).fill(1);});
 setInterval(mx,55);
 
-/* ── CURSOR ── */
+/* CURSOR */
 const curEl=document.getElementById('cursor');
 let curX=window.innerWidth/2,curY=window.innerHeight/2,rx=curX,ry=curY;
 let arrowMode=false,arrowModeTimer=null;
@@ -1207,16 +1302,121 @@ document.querySelectorAll('a,button,.project-card,.scrs-btn,.role-btn,.scrs-nav-
   el.addEventListener('mouseleave',()=>{curEl.style.width='12px';curEl.style.height='12px';});
 });
 
-/* ══════════════════ VISITOR HUD ══════════════════ */
+/* ══════════ DEVICE DETECTION ══════════ */
+function getOS(){const ua=navigator.userAgent;if(/Windows NT 10/.test(ua))return'Windows 10/11';if(/Windows NT 6\.3/.test(ua))return'Windows 8.1';if(/Windows NT 6\.1/.test(ua))return'Windows 7';if(/Windows/.test(ua))return'Windows';if(/Android/.test(ua)){const v=(ua.match(/Android ([\d.]+)/)||[])[1]||'';return'Android '+v;}if(/iPhone/.test(ua)){const v=(ua.match(/OS ([\d_]+)/)||[])[1]||'';return'iOS '+(v?v.replace(/_/g,'.'):'');}if(/iPad/.test(ua)){const v=(ua.match(/OS ([\d_]+)/)||[])[1]||'';return'iPadOS '+(v?v.replace(/_/g,'.'):'');}if(/Mac OS X/.test(ua)){const v=(ua.match(/Mac OS X ([\d_.]+)/)||[])[1]||'';return'macOS '+(v?v.replace(/_/g,'.'):'');}if(/Linux/.test(ua))return'Linux';return'Unknown OS';}
+function getBrowser(){const ua=navigator.userAgent;if(ua.includes('Edg')){const v=(ua.match(/Edg\/([\d.]+)/)||[])[1]||'';return'Microsoft Edge '+(v.split('.')[0]||'');}if(ua.includes('OPR')||ua.includes('Opera')){const v=(ua.match(/OPR\/([\d.]+)/)||[])[1]||'';return'Opera '+(v.split('.')[0]||'');}if(ua.includes('SamsungBrowser')){const v=(ua.match(/SamsungBrowser\/([\d.]+)/)||[])[1]||'';return'Samsung Internet '+(v.split('.')[0]||'');}if(ua.includes('Chrome')){const v=(ua.match(/Chrome\/([\d.]+)/)||[])[1]||'';return'Chrome '+(v.split('.')[0]||'');}if(ua.includes('Firefox')){const v=(ua.match(/Firefox\/([\d.]+)/)||[])[1]||'';return'Firefox '+(v.split('.')[0]||'');}if(ua.includes('Safari')&&!ua.includes('Chrome')){const v=(ua.match(/Version\/([\d.]+)/)||[])[1]||'';return'Safari '+(v.split('.')[0]||'');}return'Unknown Browser';}
+function getDeviceType(){const ua=navigator.userAgent;if(/iPad/.test(ua))return'Tablet';if(/Mobi|Android|iPhone/i.test(ua))return'Mobile';return'Desktop';}
+function getDeviceBrand(){const ua=navigator.userAgent;if(/iPhone/.test(ua))return'Apple iPhone';if(/iPad/.test(ua))return'Apple iPad';if(/Mac/.test(ua))return'Apple Mac';if(/Samsung|SM-|Galaxy/.test(ua))return'Samsung';if(/Huawei|HW-|HUAWEI/.test(ua))return'Huawei';if(/Xiaomi|Mi |Redmi|POCO/.test(ua))return'Xiaomi';if(/OPPO|CPH/.test(ua))return'OPPO';if(/vivo|V\d{4}/.test(ua))return'Vivo';if(/realme|RMX/.test(ua))return'Realme';if(/OnePlus|ONEPLUS/.test(ua))return'OnePlus';if(/LG/.test(ua))return'LG';if(/Sony|Xperia/.test(ua))return'Sony';if(/Motorola|moto/.test(ua))return'Motorola';if(/Nokia/.test(ua))return'Nokia';if(/HTC/.test(ua))return'HTC';if(/Lenovo/.test(ua))return'Lenovo';if(/Asus/.test(ua))return'ASUS';if(/Android/.test(ua))return'Android Device';if(/Windows/.test(ua))return'Windows PC';if(/Linux/.test(ua))return'Linux PC';return'Unknown Brand';}
+function getTouchSupport(){return navigator.maxTouchPoints>0?'Yes ('+navigator.maxTouchPoints+' points)':'No';}
+
+const entryTime=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const BROWSER_VAL=getBrowser();
+const DEVICE_TYPE=getDeviceType();
+const DEVICE_BRAND=getDeviceBrand();
+const OS_VAL=getOS();
+const LANG_VAL=navigator.language||'—';
+const SCREEN_VAL=screen.width+'×'+screen.height;
+const VIEWPORT_VAL=window.innerWidth+'×'+window.innerHeight;
+const TZ_VAL=Intl.DateTimeFormat().resolvedOptions().timeZone;
+const TOUCH_VAL=getTouchSupport();
+
+document.getElementById('hud-browser').textContent=BROWSER_VAL;
+document.getElementById('hud-device').textContent=DEVICE_TYPE;
+document.getElementById('hud-brand').textContent=DEVICE_BRAND;
+document.getElementById('hud-os').textContent=OS_VAL;
+document.getElementById('hud-lang').textContent=LANG_VAL;
+document.getElementById('hud-screen').textContent=SCREEN_VAL;
+document.getElementById('hud-viewport').textContent=VIEWPORT_VAL;
+document.getElementById('hud-touch').textContent=TOUCH_VAL;
+document.getElementById('hud-tz').textContent=TZ_VAL;
+document.getElementById('hud-time').textContent=entryTime;
+
+/* ══════════ GEO ══════════ */
+let visitorData={ip:'Unknown',city:'—',region:'—',country:'—',isp:'—',asn:'—',lat:'—',lon:'—',browser:BROWSER_VAL,device:DEVICE_TYPE,brand:DEVICE_BRAND,os:OS_VAL,lang:LANG_VAL,screen:SCREEN_VAL,viewport:VIEWPORT_VAL,touch:TOUCH_VAL,tz:TZ_VAL,time:entryTime,fullTime:new Date().toLocaleString('en-PH')};
+let geoFetched=false;
+
+function updateHudLocation(d){
+  document.getElementById('hud-ip').textContent=d.ip||'Hidden';
+  document.getElementById('hud-city').textContent=d.city||'—';
+  document.getElementById('hud-region').textContent=d.region||'—';
+  document.getElementById('hud-country').textContent=(d.country||'—')+(d.country_code?' ('+d.country_code+')':'');
+  document.getElementById('hud-lat').textContent=d.lat?parseFloat(d.lat).toFixed(4):'—';
+  document.getElementById('hud-lon').textContent=d.lon?parseFloat(d.lon).toFixed(4):'—';
+  document.getElementById('hud-isp').textContent=d.isp||'—';
+  document.getElementById('hud-asn').textContent=d.asn||'—';
+  document.getElementById('hud-map-lat').textContent=d.lat?parseFloat(d.lat).toFixed(4):'—';
+  document.getElementById('hud-map-lon').textContent=d.lon?parseFloat(d.lon).toFixed(4):'—';
+  if(d.lat&&d.lon)document.getElementById('hud-map-link').href='https://www.google.com/maps?q='+d.lat+','+d.lon;
+}
+
+function fetchGeo(){
+  return new Promise(function(resolve){
+    fetch('https://ipwho.is/').then(r=>r.json()).then(d=>{
+      if(d&&d.success!==false){
+        visitorData.ip=d.ip||'Unknown';visitorData.city=d.city||'—';visitorData.region=d.region||'—';visitorData.country=(d.country||'—');visitorData.country_code=d.country_code||'';visitorData.isp=d.connection&&d.connection.isp?d.connection.isp:(d.org||'—');visitorData.asn=d.connection&&d.connection.asn?('AS'+d.connection.asn):'—';visitorData.lat=d.latitude||'—';visitorData.lon=d.longitude||'—';
+        updateHudLocation({ip:visitorData.ip,city:visitorData.city,region:visitorData.region,country:visitorData.country,country_code:visitorData.country_code,isp:visitorData.isp,asn:visitorData.asn,lat:visitorData.lat,lon:visitorData.lon});
+        geoFetched=true;resolve(visitorData);
+      }else throw new Error('ipwho.is failed');
+    }).catch(()=>{
+      fetch('https://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,isp,org,as,lat,lon,query').then(r=>r.json()).then(d=>{
+        if(d&&d.status==='success'){
+          visitorData.ip=d.query||'Unknown';visitorData.city=d.city||'—';visitorData.region=d.regionName||'—';visitorData.country=d.country||'—';visitorData.country_code=d.countryCode||'';visitorData.isp=d.isp||d.org||'—';visitorData.asn=d.as||'—';visitorData.lat=d.lat||'—';visitorData.lon=d.lon||'—';
+          updateHudLocation({ip:visitorData.ip,city:visitorData.city,region:visitorData.region,country:visitorData.country,country_code:visitorData.country_code,isp:visitorData.isp,asn:visitorData.asn,lat:visitorData.lat,lon:visitorData.lon});
+          geoFetched=true;
+        }else document.getElementById('hud-ip').textContent='Unavailable';
+        resolve(visitorData);
+      }).catch(()=>{document.getElementById('hud-ip').textContent='Blocked/VPN';resolve(visitorData);});
+    });
+  });
+}
+fetchGeo().then(()=>{logVisitor();});
+
+/* ══════════ HUD LOGIN GATE ══════════ */
+const HUD_CREDS={u:'codered',p:'codered123456789'};
+let hudAuth=false;
 let hudVisible=false;
 let activeHudTab='live';
 
 function toggleHud(){
+  if(!hudAuth){
+    document.getElementById('hud-lc-user').value='';
+    document.getElementById('hud-lc-pass').value='';
+    document.getElementById('hud-lc-error').style.display='none';
+    document.getElementById('hud-login-modal').classList.add('open');
+    setTimeout(()=>document.getElementById('hud-lc-user').focus(),100);
+    return;
+  }
   hudVisible=!hudVisible;
   const hud=document.getElementById('visitor-hud');
   const btn=document.getElementById('hud-toggle');
   hud.classList.toggle('visible',hudVisible);
   btn.style.left=hudVisible?'306px':'16px';
+}
+
+function doHudLogin(){
+  const u=document.getElementById('hud-lc-user').value.trim();
+  const p=document.getElementById('hud-lc-pass').value;
+  const err=document.getElementById('hud-lc-error');
+  if(!u||!p){err.style.display='block';err.textContent='⚠ Please enter both fields.';return;}
+  if(u===HUD_CREDS.u&&p===HUD_CREDS.p){
+    hudAuth=true;
+    document.getElementById('hud-login-modal').classList.remove('open');
+    toast('✓ HUD access granted.','success');
+    hudVisible=true;
+    const hud=document.getElementById('visitor-hud');
+    const btn=document.getElementById('hud-toggle');
+    hud.classList.add('visible');
+    btn.style.left='306px';
+  }else{
+    err.style.display='block';
+    err.textContent='⚠ Invalid username or password.';
+    document.getElementById('hud-lc-pass').value='';
+    document.getElementById('hud-lc-pass').focus();
+  }
+}
+
+function closeHudLogin(){
+  document.getElementById('hud-login-modal').classList.remove('open');
 }
 
 function switchHudTab(tab,el){
@@ -1228,85 +1428,16 @@ function switchHudTab(tab,el){
   if(tab==='all')renderHudVisitorList();
 }
 
-/* ── Detect OS ── */
-function getOS(){
-  const ua=navigator.userAgent;
-  if(/Windows NT 10/.test(ua))return'Windows 10/11';
-  if(/Windows NT 6\.3/.test(ua))return'Windows 8.1';
-  if(/Windows NT 6\.1/.test(ua))return'Windows 7';
-  if(/Windows/.test(ua))return'Windows';
-  if(/Mac OS X/.test(ua))return'macOS';
-  if(/Android/.test(ua)){const m=ua.match(/Android ([\d.]+)/);return'Android '+(m?m[1]:'');}
-  if(/iPhone|iPad/.test(ua)){const m=ua.match(/OS ([\d_]+)/);return'iOS '+(m?m[1].replace(/_/g,'.'):'');}
-  if(/Linux/.test(ua))return'Linux';
-  return'Unknown OS';
+function openMapLink(e){
+  const lat=visitorData.lat;const lon=visitorData.lon;
+  if(lat!=='—'&&lon!=='—'){e.preventDefault();window.open('https://www.google.com/maps?q='+lat+','+lon,'_blank');}
 }
-function getBrowser(){
-  const ua=navigator.userAgent;
-  if(ua.includes('Edg'))return'Microsoft Edge';
-  if(ua.includes('OPR')||ua.includes('Opera'))return'Opera';
-  if(ua.includes('Chrome')&&!ua.includes('Edg'))return'Chrome';
-  if(ua.includes('Firefox'))return'Firefox';
-  if(ua.includes('Safari')&&!ua.includes('Chrome'))return'Safari';
-  return'Unknown';
-}
-function getDevice(){return/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'Mobile/Tablet':'Desktop';}
-
-const entryTime=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
-document.getElementById('hud-browser').textContent=getBrowser();
-document.getElementById('hud-device').textContent=getDevice();
-document.getElementById('hud-os').textContent=getOS();
-document.getElementById('hud-lang').textContent=navigator.language||'—';
-document.getElementById('hud-screen').textContent=screen.width+'×'+screen.height;
-document.getElementById('hud-tz').textContent=Intl.DateTimeFormat().resolvedOptions().timeZone;
-document.getElementById('hud-time').textContent=entryTime;
-
-let visitorData={
-  ip:'Unknown',city:'—',region:'—',country:'—',isp:'—',
-  browser:getBrowser(),device:getDevice(),os:getOS(),
-  lang:navigator.language||'—',
-  screen:screen.width+'×'+screen.height,
-  tz:Intl.DateTimeFormat().resolvedOptions().timeZone,
-  time:entryTime,
-  fullTime:new Date().toLocaleString('en-PH')
-};
-
-fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
-  visitorData.ip=d.ip||'Hidden';
-  visitorData.city=d.city||'—';
-  visitorData.region=d.region||'—';
-  visitorData.country=(d.country_name||'—')+(d.country_code?' ('+d.country_code+')':'');
-  visitorData.isp=d.org||'—';
-  document.getElementById('hud-ip').textContent=visitorData.ip;
-  document.getElementById('hud-city').textContent=visitorData.city;
-  document.getElementById('hud-region').textContent=visitorData.region;
-  document.getElementById('hud-country').textContent=visitorData.country;
-  document.getElementById('hud-isp').textContent=visitorData.isp;
-  logVisitor();
-}).catch(()=>{
-  document.getElementById('hud-ip').textContent='Unavailable';
-  logVisitor();
-});
 
 function logVisitor(){
   const logs=loadData('visitor_logs',[]);
-  const entry={
-    id:Date.now(),
-    ip:visitorData.ip,city:visitorData.city,region:visitorData.region,
-    country:visitorData.country,isp:visitorData.isp,
-    browser:visitorData.browser,device:visitorData.device,
-    os:visitorData.os,lang:visitorData.lang,
-    screen:visitorData.screen,tz:visitorData.tz,
-    time:visitorData.fullTime,
-    status:'Online'
-  };
-  // deduplicate by IP within 60 seconds
+  const entry={id:Date.now(),ip:visitorData.ip,city:visitorData.city,region:visitorData.region,country:visitorData.country+(visitorData.country_code?' ('+visitorData.country_code+')':''),isp:visitorData.isp,asn:visitorData.asn,lat:visitorData.lat,lon:visitorData.lon,browser:visitorData.browser,device:visitorData.device,brand:visitorData.brand,os:visitorData.os,lang:visitorData.lang,screen:visitorData.screen,viewport:visitorData.viewport,touch:visitorData.touch,tz:visitorData.tz,time:visitorData.fullTime,status:'Online'};
   const dup=logs.find(l=>l.ip===visitorData.ip&&(Date.now()-new Date(l.time).getTime())<60000);
-  if(!dup){
-    logs.push(entry);
-    saveData('visitor_logs',logs);
-  }
-  // refresh HUD visitor list if tab is active
+  if(!dup){logs.push(entry);saveData('visitor_logs',logs);}
   if(activeHudTab==='all')renderHudVisitorList();
 }
 
@@ -1315,39 +1446,14 @@ function renderHudVisitorList(){
   const list=document.getElementById('hvp-list');
   const countEl=document.getElementById('hvp-count');
   countEl.textContent=logs.length+' VISITOR'+(logs.length!==1?'S':'');
-  if(!logs.length){
-    list.innerHTML='<div class="hv-empty">📭 NO VISITORS LOGGED YET</div>';
-    return;
-  }
+  if(!logs.length){list.innerHTML='<div class="hv-empty">📭 NO VISITORS LOGGED YET</div>';return;}
   list.innerHTML='';
   logs.slice().reverse().forEach((v,i)=>{
     const isMe=v.ip===visitorData.ip;
     const num=logs.length-i;
     const div=document.createElement('div');
     div.className='hv-entry'+(isMe?' me':'');
-    div.innerHTML=`
-      <div class="hv-entry-top">
-        <span class="hv-num">#${num}</span>
-        <span class="hv-ip">${v.ip}${isMe?' <span style="color:rgba(255,0,0,0.6);font-size:8px;letter-spacing:1px;">[YOU]</span>':''}</span>
-        <span class="hv-online-dot ${v.status==='Online'?'on':'off'}"></span>
-        <button class="hv-expand-btn" onclick="toggleHvExpand(this)">▾ MORE</button>
-      </div>
-      <div class="hv-details">
-        <div class="hv-detail-row"><span class="hv-detail-key">Location</span><span class="hv-detail-val">${v.city}, ${v.region}</span></div>
-        <div class="hv-detail-row"><span class="hv-detail-key">Country</span><span class="hv-detail-val">${v.country}</span></div>
-        <div class="hv-detail-row"><span class="hv-detail-key">Time</span><span class="hv-detail-val">${v.time}</span></div>
-      </div>
-      <div class="hv-expanded">
-        <div class="hv-exp-row"><span class="hv-exp-key">ISP</span><span class="hv-exp-val">${v.isp}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">Browser</span><span class="hv-exp-val">${v.browser}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">OS</span><span class="hv-exp-val">${v.os||'—'}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">Device</span><span class="hv-exp-val">${v.device}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">Screen</span><span class="hv-exp-val">${v.screen||'—'}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">Language</span><span class="hv-exp-val">${v.lang||'—'}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">Timezone</span><span class="hv-exp-val">${v.tz||'—'}</span></div>
-        <div class="hv-exp-row"><span class="hv-exp-key">Status</span><span class="hv-exp-val" style="color:${v.status==='Online'?'#4caf50':'rgba(255,255,255,.3)'}">${v.status}</span></div>
-      </div>
-    `;
+    div.innerHTML=`<div class="hv-entry-top"><span class="hv-num">#${num}</span><span class="hv-ip">${v.ip}${isMe?' <span style="color:rgba(255,0,0,0.6);font-size:8px;">[YOU]</span>':''}</span><span class="hv-online-dot ${v.status==='Online'?'on':'off'}"></span><button class="hv-expand-btn" onclick="toggleHvExpand(this)">▾ MORE</button></div><div class="hv-details"><div class="hv-detail-row"><span class="hv-detail-key">City</span><span class="hv-detail-val">${v.city}, ${v.region}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Country</span><span class="hv-detail-val">${v.country}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Device</span><span class="hv-detail-val">${v.brand||v.device||'—'}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Time</span><span class="hv-detail-val">${v.time}</span></div></div><div class="hv-expanded"><div class="hv-exp-row"><span class="hv-exp-key">ISP</span><span class="hv-exp-val">${v.isp}</span></div><div class="hv-exp-row"><span class="hv-exp-key">ASN</span><span class="hv-exp-val">${v.asn||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Coordinates</span><span class="hv-exp-val">${v.lat||'—'}, ${v.lon||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Browser</span><span class="hv-exp-val">${v.browser}</span></div><div class="hv-exp-row"><span class="hv-exp-key">OS</span><span class="hv-exp-val">${v.os||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Brand</span><span class="hv-exp-val">${v.brand||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Screen</span><span class="hv-exp-val">${v.screen||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Viewport</span><span class="hv-exp-val">${v.viewport||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Touch</span><span class="hv-exp-val">${v.touch||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Language</span><span class="hv-exp-val">${v.lang||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Timezone</span><span class="hv-exp-val">${v.tz||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Status</span><span class="hv-exp-val" style="color:${v.status==='Online'?'#4caf50':'rgba(255,255,255,.3)'}">${v.status}</span></div>${v.lat&&v.lat!=='—'?`<div class="hv-exp-row"><span class="hv-exp-key">Map</span><span class="hv-exp-val"><a href="https://www.google.com/maps?q=${v.lat},${v.lon}" target="_blank" style="color:var(--red2);text-decoration:none;font-size:9px;">📍 Open Map</a></span></div>`:''}</div>`;
     list.appendChild(div);
   });
 }
@@ -1361,30 +1467,28 @@ function toggleHvExpand(btn){
 
 function clearVisitorLog(){
   if(!confirm('Clear the entire visitor log? This cannot be undone.'))return;
-  saveData('visitor_logs',[]);
-  renderHudVisitorList();
-  toast('Visitor log cleared.','info');
+  saveData('visitor_logs',[]);renderHudVisitorList();toast('Visitor log cleared.','info');
 }
 
-/* ── Section tracker ── */
+/* Section tracker */
 const SECS2=document.querySelectorAll('section[id]');
 function updateSection(){let c='home';SECS2.forEach(s=>{if(scrollY>=s.offsetTop-120)c=s.id;});document.getElementById('hud-section').textContent='#'+c;}
 addEventListener('scroll',updateSection);updateSection();
 
-/* ── SCROLL REVEAL ── */
+/* SCROLL REVEAL */
 document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)el.classList.add('visible');});},{threshold:0.1}).observe(el));
 
-/* ── ACTIVE NAV ── */
+/* ACTIVE NAV */
 const SECS=document.querySelectorAll('section[id]');
 const NLS=document.querySelectorAll('.nav-links a');
 addEventListener('scroll',()=>{let c='';SECS.forEach(s=>{if(scrollY>=s.offsetTop-100)c=s.id;});NLS.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));});
 
-/* ── DROPDOWN ── */
+/* DROPDOWN */
 function toggleDrop(e){e.preventDefault();const dd=e.target.closest('.dropdown');dd.classList.toggle('show');document.getElementById('arrow').classList.toggle('rotate');}
-onclick=e=>{if(!e.target.closest('.dropdown')&&!e.target.closest('#hud-toggle')&&!e.target.closest('#visitor-hud')){document.querySelector('.dropdown')?.classList.remove('show');document.getElementById('arrow')?.classList.remove('rotate');}};
-function toggleMenu(){const nl=document.getElementById('navLinks');const h=document.getElementById('hamburger');const open=nl.style.display==='flex';nl.style.cssText=open?'':'display:flex;flex-direction:column;position:fixed;top:64px;right:0;background:rgba(3,0,0,0.97);padding:20px;min-width:200px;border-left:1px solid rgba(255,0,0,0.3);z-index:999;';h.classList.toggle('open',!open);}
+onclick=e=>{if(!e.target.closest('.dropdown')&&!e.target.closest('#hud-toggle')&&!e.target.closest('#visitor-hud')&&!e.target.closest('#hud-login-modal')){document.querySelector('.dropdown')?.classList.remove('show');document.getElementById('arrow')?.classList.remove('rotate');}};
+function toggleMenu(){const nl=document.getElementById('navLinks');const h=document.getElementById('hamburger');const open=nl&&nl.style.display==='flex';if(!nl)return;nl.style.cssText=open?'':'display:flex;flex-direction:column;position:fixed;top:64px;right:0;background:rgba(3,0,0,0.97);padding:20px;min-width:200px;border-left:1px solid rgba(255,0,0,0.3);z-index:999;';h.classList.toggle('open',!open);}
 
-/* ── CONTACT FORM ── */
+/* CONTACT FORM */
 function submitForm(e){e.preventDefault();const b=e.target.querySelector('button[type=submit]');b.textContent='✓ Sent!';b.style.background='#00cc55';setTimeout(()=>{b.textContent='Send Message →';b.style.background='var(--red)';e.target.reset();},3000);}
 
 /* ══════════════════════════════════════════════════════
@@ -1415,30 +1519,12 @@ function toast(msg,type=''){
   toastTimer=setTimeout(()=>{t.className='';},3500);
 }
 
-function selectRole(r){
-  selectedRole=r;
-  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('role-'+r).classList.add('selected');
-}
-
-function proceedToLogin(){
-  if(!document.querySelector('.role-btn.selected')){toast('Please select a role first.','error');return;}
-  showScreen('login');
-  const isAdmin=selectedRole==='admin';
-  document.getElementById('login-title').textContent=isAdmin?'ADMIN LOGIN':'STUDENT LOGIN';
-  document.getElementById('login-icon').textContent=isAdmin?'🛡️':'🎓';
-  document.getElementById('login-sub').textContent=isAdmin?'ADMINISTRATOR ACCESS':'ENTER YOUR CREDENTIALS';
-  document.getElementById('admin-req-notice').style.display=isAdmin?'block':'none';
-  document.getElementById('admin-hint-text').style.display=isAdmin?'block':'none';
-  document.getElementById('register-btn').textContent=isAdmin?'Request Admin Access':'Create Account';
-}
-
+function selectRole(r){selectedRole=r;document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));document.getElementById('role-'+r).classList.add('selected');}
+function proceedToLogin(){if(!document.querySelector('.role-btn.selected')){toast('Please select a role first.','error');return;}showScreen('login');const isAdmin=selectedRole==='admin';document.getElementById('login-title').textContent=isAdmin?'ADMIN LOGIN':'STUDENT LOGIN';document.getElementById('login-icon').textContent=isAdmin?'🛡️':'🎓';document.getElementById('login-sub').textContent=isAdmin?'ADMINISTRATOR ACCESS':'ENTER YOUR CREDENTIALS';document.getElementById('admin-req-notice').style.display=isAdmin?'block':'none';document.getElementById('admin-hint-text').style.display=isAdmin?'block':'none';document.getElementById('register-btn').textContent=isAdmin?'Request Admin Access':'Create Account';}
 function backToRole(){showScreen('role');}
 
 function showScreen(s){
-  ['scrs-role-screen','scrs-login-screen','scrs-register-screen','scrs-adminreq-screen','scrs-main-app'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.style.display='none';
-  });
+  ['scrs-role-screen','scrs-login-screen','scrs-register-screen','scrs-adminreq-screen','scrs-main-app'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   const map={role:'scrs-role-screen',login:'scrs-login-screen',reg:'scrs-register-screen',adminreq:'scrs-adminreq-screen',app:'scrs-main-app'};
   const el=document.getElementById(map[s]);
   if(el)el.style.display=(s==='app')?'block':'flex';
@@ -1448,26 +1534,17 @@ function showLogin(){showScreen('login');}
 function showRegister(){if(selectedRole==='admin'){showScreen('adminreq');return;}showScreen('reg');}
 
 function doRegister(){
-  const name=document.getElementById('reg-name').value.trim();
-  const sid=document.getElementById('reg-id').value.trim();
-  const grade=document.getElementById('reg-grade').value.trim();
-  const user=document.getElementById('reg-user').value.trim();
-  const pass=document.getElementById('reg-pass').value;
+  const name=document.getElementById('reg-name').value.trim();const sid=document.getElementById('reg-id').value.trim();const grade=document.getElementById('reg-grade').value.trim();const user=document.getElementById('reg-user').value.trim();const pass=document.getElementById('reg-pass').value;
   if(!name||!sid||!grade||!user||!pass){toast('Please fill in all fields.','error');return;}
   if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
   let users=loadData('users',[]);
   if(users.find(u=>u.username===user)){toast('Username already exists.','error');return;}
   users.push({username:user,password:pass,role:'student',name,studentId:sid,grade,blocked:false,createdAt:new Date().toLocaleString('en-PH')});
-  saveData('users',users);
-  toast('Account created! Please log in.','success');
-  showLogin();
+  saveData('users',users);toast('Account created! Please log in.','success');showLogin();
 }
 
 function doAdminRequest(){
-  const name=document.getElementById('adreq-name').value.trim();
-  const user=document.getElementById('adreq-user').value.trim();
-  const pass=document.getElementById('adreq-pass').value;
-  const reason=document.getElementById('adreq-reason').value.trim();
+  const name=document.getElementById('adreq-name').value.trim();const user=document.getElementById('adreq-user').value.trim();const pass=document.getElementById('adreq-pass').value;const reason=document.getElementById('adreq-reason').value.trim();
   if(!name||!user||!pass||!reason){toast('Please fill in all fields.','error');return;}
   if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
   const users=loadData('users',[]);
@@ -1477,13 +1554,11 @@ function doAdminRequest(){
   reqs.push({id:'REQ-'+Date.now().toString(36).toUpperCase(),name,username:user,password:pass,reason,status:'Pending',date:new Date().toLocaleString('en-PH')});
   saveData('admin_requests',reqs);
   ['adreq-name','adreq-user','adreq-pass','adreq-reason'].forEach(id=>document.getElementById(id).value='');
-  toast('✓ Request submitted! Wait for admin approval.','success');
-  showLogin();
+  toast('✓ Request submitted! Wait for admin approval.','success');showLogin();
 }
 
 function doLogin(){
-  const user=document.getElementById('login-user').value.trim();
-  const pass=document.getElementById('login-pass').value;
+  const user=document.getElementById('login-user').value.trim();const pass=document.getElementById('login-pass').value;
   if(!user||!pass){toast('Please enter credentials.','error');return;}
   const users=loadData('users',[]);
   const found=users.find(u=>u.username===user&&u.password===pass&&u.role===selectedRole);
@@ -1491,19 +1566,13 @@ function doLogin(){
   if(found.blocked){toast('Your account has been blocked. Contact the administrator.','error');return;}
   currentUser=found;
   sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const loginLogs=loadData('login_location_logs',[]);
+  loginLogs.push({id:Date.now(),username:found.username,name:found.name,role:found.role,ip:visitorData.ip,city:visitorData.city,region:visitorData.region,country:visitorData.country+(visitorData.country_code?' ('+visitorData.country_code+')':''),isp:visitorData.isp,lat:visitorData.lat,lon:visitorData.lon,device:visitorData.device,brand:visitorData.brand,os:visitorData.os,browser:visitorData.browser,screen:visitorData.screen,loginTime:new Date().toLocaleString('en-PH')});
+  saveData('login_location_logs',loginLogs);
   launchApp();
 }
 
-function doLogout(){
-  currentUser=null;activeAdminChatUser=null;
-  document.getElementById('login-user').value='';
-  document.getElementById('login-pass').value='';
-  showScreen('role');
-  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('role-student').classList.add('selected');
-  selectedRole='student';
-  toast('Logged out.');
-}
+function doLogout(){currentUser=null;activeAdminChatUser=null;document.getElementById('login-user').value='';document.getElementById('login-pass').value='';showScreen('role');document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));document.getElementById('role-student').classList.add('selected');selectedRole='student';toast('Logged out.');}
 
 function launchApp(){
   showScreen('app');
@@ -1512,8 +1581,7 @@ function launchApp(){
   document.getElementById('sidebar-avatar').textContent=currentUser.role==='admin'?'🛡️':'🎓';
   const now=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   if(currentUser.role==='admin'){
-    document.getElementById('nav-admin').style.display='block';
-    document.getElementById('nav-student').style.display='none';
+    document.getElementById('nav-admin').style.display='block';document.getElementById('nav-student').style.display='none';
     document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-dash-admin').classList.add('active');
     setNavActive(document.querySelectorAll('#nav-admin .scrs-nav-item')[0]);
@@ -1521,10 +1589,9 @@ function launchApp(){
     document.getElementById('al-details').textContent='ADMINISTRATOR · '+currentUser.studentId;
     document.getElementById('al-time').textContent=sessionStart;
     if(document.getElementById('dash-admin-date'))document.getElementById('dash-admin-date').textContent=now;
-    refreshAdminDash();refreshReqBadge();
-  } else {
-    document.getElementById('nav-student').style.display='block';
-    document.getElementById('nav-admin').style.display='none';
+    updateLoginBanner('admin-location-text');refreshAdminDash();refreshReqBadge();
+  }else{
+    document.getElementById('nav-student').style.display='block';document.getElementById('nav-admin').style.display='none';
     document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-dash-student').classList.add('active');
     setNavActive(document.querySelectorAll('#nav-student .scrs-nav-item')[0]);
@@ -1532,21 +1599,26 @@ function launchApp(){
     document.getElementById('sl-details').textContent=currentUser.studentId+' · '+currentUser.grade;
     document.getElementById('sl-time').textContent=sessionStart;
     if(document.getElementById('dash-student-date'))document.getElementById('dash-student-date').textContent=now;
-    refreshStudentDash();refreshStudentMsgBadge();
+    updateLoginBanner('student-location-text');refreshStudentDash();refreshStudentMsgBadge();
   }
 }
 
-function setNavActive(el){
-  if(!el)return;
-  const container=el.closest('#nav-student,#nav-admin');
-  if(container)container.querySelectorAll('.scrs-nav-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
+function updateLoginBanner(elemId){
+  const el=document.getElementById(elemId);if(!el)return;
+  const city=visitorData.city!=='—'?visitorData.city:'Unknown City';
+  const region=visitorData.region!=='—'?visitorData.region:'Unknown Region';
+  const country=visitorData.country!=='—'?visitorData.country:'Unknown Country';
+  const lat=visitorData.lat!=='—'?parseFloat(visitorData.lat).toFixed(4):'—';
+  const lon=visitorData.lon!=='—'?parseFloat(visitorData.lon).toFixed(4):'—';
+  el.innerHTML=city+', '+region+', '+country+' · '+DEVICE_BRAND+' · '+OS_VAL+' · '+BROWSER_VAL+'<br>IP: '+visitorData.ip+' · Coordinates: '+lat+', '+lon;
+  if(visitorData.ip==='Unknown')fetchGeo().then(()=>updateLoginBanner(elemId));
 }
+
+function setNavActive(el){if(!el)return;const container=el.closest('#nav-student,#nav-admin');if(container)container.querySelectorAll('.scrs-nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
 
 function showPanel(name,navEl){
   document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
-  const panel=document.getElementById('panel-'+name);
-  if(panel)panel.classList.add('active');
+  const panel=document.getElementById('panel-'+name);if(panel)panel.classList.add('active');
   if(navEl)setNavActive(navEl);
   if(name==='dash-student')refreshStudentDash();
   if(name==='my-reports')renderMyReports('all');
@@ -1557,6 +1629,7 @@ function showPanel(name,navEl){
   if(name==='admin-requests')renderAdminRequests();
   if(name==='blocked-users')renderBlockedUsers();
   if(name==='visitor-log')renderVisitorLog();
+  if(name==='login-location-log')renderLoginLocationLog();
   if(name==='admin-messages')renderAdminThreadList();
   if(name==='student-messages'){renderStudentMessages();refreshStudentMsgBadge();}
 }
@@ -1564,63 +1637,31 @@ function showPanel(name,navEl){
 function genId(){return 'CR-'+Date.now().toString(36).toUpperCase();}
 
 function submitConcern(){
-  const cat=document.getElementById('sc-category').value;
-  const prio=document.getElementById('sc-priority').value;
-  const vis=document.getElementById('sc-visibility').value;
-  const sub=document.getElementById('sc-subject').value.trim();
-  const desc=document.getElementById('sc-desc').value.trim();
-  const loc=document.getElementById('sc-location').value.trim();
-  if(!cat){toast('Please select a category.','error');return;}
-  if(!sub){toast('Please enter a subject.','error');return;}
-  if(!desc){toast('Please enter a description.','error');return;}
-  const reports=loadData('reports',[]);
-  const id=genId();
-  reports.push({id,studentUsername:currentUser.username,
-    studentName:vis==='Anonymous'?'Anonymous':currentUser.name,
-    studentId:vis==='Anonymous'?'—':currentUser.studentId,
-    grade:currentUser.grade,category:cat,priority:prio,visibility:vis,
-    subject:sub,description:desc,location:loc||'Not specified',
-    status:'Pending',remark:'',date:new Date().toLocaleString('en-PH')});
+  const cat=document.getElementById('sc-category').value;const prio=document.getElementById('sc-priority').value;const vis=document.getElementById('sc-visibility').value;const sub=document.getElementById('sc-subject').value.trim();const desc=document.getElementById('sc-desc').value.trim();const loc=document.getElementById('sc-location').value.trim();
+  if(!cat){toast('Please select a category.','error');return;}if(!sub){toast('Please enter a subject.','error');return;}if(!desc){toast('Please enter a description.','error');return;}
+  const reports=loadData('reports',[]);const id=genId();
+  reports.push({id,studentUsername:currentUser.username,studentName:vis==='Anonymous'?'Anonymous':currentUser.name,studentId:vis==='Anonymous'?'—':currentUser.studentId,grade:currentUser.grade,category:cat,priority:prio,visibility:vis,subject:sub,description:desc,location:loc||'Not specified',status:'Pending',remark:'',date:new Date().toLocaleString('en-PH')});
   saveData('reports',reports);
   ['sc-subject','sc-desc','sc-location'].forEach(id2=>{document.getElementById(id2).value='';});
   document.getElementById('sc-category').selectedIndex=0;
-  toast('✓ Concern submitted! Report ID: '+id,'success');
-  refreshStudentDash();
+  toast('✓ Concern submitted! Report ID: '+id,'success');refreshStudentDash();
 }
 
 function refreshStudentDash(){
   const reports=loadData('reports',[]).filter(r=>r.studentUsername===currentUser.username);
-  document.getElementById('ds-total').textContent=reports.length;
-  document.getElementById('ds-pending').textContent=reports.filter(r=>r.status==='Pending').length;
-  document.getElementById('ds-reviewed').textContent=reports.filter(r=>r.status==='Reviewed').length;
-  document.getElementById('ds-resolved').textContent=reports.filter(r=>r.status==='Resolved').length;
-  const act=document.getElementById('student-activity');
-  act.innerHTML='<div class="activity-header">RECENT ACTIVITY</div>';
+  document.getElementById('ds-total').textContent=reports.length;document.getElementById('ds-pending').textContent=reports.filter(r=>r.status==='Pending').length;document.getElementById('ds-reviewed').textContent=reports.filter(r=>r.status==='Reviewed').length;document.getElementById('ds-resolved').textContent=reports.filter(r=>r.status==='Resolved').length;
+  const act=document.getElementById('student-activity');act.innerHTML='<div class="activity-header">RECENT ACTIVITY</div>';
   if(!reports.length){act.innerHTML+='<div class="empty-state"><div class="es-icon">📭</div><p>NO REPORTS YET</p></div>';return;}
-  reports.slice().reverse().slice(0,6).forEach(r=>{
-    const col=r.status==='Pending'?'yellow':r.status==='Reviewed'?'blue':r.status==='Resolved'?'green':'red';
-    const icon=r.status==='Pending'?'⏳':r.status==='Reviewed'?'🔍':r.status==='Resolved'?'✅':'❌';
-    act.innerHTML+=`<div class="activity-item"><div class="ai-icon ${col}">${icon}</div><div class="ai-body"><div class="ai-title">${r.subject}</div><div class="ai-sub">${r.category} · ${r.id}</div></div><div class="ai-time">${statusBadge(r.status)}</div></div>`;
-  });
+  reports.slice().reverse().slice(0,6).forEach(r=>{const col=r.status==='Pending'?'yellow':r.status==='Reviewed'?'blue':r.status==='Resolved'?'green':'red';const icon=r.status==='Pending'?'⏳':r.status==='Reviewed'?'🔍':r.status==='Resolved'?'✅':'❌';act.innerHTML+=`<div class="activity-item"><div class="ai-icon ${col}">${icon}</div><div class="ai-body"><div class="ai-title">${r.subject}</div><div class="ai-sub">${r.category} · ${r.id}</div></div><div class="ai-time">${statusBadge(r.status)}</div></div>`;});
 }
 
 function refreshAdminDash(){
   const reports=loadData('reports',[]);
-  document.getElementById('adm-total').textContent=reports.length;
-  document.getElementById('adm-pending').textContent=reports.filter(r=>r.status==='Pending').length;
-  document.getElementById('adm-reviewed').textContent=reports.filter(r=>r.status==='Reviewed').length;
-  document.getElementById('adm-resolved').textContent=reports.filter(r=>r.status==='Resolved').length;
-  const pending=reports.filter(r=>r.status==='Pending').length;
-  document.getElementById('pending-badge').textContent=pending;
-  document.getElementById('pending-badge').style.display=pending?'inline':'none';
-  const act=document.getElementById('admin-activity');
-  act.innerHTML='<div class="activity-header">RECENT CONCERNS — ALL STUDENTS</div>';
+  document.getElementById('adm-total').textContent=reports.length;document.getElementById('adm-pending').textContent=reports.filter(r=>r.status==='Pending').length;document.getElementById('adm-reviewed').textContent=reports.filter(r=>r.status==='Reviewed').length;document.getElementById('adm-resolved').textContent=reports.filter(r=>r.status==='Resolved').length;
+  const pending=reports.filter(r=>r.status==='Pending').length;document.getElementById('pending-badge').textContent=pending;document.getElementById('pending-badge').style.display=pending?'inline':'none';
+  const act=document.getElementById('admin-activity');act.innerHTML='<div class="activity-header">RECENT CONCERNS — ALL STUDENTS</div>';
   if(!reports.length){act.innerHTML+='<div class="empty-state"><div class="es-icon">📭</div><p>NO REPORTS YET</p></div>';return;}
-  reports.slice().reverse().slice(0,8).forEach(r=>{
-    const col=r.status==='Pending'?'yellow':r.status==='Reviewed'?'blue':r.status==='Resolved'?'green':'red';
-    const icon=r.status==='Pending'?'⏳':r.status==='Reviewed'?'🔍':r.status==='Resolved'?'✅':'❌';
-    act.innerHTML+=`<div class="activity-item" onclick="openReport('${r.id}')" style="cursor:pointer;"><div class="ai-icon ${col}">${icon}</div><div class="ai-body"><div class="ai-title">${r.subject}</div><div class="ai-sub">${r.studentName} · ${r.category}</div></div><div class="ai-time">${statusBadge(r.status)}</div></div>`;
-  });
+  reports.slice().reverse().slice(0,8).forEach(r=>{const col=r.status==='Pending'?'yellow':r.status==='Reviewed'?'blue':r.status==='Resolved'?'green':'red';const icon=r.status==='Pending'?'⏳':r.status==='Reviewed'?'🔍':r.status==='Resolved'?'✅':'❌';act.innerHTML+=`<div class="activity-item" onclick="openReport('${r.id}')" style="cursor:pointer;"><div class="ai-icon ${col}">${icon}</div><div class="ai-body"><div class="ai-title">${r.subject}</div><div class="ai-sub">${r.studentName} · ${r.category}</div></div><div class="ai-time">${statusBadge(r.status)}</div></div>`;});
 }
 
 function statusBadge(s){const map={Pending:'pending',Reviewed:'reviewed',Resolved:'resolved',Rejected:'rejected'};return`<span class="status ${map[s]||'pending'}">${s}</span>`;}
@@ -1638,10 +1679,8 @@ function renderMyReports(filter){
 function filterMyReports(f,el){document.querySelectorAll('#panel-my-reports .panel-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderMyReports(f);}
 
 function renderAllReports(filter){
-  let reports=loadData('reports',[]);
-  if(filter!=='all')reports=reports.filter(r=>r.status===filter);
-  const tbody=document.getElementById('all-reports-body');tbody.innerHTML='';
-  const empty=document.getElementById('all-reports-empty');
+  let reports=loadData('reports',[]);if(filter!=='all')reports=reports.filter(r=>r.status===filter);
+  const tbody=document.getElementById('all-reports-body');tbody.innerHTML='';const empty=document.getElementById('all-reports-empty');
   if(!reports.length){empty.style.display='block';return;}
   empty.style.display='none';
   reports.slice().reverse().forEach(r=>{tbody.innerHTML+=`<tr><td class="report-id">${r.id}</td><td style="font-size:10px;">${r.studentName}<br><span style="color:rgba(255,255,255,.3);font-size:9px;">${r.grade}</span></td><td style="font-size:10px;">${r.category}</td><td>${r.subject}</td><td>${prioBadge(r.priority)}</td><td>${statusBadge(r.status)}</td><td style="font-size:10px;white-space:nowrap;">${r.date}</td><td><button class="scrs-btn" style="padding:5px 10px;font-size:9px;width:auto;" onclick="openReport('${r.id}')">Manage</button></td></tr>`;});
@@ -1649,246 +1688,78 @@ function renderAllReports(filter){
 function filterAllReports(f,el){document.querySelectorAll('#panel-all-reports .panel-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAllReports(f);}
 
 function renderUsers(){
-  const users=loadData('users',[]).filter(u=>u.role==='student');
-  const reports=loadData('reports',[]);
-  const tbody=document.getElementById('users-body');tbody.innerHTML='';
-  const empty=document.getElementById('users-empty');
-  if(!users.length){empty.style.display='block';return;}
-  empty.style.display='none';
-  users.forEach((u,i)=>{
-    const count=reports.filter(r=>r.studentUsername===u.username).length;
-    const blocked=u.blocked;
-    tbody.innerHTML+=`<tr><td>${i+1}</td><td>${u.name}</td><td style="color:var(--red2);">${u.studentId||'—'}</td><td style="font-size:10px;">${u.grade||'—'}</td><td style="color:rgba(255,255,255,.5);">${u.username}</td><td style="text-align:center;">${count}</td><td>${blocked?'<span class="status blocked">Blocked</span>':'<span class="status resolved">Active</span>'}</td><td style="display:flex;gap:6px;"><button class="scrs-btn ${blocked?'success':'danger'}" style="padding:5px 10px;font-size:9px;width:auto;" onclick="${blocked?'unblockUser':'blockUser'}('${u.username}')">${blocked?'Unblock':'Block'}</button><button class="scrs-btn secondary" style="padding:5px 10px;font-size:9px;width:auto;" onclick="msgStudent('${u.username}','${u.name}')">Message</button></td></tr>`;
-  });
+  const users=loadData('users',[]).filter(u=>u.role==='student');const reports=loadData('reports',[]);
+  const tbody=document.getElementById('users-body');tbody.innerHTML='';const empty=document.getElementById('users-empty');
+  if(!users.length){empty.style.display='block';return;}empty.style.display='none';
+  users.forEach((u,i)=>{const count=reports.filter(r=>r.studentUsername===u.username).length;const blocked=u.blocked;tbody.innerHTML+=`<tr><td>${i+1}</td><td>${u.name}</td><td style="color:var(--red2);">${u.studentId||'—'}</td><td style="font-size:10px;">${u.grade||'—'}</td><td style="color:rgba(255,255,255,.5);">${u.username}</td><td style="text-align:center;">${count}</td><td>${blocked?'<span class="status blocked">Blocked</span>':'<span class="status resolved">Active</span>'}</td><td style="display:flex;gap:6px;"><button class="scrs-btn ${blocked?'success':'danger'}" style="padding:5px 10px;font-size:9px;width:auto;" onclick="${blocked?'unblockUser':'blockUser'}('${u.username}')">${blocked?'Unblock':'Block'}</button><button class="scrs-btn secondary" style="padding:5px 10px;font-size:9px;width:auto;" onclick="msgStudent('${u.username}','${u.name}')">Message</button></td></tr>`;});
 }
 
-function blockUser(username){
-  if(!confirm('Block user "'+username+'"?'))return;
-  const users=loadData('users',[]);
-  const idx=users.findIndex(u=>u.username===username);if(idx===-1)return;
-  users[idx].blocked=true;
-  const blocked=loadData('blocked_users',[]);
-  if(!blocked.find(b=>b.username===username)){blocked.push({username,name:users[idx].name,role:users[idx].role,blockedAt:new Date().toLocaleString('en-PH')});saveData('blocked_users',blocked);}
-  saveData('users',users);toast('User "'+username+'" has been blocked.','error');renderUsers();
-}
-function unblockUser(username){
-  const users=loadData('users',[]);
-  const idx=users.findIndex(u=>u.username===username);if(idx===-1)return;
-  users[idx].blocked=false;saveData('users',users);
-  const blocked=loadData('blocked_users',[]).filter(b=>b.username!==username);saveData('blocked_users',blocked);
-  toast('User "'+username+'" has been unblocked.','success');renderUsers();
-}
+function blockUser(username){if(!confirm('Block user "'+username+'"?'))return;const users=loadData('users',[]);const idx=users.findIndex(u=>u.username===username);if(idx===-1)return;users[idx].blocked=true;const blocked=loadData('blocked_users',[]);if(!blocked.find(b=>b.username===username)){blocked.push({username,name:users[idx].name,role:users[idx].role,blockedAt:new Date().toLocaleString('en-PH')});saveData('blocked_users',blocked);}saveData('users',users);toast('User "'+username+'" has been blocked.','error');renderUsers();}
+function unblockUser(username){const users=loadData('users',[]);const idx=users.findIndex(u=>u.username===username);if(idx===-1)return;users[idx].blocked=false;saveData('users',users);const blocked=loadData('blocked_users',[]).filter(b=>b.username!==username);saveData('blocked_users',blocked);toast('User "'+username+'" has been unblocked.','success');renderUsers();}
 
 function renderBlockedUsers(){
-  const blocked=loadData('blocked_users',[]);
-  const tbody=document.getElementById('blocked-body');
-  const empty=document.getElementById('blocked-empty');
-  tbody.innerHTML='';
-  if(!blocked.length){empty.style.display='block';return;}
-  empty.style.display='none';
+  const blocked=loadData('blocked_users',[]);const tbody=document.getElementById('blocked-body');const empty=document.getElementById('blocked-empty');tbody.innerHTML='';
+  if(!blocked.length){empty.style.display='block';return;}empty.style.display='none';
   blocked.forEach((b,i)=>{tbody.innerHTML+=`<tr><td>${i+1}</td><td>${b.name}</td><td style="color:var(--red2);">${b.username}</td><td style="font-size:10px;">${b.role}</td><td style="font-size:10px;">${b.blockedAt}</td><td><button class="scrs-btn success" style="padding:5px 12px;font-size:9px;width:auto;" onclick="unblockUser('${b.username}');renderBlockedUsers()">Unblock</button></td></tr>`;});
 }
 
 function renderVisitorLog(){
-  const logs=loadData('visitor_logs',[]);
-  const tbody=document.getElementById('visitor-log-body');
-  const empty=document.getElementById('visitor-log-empty');
-  tbody.innerHTML='';
-  if(!logs.length){empty.style.display='block';return;}
-  empty.style.display='none';
-  logs.slice().reverse().forEach((l,i)=>{
-    tbody.innerHTML+=`<tr>
-      <td>${i+1}</td>
-      <td style="color:var(--red2);">${l.ip}</td>
-      <td>${l.city}, ${l.region}</td>
-      <td>${l.country}</td>
-      <td style="font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${l.isp}</td>
-      <td>${l.browser}</td>
-      <td style="font-size:10px;">${l.os||'—'}</td>
-      <td>${l.device}</td>
-      <td style="font-size:10px;">${l.screen||'—'}</td>
-      <td style="font-size:10px;">${l.lang||'—'}</td>
-      <td style="font-size:10px;">${l.tz||'—'}</td>
-      <td style="font-size:10px;">${l.time}</td>
-      <td><span class="${l.status==='Online'?'visitor-online':'visitor-offline'}">${l.status}</span></td>
-    </tr>`;
-  });
+  const logs=loadData('visitor_logs',[]);const tbody=document.getElementById('visitor-log-body');const empty=document.getElementById('visitor-log-empty');tbody.innerHTML='';
+  if(!logs.length){empty.style.display='block';return;}empty.style.display='none';
+  logs.slice().reverse().forEach((l,i)=>{const coords=l.lat&&l.lat!=='—'?`<a href="https://www.google.com/maps?q=${l.lat},${l.lon}" target="_blank" style="color:var(--red2);text-decoration:none;">${parseFloat(l.lat).toFixed(3)}, ${parseFloat(l.lon).toFixed(3)} 📍</a>`:'—';tbody.innerHTML+=`<tr><td>${i+1}</td><td style="color:var(--red2);">${l.ip}</td><td>${l.city}</td><td>${l.region}</td><td>${l.country}</td><td style="font-size:9px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.isp}">${l.isp}</td><td>${l.browser}</td><td style="font-size:9px;">${l.brand||l.device||'—'} · ${l.device||'—'}</td><td style="font-size:9px;">${l.os||'—'}</td><td style="font-size:9px;">${l.screen||'—'}</td><td style="font-size:9px;">${l.lang||'—'}</td><td style="font-size:9px;">${l.tz||'—'}</td><td style="font-size:9px;">${coords}</td><td style="font-size:9px;white-space:nowrap;">${l.time}</td><td><span class="${l.status==='Online'?'visitor-online':'visitor-offline'}">${l.status}</span></td></tr>`;});
 }
 
-function refreshReqBadge(){
-  const reqs=loadData('admin_requests',[]).filter(r=>r.status==='Pending');
-  const badge=document.getElementById('req-badge');
-  badge.textContent=reqs.length;badge.style.display=reqs.length?'inline':'none';
+function renderLoginLocationLog(){
+  const logs=loadData('login_location_logs',[]);const tbody=document.getElementById('login-location-body');const empty=document.getElementById('login-location-empty');tbody.innerHTML='';
+  if(!logs.length){if(empty)empty.style.display='block';return;}if(empty)empty.style.display='none';
+  logs.slice().reverse().forEach((l,i)=>{const coords=l.lat&&l.lat!=='—'?`<a href="https://www.google.com/maps?q=${l.lat},${l.lon}" target="_blank" style="color:var(--red2);text-decoration:none;">${parseFloat(l.lat).toFixed(3)}, ${parseFloat(l.lon).toFixed(3)} 📍</a>`:'—';tbody.innerHTML+=`<tr><td>${i+1}</td><td style="color:var(--red2);">${l.username}</td><td>${l.name}</td><td><span class="status ${l.role==='admin'?'reviewed':'resolved'}">${l.role}</span></td><td style="color:rgba(255,180,180,.9);">${l.ip}</td><td>${l.city||'—'}</td><td>${l.region||'—'}</td><td>${l.country||'—'}</td><td style="font-size:9px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.isp||''}">${l.isp||'—'}</td><td style="font-size:9px;">${l.brand||l.device||'—'}</td><td style="font-size:9px;">${l.os||'—'}</td><td style="font-size:9px;">${l.browser||'—'}</td><td style="font-size:9px;">${coords}</td><td style="font-size:9px;white-space:nowrap;">${l.loginTime}</td></tr>`;});
 }
+
+function refreshReqBadge(){const reqs=loadData('admin_requests',[]).filter(r=>r.status==='Pending');const badge=document.getElementById('req-badge');badge.textContent=reqs.length;badge.style.display=reqs.length?'inline':'none';}
 function renderAdminRequests(){
-  const reqs=loadData('admin_requests',[]);
-  const list=document.getElementById('admin-requests-list');list.innerHTML='';
+  const reqs=loadData('admin_requests',[]);const list=document.getElementById('admin-requests-list');list.innerHTML='';
   if(!reqs.length){list.innerHTML='<div class="empty-state"><div class="es-icon">🔐</div><p>NO ADMIN REQUESTS</p></div>';return;}
-  reqs.slice().reverse().forEach(req=>{
-    const isPending=req.status==='Pending';
-    list.innerHTML+=`<div class="req-card"><div class="req-card-title">${req.name} <span style="font-size:9px;color:rgba(255,255,255,.3);">· ${req.id}</span></div><div class="req-card-info">Username: <span style="color:var(--red2);">${req.username}</span><br>Reason: ${req.reason}<br>Submitted: ${req.date}<br>Status: ${req.status==='Pending'?'<span class="status pending">Pending</span>':req.status==='Approved'?'<span class="status resolved">Approved</span>':'<span class="status rejected">Rejected</span>'}</div>${isPending?`<div class="req-actions"><button class="scrs-btn success" style="width:auto;padding:8px 20px;font-size:10px;" onclick="approveAdminReq('${req.id}')">Approve</button><button class="scrs-btn danger" style="width:auto;padding:8px 20px;font-size:10px;" onclick="rejectAdminReq('${req.id}')">Reject</button></div>`:''}</div>`;
-  });
+  reqs.slice().reverse().forEach(req=>{const isPending=req.status==='Pending';list.innerHTML+=`<div class="req-card"><div class="req-card-title">${req.name} <span style="font-size:9px;color:rgba(255,255,255,.3);">· ${req.id}</span></div><div class="req-card-info">Username: <span style="color:var(--red2);">${req.username}</span><br>Reason: ${req.reason}<br>Submitted: ${req.date}<br>Status: ${req.status==='Pending'?'<span class="status pending">Pending</span>':req.status==='Approved'?'<span class="status resolved">Approved</span>':'<span class="status rejected">Rejected</span>'}</div>${isPending?`<div class="req-actions"><button class="scrs-btn success" style="width:auto;padding:8px 20px;font-size:10px;" onclick="approveAdminReq('${req.id}')">Approve</button><button class="scrs-btn danger" style="width:auto;padding:8px 20px;font-size:10px;" onclick="rejectAdminReq('${req.id}')">Reject</button></div>`:''}</div>`;});
 }
-function approveAdminReq(id){
-  const reqs=loadData('admin_requests',[]);
-  const idx=reqs.findIndex(r=>r.id===id);if(idx===-1)return;
-  const req=reqs[idx];reqs[idx].status='Approved';saveData('admin_requests',reqs);
-  let users=loadData('users',[]);
-  if(!users.find(u=>u.username===req.username)){users.push({username:req.username,password:req.password,role:'admin',name:req.name,studentId:'ADM-'+Date.now().toString(36).toUpperCase().slice(-4),grade:'N/A',blocked:false,createdAt:new Date().toLocaleString('en-PH')});saveData('users',users);}
-  toast('✓ Admin request approved.','success');renderAdminRequests();refreshReqBadge();
-}
-function rejectAdminReq(id){
-  const reqs=loadData('admin_requests',[]);
-  const idx=reqs.findIndex(r=>r.id===id);if(idx===-1)return;
-  reqs[idx].status='Rejected';saveData('admin_requests',reqs);
-  toast('Admin request rejected.','error');renderAdminRequests();refreshReqBadge();
-}
+function approveAdminReq(id){const reqs=loadData('admin_requests',[]);const idx=reqs.findIndex(r=>r.id===id);if(idx===-1)return;const req=reqs[idx];reqs[idx].status='Approved';saveData('admin_requests',reqs);let users=loadData('users',[]);if(!users.find(u=>u.username===req.username)){users.push({username:req.username,password:req.password,role:'admin',name:req.name,studentId:'ADM-'+Date.now().toString(36).toUpperCase().slice(-4),grade:'N/A',blocked:false,createdAt:new Date().toLocaleString('en-PH')});saveData('users',users);}toast('✓ Admin request approved.','success');renderAdminRequests();refreshReqBadge();}
+function rejectAdminReq(id){const reqs=loadData('admin_requests',[]);const idx=reqs.findIndex(r=>r.id===id);if(idx===-1)return;reqs[idx].status='Rejected';saveData('admin_requests',reqs);toast('Admin request rejected.','error');renderAdminRequests();refreshReqBadge();}
 
 function openReport(id){
-  const reports=loadData('reports',[]);
-  const r=reports.find(r=>r.id===id);if(!r)return;
+  const reports=loadData('reports',[]);const r=reports.find(r=>r.id===id);if(!r)return;
   currentReportId=id;
-  document.getElementById('modal-subject').textContent=r.subject;
-  document.getElementById('modal-id').textContent=r.id+' · Submitted '+r.date;
-  document.getElementById('modal-category').textContent=r.category;
-  document.getElementById('modal-priority').textContent=r.priority;
-  document.getElementById('modal-status-val').innerHTML=statusBadge(r.status);
-  document.getElementById('modal-location').textContent=r.location;
-  document.getElementById('modal-desc').textContent=r.description;
-  document.getElementById('modal-by').textContent=r.studentName+(r.grade&&r.grade!=='N/A'?' · '+r.grade:'');
-  document.getElementById('modal-date').textContent=r.date;
-  const remarkWrap=document.getElementById('modal-remark-wrap');
-  if(r.remark){remarkWrap.style.display='block';document.getElementById('modal-remark').textContent=r.remark;}else remarkWrap.style.display='none';
+  document.getElementById('modal-subject').textContent=r.subject;document.getElementById('modal-id').textContent=r.id+' · Submitted '+r.date;document.getElementById('modal-category').textContent=r.category;document.getElementById('modal-priority').textContent=r.priority;document.getElementById('modal-status-val').innerHTML=statusBadge(r.status);document.getElementById('modal-location').textContent=r.location;document.getElementById('modal-desc').textContent=r.description;document.getElementById('modal-by').textContent=r.studentName+(r.grade&&r.grade!=='N/A'?' · '+r.grade:'');document.getElementById('modal-date').textContent=r.date;
+  const remarkWrap=document.getElementById('modal-remark-wrap');if(r.remark){remarkWrap.style.display='block';document.getElementById('modal-remark').textContent=r.remark;}else remarkWrap.style.display='none';
   const isAdmin=currentUser&&currentUser.role==='admin';
-  document.getElementById('modal-admin-controls').style.display=isAdmin?'block':'none';
-  document.getElementById('modal-update-btn').style.display=isAdmin?'block':'none';
-  document.getElementById('modal-delete-btn').style.display=isAdmin?'block':'none';
-  if(isAdmin)document.getElementById('modal-new-status').value=r.status;
-  if(isAdmin)document.getElementById('modal-remark-input').value=r.remark||'';
+  document.getElementById('modal-admin-controls').style.display=isAdmin?'block':'none';document.getElementById('modal-update-btn').style.display=isAdmin?'block':'none';document.getElementById('modal-delete-btn').style.display=isAdmin?'block':'none';
+  if(isAdmin)document.getElementById('modal-new-status').value=r.status;if(isAdmin)document.getElementById('modal-remark-input').value=r.remark||'';
   document.getElementById('report-modal').classList.add('open');
 }
 function closeModal(){document.getElementById('report-modal').classList.remove('open');currentReportId=null;}
-function updateReportStatus(){
-  if(!currentReportId)return;
-  const newStatus=document.getElementById('modal-new-status').value;
-  const remark=document.getElementById('modal-remark-input').value.trim();
-  const reports=loadData('reports',[]);
-  const idx=reports.findIndex(r=>r.id===currentReportId);if(idx===-1)return;
-  reports[idx].status=newStatus;reports[idx].remark=remark;saveData('reports',reports);
-  closeModal();toast('✓ Report '+currentReportId+' updated to '+newStatus+'.','success');
-  refreshAdminDash();renderAllReports('all');
-  document.querySelectorAll('#panel-all-reports .panel-tab').forEach((t,i)=>{t.classList.toggle('active',i===0);});
-}
-function deleteReport(){
-  if(!currentReportId)return;
-  if(!confirm('Permanently delete report "'+currentReportId+'"?'))return;
-  let reports=loadData('reports',[]).filter(r=>r.id!==currentReportId);
-  saveData('reports',reports);closeModal();toast('Report deleted.','info');
-  refreshAdminDash();renderAllReports('all');
-}
+function updateReportStatus(){if(!currentReportId)return;const newStatus=document.getElementById('modal-new-status').value;const remark=document.getElementById('modal-remark-input').value.trim();const reports=loadData('reports',[]);const idx=reports.findIndex(r=>r.id===currentReportId);if(idx===-1)return;reports[idx].status=newStatus;reports[idx].remark=remark;saveData('reports',reports);closeModal();toast('✓ Report '+currentReportId+' updated to '+newStatus+'.','success');refreshAdminDash();renderAllReports('all');document.querySelectorAll('#panel-all-reports .panel-tab').forEach((t,i)=>{t.classList.toggle('active',i===0);});}
+function deleteReport(){if(!currentReportId)return;if(!confirm('Permanently delete report "'+currentReportId+'"?'))return;let reports=loadData('reports',[]).filter(r=>r.id!==currentReportId);saveData('reports',reports);closeModal();toast('Report deleted.','info');refreshAdminDash();renderAllReports('all');}
 
-/* ── MESSAGING ── */
+/* MESSAGING */
 function getMsgKey(userA,userB){return 'msg_'+[userA,userB].sort().join('__');}
-function sendStudentMessage(){
-  const input=document.getElementById('student-msg-input');
-  const text=input.value.trim();if(!text)return;
-  const key=getMsgKey(currentUser.username,'admin');
-  const msgs=loadData(key,[]);
-  msgs.push({from:currentUser.username,to:'admin',text,time:new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit'})});
-  saveData(key,msgs);input.value='';renderStudentMessages();
-  const el=document.getElementById('stu-preview');if(el)el.textContent=text.length>28?text.slice(0,28)+'...':text;
-}
-function renderStudentMessages(){
-  const key=getMsgKey(currentUser.username,'admin');
-  const msgs=loadData(key,[]);
-  const body=document.getElementById('student-chat-body');
-  if(!msgs.length){body.innerHTML='<div class="msg-empty">NO MESSAGES YET — START A CONVERSATION</div>';return;}
-  body.innerHTML='';
-  msgs.forEach(m=>{const isMe=m.from===currentUser.username;body.innerHTML+=`<div><div class="msg-bubble ${isMe?'from-me':'from-admin'}">${m.text}<div class="msg-bubble-time">${m.time}</div></div></div>`;});
-  body.scrollTop=body.scrollHeight;
-}
+function sendStudentMessage(){const input=document.getElementById('student-msg-input');const text=input.value.trim();if(!text)return;const key=getMsgKey(currentUser.username,'admin');const msgs=loadData(key,[]);msgs.push({from:currentUser.username,to:'admin',text,time:new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit'})});saveData(key,msgs);input.value='';renderStudentMessages();const el=document.getElementById('stu-preview');if(el)el.textContent=text.length>28?text.slice(0,28)+'...':text;}
+function renderStudentMessages(){const key=getMsgKey(currentUser.username,'admin');const msgs=loadData(key,[]);const body=document.getElementById('student-chat-body');if(!msgs.length){body.innerHTML='<div class="msg-empty">NO MESSAGES YET — START A CONVERSATION</div>';return;}body.innerHTML='';msgs.forEach(m=>{const isMe=m.from===currentUser.username;body.innerHTML+=`<div><div class="msg-bubble ${isMe?'from-me':'from-admin'}">${m.text}<div class="msg-bubble-time">${m.time}</div></div></div>`;});body.scrollTop=body.scrollHeight;}
 function openStudentThread(){renderStudentMessages();}
-function refreshStudentMsgBadge(){
-  const key=getMsgKey(currentUser.username,'admin');
-  const msgs=loadData(key,[]);
-  const unread=msgs.filter(m=>m.from==='admin'&&!m.read);
-  const badge=document.getElementById('student-msg-badge');
-  if(badge){badge.style.display=unread.length?'inline':'none';}
-}
+function refreshStudentMsgBadge(){const key=getMsgKey(currentUser.username,'admin');const msgs=loadData(key,[]);const unread=msgs.filter(m=>m.from==='admin'&&!m.read);const badge=document.getElementById('student-msg-badge');if(badge)badge.style.display=unread.length?'inline':'none';}
 function renderAdminThreadList(){
-  const users=loadData('users',[]).filter(u=>u.role==='student');
-  const list=document.getElementById('admin-thread-list');
+  const users=loadData('users',[]).filter(u=>u.role==='student');const list=document.getElementById('admin-thread-list');
   list.innerHTML='<div style="padding:12px 14px;border-bottom:1px solid rgba(255,0,0,0.1);font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:2px;">STUDENTS</div>';
   if(!users.length){list.innerHTML+='<div style="padding:14px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.2);">No students registered.</div>';return;}
-  users.forEach(u=>{
-    const key=getMsgKey('admin',u.username);
-    const msgs=loadData(key,[]);
-    const last=msgs.length?msgs[msgs.length-1].text:'No messages yet';
-    const unread=msgs.filter(m=>m.from===u.username&&!m.read).length;
-    list.innerHTML+=`<div class="msg-list-item ${activeAdminChatUser===u.username?'active':''}" onclick="selectAdminThread('${u.username}','${u.name}')"><div class="msg-list-name" style="display:flex;align-items:center;">🎓 ${u.name}${unread?'<span class="msg-unread"></span>':''}</div><div class="msg-list-preview">${last.length>28?last.slice(0,28)+'...':last}</div></div>`;
-  });
+  users.forEach(u=>{const key=getMsgKey('admin',u.username);const msgs=loadData(key,[]);const last=msgs.length?msgs[msgs.length-1].text:'No messages yet';const unread=msgs.filter(m=>m.from===u.username&&!m.read).length;list.innerHTML+=`<div class="msg-list-item ${activeAdminChatUser===u.username?'active':''}" onclick="selectAdminThread('${u.username}','${u.name}')"><div class="msg-list-name" style="display:flex;align-items:center;">🎓 ${u.name}${unread?'<span class="msg-unread"></span>':''}</div><div class="msg-list-preview">${last.length>28?last.slice(0,28)+'...':last}</div></div>`;});
   updateAdminMsgBadge();
 }
-function selectAdminThread(username,name){
-  activeAdminChatUser=username;
-  document.getElementById('admin-chat-header').textContent='🎓 '+name;
-  document.getElementById('admin-msg-input-row').style.display='flex';
-  renderAdminChatBody(username);renderAdminThreadList();
-}
-function renderAdminChatBody(username){
-  const key=getMsgKey('admin',username);
-  const msgs=loadData(key,[]);
-  let changed=false;msgs.forEach(m=>{if(m.from===username&&!m.read){m.read=true;changed=true;}});
-  if(changed)saveData(key,msgs);
-  const body=document.getElementById('admin-chat-body');
-  if(!msgs.length){body.innerHTML='<div class="msg-empty">NO MESSAGES YET</div>';return;}
-  body.innerHTML='';
-  msgs.forEach(m=>{const isMe=m.from==='admin';body.innerHTML+=`<div><div class="msg-bubble ${isMe?'from-me':'from-admin'}">${m.text}<div class="msg-bubble-time">${m.time}</div></div></div>`;});
-  body.scrollTop=body.scrollHeight;updateAdminMsgBadge();
-}
-function sendAdminMessage(){
-  if(!activeAdminChatUser)return;
-  const input=document.getElementById('admin-msg-input');
-  const text=input.value.trim();if(!text)return;
-  const key=getMsgKey('admin',activeAdminChatUser);
-  const msgs=loadData(key,[]);
-  msgs.push({from:'admin',to:activeAdminChatUser,text,time:new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit'})});
-  saveData(key,msgs);input.value='';renderAdminChatBody(activeAdminChatUser);renderAdminThreadList();
-}
-function msgStudent(username,name){
-  document.querySelectorAll('#nav-admin .scrs-nav-item').forEach(i=>i.classList.remove('active'));
-  const msgNav=document.querySelectorAll('#nav-admin .scrs-nav-item')[3];
-  if(msgNav)msgNav.classList.add('active');
-  document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-admin-messages').classList.add('active');
-  renderAdminThreadList();selectAdminThread(username,name);
-}
-function updateAdminMsgBadge(){
-  const users=loadData('users',[]).filter(u=>u.role==='student');
-  let total=0;
-  users.forEach(u=>{const key=getMsgKey('admin',u.username);const msgs=loadData(key,[]);total+=msgs.filter(m=>m.from===u.username&&!m.read).length;});
-  const badge=document.getElementById('admin-msg-badge');
-  if(badge){badge.style.display=total?'inline':'none';badge.textContent=total||'!';}
-}
+function selectAdminThread(username,name){activeAdminChatUser=username;document.getElementById('admin-chat-header').textContent='🎓 '+name;document.getElementById('admin-msg-input-row').style.display='flex';renderAdminChatBody(username);renderAdminThreadList();}
+function renderAdminChatBody(username){const key=getMsgKey('admin',username);const msgs=loadData(key,[]);let changed=false;msgs.forEach(m=>{if(m.from===username&&!m.read){m.read=true;changed=true;}});if(changed)saveData(key,msgs);const body=document.getElementById('admin-chat-body');if(!msgs.length){body.innerHTML='<div class="msg-empty">NO MESSAGES YET</div>';return;}body.innerHTML='';msgs.forEach(m=>{const isMe=m.from==='admin';body.innerHTML+=`<div><div class="msg-bubble ${isMe?'from-me':'from-admin'}">${m.text}<div class="msg-bubble-time">${m.time}</div></div></div>`;});body.scrollTop=body.scrollHeight;updateAdminMsgBadge();}
+function sendAdminMessage(){if(!activeAdminChatUser)return;const input=document.getElementById('admin-msg-input');const text=input.value.trim();if(!text)return;const key=getMsgKey('admin',activeAdminChatUser);const msgs=loadData(key,[]);msgs.push({from:'admin',to:activeAdminChatUser,text,time:new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit'})});saveData(key,msgs);input.value='';renderAdminChatBody(activeAdminChatUser);renderAdminThreadList();}
+function msgStudent(username,name){document.querySelectorAll('#nav-admin .scrs-nav-item').forEach(i=>i.classList.remove('active'));const msgNav=document.querySelectorAll('#nav-admin .scrs-nav-item')[3];if(msgNav)msgNav.classList.add('active');document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-admin-messages').classList.add('active');renderAdminThreadList();selectAdminThread(username,name);}
+function updateAdminMsgBadge(){const users=loadData('users',[]).filter(u=>u.role==='student');let total=0;users.forEach(u=>{const key=getMsgKey('admin',u.username);const msgs=loadData(key,[]);total+=msgs.filter(m=>m.from===u.username&&!m.read).length;});const badge=document.getElementById('admin-msg-badge');if(badge){badge.style.display=total?'inline':'none';badge.textContent=total||'!';}}
 
-/* ── Announcements ── */
-function renderAnnouncements(){
-  const anns=loadData('announcements',[]);
-  const list=document.getElementById('ann-list');
-  list.innerHTML='<div class="activity-header" style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--red2);padding:14px 0;border-bottom:1px solid rgba(255,0,0,0.1);">POSTED ANNOUNCEMENTS</div>';
-  if(!anns.length){list.innerHTML+='<div class="empty-state"><div class="es-icon">📢</div><p>NO ANNOUNCEMENTS YET</p></div>';return;}
-  anns.slice().reverse().forEach(a=>{list.innerHTML+=`<div style="border:1px solid rgba(255,0,0,0.12);border-radius:8px;padding:16px 18px;margin-top:12px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><span style="font-family:var(--mono);font-size:12px;color:var(--red2);">${a.title}</span><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);">${a.date}</span></div><div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);line-height:1.7;">${a.body}</div></div>`;});
-}
-function postAnnouncement(){
-  const title=document.getElementById('ann-title').value.trim();
-  const body=document.getElementById('ann-body').value.trim();
-  if(!title||!body){toast('Please fill in both fields.','error');return;}
-  const anns=loadData('announcements',[]);
-  anns.push({title,body,date:new Date().toLocaleString('en-PH'),by:currentUser.name});
-  saveData('announcements',anns);
-  document.getElementById('ann-title').value='';document.getElementById('ann-body').value='';
-  renderAnnouncements();toast('✓ Announcement posted.','success');
-}
+/* ANNOUNCEMENTS */
+function renderAnnouncements(){const anns=loadData('announcements',[]);const list=document.getElementById('ann-list');list.innerHTML='<div class="activity-header" style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--red2);padding:14px 0;border-bottom:1px solid rgba(255,0,0,0.1);">POSTED ANNOUNCEMENTS</div>';if(!anns.length){list.innerHTML+='<div class="empty-state"><div class="es-icon">📢</div><p>NO ANNOUNCEMENTS YET</p></div>';return;}anns.slice().reverse().forEach(a=>{list.innerHTML+=`<div style="border:1px solid rgba(255,0,0,0.12);border-radius:8px;padding:16px 18px;margin-top:12px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><span style="font-family:var(--mono);font-size:12px;color:var(--red2);">${a.title}</span><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);">${a.date}</span></div><div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);line-height:1.7;">${a.body}</div></div>`;});}
+function postAnnouncement(){const title=document.getElementById('ann-title').value.trim();const body=document.getElementById('ann-body').value.trim();if(!title||!body){toast('Please fill in both fields.','error');return;}const anns=loadData('announcements',[]);anns.push({title,body,date:new Date().toLocaleString('en-PH'),by:currentUser.name});saveData('announcements',anns);document.getElementById('ann-title').value='';document.getElementById('ann-body').value='';renderAnnouncements();toast('✓ Announcement posted.','success');}
 
 document.getElementById('report-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 </script>
