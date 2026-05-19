@@ -18,12 +18,30 @@
 html{scroll-behavior:smooth;}
 body{background:var(--dark);color:#fff;font-family:var(--body);overflow-x:hidden;cursor:none;}
 
+/* ═══ BACKGROUND SYSTEM ═══ */
 #video-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3;overflow:hidden;pointer-events:none;}
-#bg-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;}
-#video-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.76);z-index:1;}
-#matrixCanvas{position:fixed;top:0;left:0;z-index:-2;opacity:0.1;pointer-events:none;}
+#bg-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;transition:opacity .6s;}
+#video-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.76);z-index:1;transition:background .4s;}
+#matrixCanvas{position:fixed;top:0;left:0;z-index:-2;opacity:0.1;pointer-events:none;transition:opacity .4s;}
+#bg-3d-canvas{position:fixed;top:0;left:0;z-index:-2;pointer-events:none;display:none;}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);pointer-events:none;z-index:9990;}
 
+/* ═══ THEME BG PRESETS ═══ */
+body.theme-default #bg-video{opacity:1;}
+body.theme-cyber #bg-video{opacity:0;} body.theme-cyber #matrixCanvas{opacity:0.25;}
+body.theme-cyber #video-overlay{background:rgba(0,5,0,0.85);}
+body.theme-cyber{--red:#00ff41;--red2:#00dd33;--red3:#009922;--dark:#000500;}
+body.theme-red3d #bg-video{opacity:0;} body.theme-red3d #bg-3d-canvas{display:block;}
+body.theme-red3d #matrixCanvas{opacity:0;}
+body.theme-red3d #video-overlay{background:rgba(0,0,0,0);}
+body.theme-void #bg-video{opacity:0;} body.theme-void #matrixCanvas{opacity:0;}
+body.theme-void #video-overlay{background:rgba(0,0,0,0);}
+body.theme-void{background:radial-gradient(ellipse at 30% 40%,rgba(60,0,0,0.8),#000 70%);}
+body.theme-inferno #bg-video{opacity:0;} body.theme-inferno #matrixCanvas{opacity:0.05;}
+body.theme-inferno #video-overlay{background:rgba(0,0,0,0);}
+body.theme-inferno{background:radial-gradient(ellipse at 50% 100%,#3a0000 0%,#1a0000 40%,#000 80%);}
+
+/* ═══ CURSOR ═══ */
 .cursor{position:fixed;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s;mix-blend-mode:screen;}
 .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,0,0,0.6);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .1s;}
 
@@ -31,138 +49,56 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 #arrowmode-indicator.show{opacity:1;}
 #arrowmode-indicator .kbd{display:inline-block;background:rgba(255,0,0,0.15);border:1px solid rgba(255,0,0,0.4);border-radius:3px;padding:1px 5px;font-size:9px;margin:0 2px;}
 
-/* HUD LOGIN MODAL */
-#hud-login-modal{
-  display:none;position:fixed;inset:0;z-index:99998;
-  background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);
-  align-items:center;justify-content:center;
-}
+/* ═══ HUD LOGIN MODAL ═══ */
+#hud-login-modal{display:none;position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);align-items:center;justify-content:center;}
 #hud-login-modal.open{display:flex;}
-.hud-login-card{
-  background:rgba(4,0,0,0.98);border:1px solid rgba(255,0,0,0.45);
-  border-radius:14px;padding:36px;width:100%;max-width:360px;
-  box-shadow:0 0 60px rgba(255,0,0,0.2);
-  animation:fadeUp .3s ease;
-}
-.hud-login-card .hud-lc-icon{
-  width:56px;height:56px;border-radius:50%;
-  background:rgba(255,0,0,0.08);border:2px solid rgba(255,0,0,0.4);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;margin:0 auto 16px;
-}
-.hud-login-card h3{
-  font-family:var(--display);font-size:16px;font-weight:700;
-  color:#fff;text-align:center;margin-bottom:6px;letter-spacing:3px;
-}
-.hud-login-card p{
-  font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);
-  text-align:center;margin-bottom:24px;letter-spacing:1px;
-}
+.hud-login-card{background:rgba(4,0,0,0.98);border:1px solid rgba(255,0,0,0.45);border-radius:14px;padding:36px;width:100%;max-width:360px;box-shadow:0 0 60px rgba(255,0,0,0.2);animation:fadeUp .3s ease;}
+.hud-login-card .hud-lc-icon{width:56px;height:56px;border-radius:50%;background:rgba(255,0,0,0.08);border:2px solid rgba(255,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px;}
+.hud-login-card h3{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;text-align:center;margin-bottom:6px;letter-spacing:3px;}
+.hud-login-card p{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);text-align:center;margin-bottom:24px;letter-spacing:1px;}
 .hud-lc-group{margin-bottom:14px;}
-.hud-lc-group label{
-  display:block;font-family:var(--mono);font-size:9px;
-  letter-spacing:3px;color:var(--red2);margin-bottom:6px;text-transform:uppercase;
-}
-.hud-lc-group input{
-  width:100%;background:rgba(255,0,0,0.04);
-  border:1px solid rgba(255,0,0,0.2);border-radius:6px;
-  color:#fff;font-family:var(--mono);font-size:13px;
-  padding:11px 14px;outline:none;transition:border-color .2s;
-}
+.hud-lc-group label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--red2);margin-bottom:6px;text-transform:uppercase;}
+.hud-lc-group input{width:100%;background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.2);border-radius:6px;color:#fff;font-family:var(--mono);font-size:13px;padding:11px 14px;outline:none;transition:border-color .2s;}
 .hud-lc-group input:focus{border-color:rgba(255,0,0,.7);}
-.hud-lc-btn{
-  width:100%;font-family:var(--mono);font-size:12px;letter-spacing:2px;
-  text-transform:uppercase;color:#000;background:var(--red);
-  border:none;padding:13px;border-radius:6px;cursor:pointer;
-  transition:all .25s;margin-top:6px;
-}
+.hud-lc-btn{width:100%;font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#000;background:var(--red);border:none;padding:13px;border-radius:6px;cursor:pointer;transition:all .25s;margin-top:6px;}
 .hud-lc-btn:hover{background:#ff3333;box-shadow:0 0 24px rgba(255,0,0,0.5);}
-.hud-lc-cancel{
-  display:block;text-align:center;margin-top:14px;
-  font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);
-  letter-spacing:1px;cursor:pointer;transition:color .2s;
-}
+.hud-lc-cancel{display:block;text-align:center;margin-top:14px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;cursor:pointer;transition:color .2s;}
 .hud-lc-cancel:hover{color:var(--red2);}
-.hud-lc-error{
-  background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.3);
-  border-radius:6px;padding:8px 12px;margin-bottom:14px;
-  font-family:var(--mono);font-size:10px;color:#ff5555;
-  letter-spacing:1px;text-align:center;display:none;
-}
+.hud-lc-error{background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.3);border-radius:6px;padding:8px 12px;margin-bottom:14px;font-family:var(--mono);font-size:10px;color:#ff5555;letter-spacing:1px;text-align:center;display:none;}
 
-/* ═══════════ LEFT-SIDE VISITOR HUD ═══════════ */
-#hud-toggle{
-  position:fixed;top:76px;left:16px;z-index:9999;
-  background:rgba(3,0,0,0.95);
-  border:1px solid rgba(255,0,0,0.45);
-  border-radius:6px;padding:7px 12px;
-  font-family:var(--mono);font-size:9px;letter-spacing:2px;
-  color:var(--red2);cursor:pointer;
-  transition:all .2s;display:flex;align-items:center;gap:6px;
-}
+/* ═══ LEFT-SIDE VISITOR HUD ═══ */
+#hud-toggle{position:fixed;top:76px;left:16px;z-index:9999;background:rgba(3,0,0,0.95);border:1px solid rgba(255,0,0,0.45);border-radius:6px;padding:7px 12px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--red2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
 #hud-toggle:hover{background:rgba(255,0,0,.1);color:#fff;}
 #hud-toggle .dot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse-dot 1s infinite;}
 
-#visitor-hud{
-  position:fixed;top:70px;left:16px;z-index:9997;
-  background:rgba(3,0,0,0.97);
-  border:1px solid rgba(255,0,0,0.35);
-  border-radius:10px;padding:0;
-  font-family:var(--mono);font-size:10px;
-  color:rgba(255,80,80,0.85);
-  min-width:270px;max-width:290px;
-  backdrop-filter:blur(16px);
-  transform:translateX(-320px);
-  transition:transform .4s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 40px rgba(255,0,0,0.12);
-  overflow:hidden;
-}
+#visitor-hud{position:fixed;top:70px;left:16px;z-index:9997;background:rgba(3,0,0,0.97);border:1px solid rgba(255,0,0,0.35);border-radius:10px;padding:0;font-family:var(--mono);font-size:10px;color:rgba(255,80,80,0.85);min-width:270px;max-width:290px;backdrop-filter:blur(16px);transform:translateX(-320px);transition:transform .4s cubic-bezier(.4,0,.2,1);box-shadow:0 0 40px rgba(255,0,0,0.12);overflow:hidden;}
 #visitor-hud.visible{transform:translateX(0);}
 
-.hud-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 14px 10px;
-  border-bottom:1px solid rgba(255,0,0,0.15);
-  background:rgba(255,0,0,0.04);
-}
+.hud-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;border-bottom:1px solid rgba(255,0,0,0.15);background:rgba(255,0,0,0.04);}
 .hud-title-bar{font-size:9px;letter-spacing:4px;color:var(--red);display:flex;align-items:center;gap:6px;}
 .hud-pulse-dot{width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0;animation:pulse-dot 1s ease-in-out infinite;}
 @keyframes pulse-dot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,0,0,.6);}50%{opacity:.6;box-shadow:0 0 0 4px rgba(255,0,0,0);}}
-
 .hud-close-btn{background:none;border:none;color:rgba(255,80,80,0.5);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;transition:color .2s;}
 .hud-close-btn:hover{color:var(--red);}
-
 .hud-tabs{display:flex;border-bottom:1px solid rgba(255,0,0,0.12);}
 .hud-tab{flex:1;padding:8px 4px;font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(255,80,80,0.4);border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
 .hud-tab:hover{color:rgba(255,120,120,0.8);}
 .hud-tab.active{color:var(--red2);border-bottom-color:var(--red);}
-
 .hud-panel{display:none;padding:12px 14px;max-height:520px;overflow-y:auto;}
 .hud-panel.active{display:block;}
 .hud-panel::-webkit-scrollbar{width:3px;}
 .hud-panel::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.4);border-radius:2px;}
-
 .hud-online-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
 .hud-online-dot{width:5px;height:5px;background:#4caf50;border-radius:50%;animation:pulse-dot 1.5s ease-in-out infinite;flex-shrink:0;}
 .hud-online-text{font-size:9px;color:#4caf50;letter-spacing:2px;}
-
-.hud-ip-badge{
-  background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);
-  border-radius:4px;padding:6px 8px;text-align:center;
-  color:rgba(255,180,180,1);font-size:11px;letter-spacing:2px;margin-bottom:10px;
-}
-.hud-section-label{
-  font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.5);text-transform:uppercase;
-  margin:8px 0 5px;padding-bottom:3px;border-bottom:1px solid rgba(255,0,0,0.08);
-  display:flex;align-items:center;gap:5px;
-}
+.hud-ip-badge{background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);border-radius:4px;padding:6px 8px;text-align:center;color:rgba(255,180,180,1);font-size:11px;letter-spacing:2px;margin-bottom:10px;}
+.hud-section-label{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.5);text-transform:uppercase;margin:8px 0 5px;padding-bottom:3px;border-bottom:1px solid rgba(255,0,0,0.08);display:flex;align-items:center;gap:5px;}
 .hud-section-label::before{content:'';width:3px;height:3px;background:rgba(255,0,0,0.5);border-radius:50%;flex-shrink:0;}
 .hud-row{display:flex;justify-content:space-between;gap:8px;margin:3px 0;align-items:baseline;}
 .hud-key{color:rgba(255,255,255,.3);font-size:9px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
 .hud-val{color:rgba(255,130,130,.9);font-size:10px;text-align:right;word-break:break-all;}
 .hud-val.hl{color:rgba(255,200,200,1);font-size:11px;}
 .hud-val.dm{color:rgba(255,80,80,0.5);font-size:9px;}
-
 .hud-cursor-block{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.1);border-radius:6px;padding:8px 10px;margin-top:8px;}
 .hud-cursor-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.45);margin-bottom:7px;}
 .hud-coords-row{display:flex;gap:8px;margin-bottom:6px;}
@@ -172,29 +108,60 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hud-badge-row{display:flex;gap:6px;flex-wrap:wrap;}
 .hud-badge{background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.2);border-radius:3px;padding:2px 7px;font-size:9px;color:rgba(255,120,120,0.8);letter-spacing:1px;}
 
+/* ═══ LIVE GPS MAP BLOCK ═══ */
 .hud-map-block{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.1);border-radius:6px;padding:8px 10px;margin-top:8px;}
-.hud-map-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.45);margin-bottom:7px;}
-.hud-map-coords{display:flex;gap:8px;}
+.hud-map-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.45);margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.hud-map-lbl::before{content:'';width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse-dot 1s infinite;}
+.hud-map-coords{display:flex;gap:8px;margin-bottom:8px;}
 .hud-map-coord-box{flex:1;background:rgba(255,0,0,0.06);border:1px solid rgba(255,0,0,0.15);border-radius:4px;padding:5px 7px;text-align:center;}
 .hud-map-coord-axis{font-size:8px;color:rgba(255,255,255,.25);letter-spacing:2px;display:block;margin-bottom:2px;}
 .hud-map-coord-val{font-size:10px;color:rgba(255,160,160,0.9);}
+#hud-map-frame-wrap{width:100%;height:130px;border-radius:6px;overflow:hidden;border:1px solid rgba(255,0,0,0.2);position:relative;margin-bottom:6px;}
+#hud-map-frame-wrap iframe{width:100%;height:100%;border:none;display:block;}
+#hud-map-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,0,0,0.9);gap:4px;}
+#hud-map-placeholder span{font-family:var(--mono);font-size:9px;color:rgba(255,0,0,0.4);letter-spacing:2px;text-align:center;}
+.hud-map-actions{display:flex;gap:6px;}
+.hud-map-btn{flex:1;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);border-radius:4px;padding:5px 8px;font-family:var(--mono);font-size:9px;color:var(--red2);letter-spacing:1px;cursor:pointer;text-align:center;transition:all .2s;text-decoration:none;display:block;}
+.hud-map-btn:hover{background:rgba(255,0,0,0.2);border-color:var(--red);}
 
-/* ── ALL VISITORS PANEL ── */
+/* ═══ THEME TAB INSIDE HUD ═══ */
+.hud-theme-panel{padding:12px 14px;max-height:520px;overflow-y:auto;}
+.hud-theme-panel::-webkit-scrollbar{width:3px;}
+.hud-theme-panel::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.4);border-radius:2px;}
+.tp-section-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.5);text-transform:uppercase;margin-bottom:10px;}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.theme-btn{border:1px solid rgba(255,0,0,0.2);border-radius:8px;padding:10px 8px;cursor:pointer;transition:all .25s;background:rgba(255,0,0,0.03);text-align:center;position:relative;overflow:hidden;}
+.theme-btn:hover,.theme-btn.active{border-color:var(--red);box-shadow:0 0 16px rgba(255,0,0,0.3);background:rgba(255,0,0,0.1);}
+.theme-btn .tb-preview{width:100%;height:36px;border-radius:4px;margin-bottom:6px;position:relative;overflow:hidden;}
+.theme-btn .tb-name{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase;}
+.theme-btn.active .tb-name{color:var(--red2);}
+.tb-default{background:linear-gradient(135deg,#1a0000,#300000,#0a0000);border:1px solid rgba(255,0,0,0.3);}
+.tb-default::after{content:'▶';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,0,0,0.6);}
+.tb-cyber{background:linear-gradient(135deg,#000500,#001a00,#000800);}
+.tb-cyber::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,0.08) 3px,rgba(0,255,65,0.08) 4px);}
+.tb-red3d{background:radial-gradient(ellipse at 50% 100%,#ff0000,#600000,#000);}
+.tb-void{background:radial-gradient(ellipse at 30% 40%,rgba(80,0,0,0.9),#000);}
+.tb-inferno{background:linear-gradient(0deg,#3a0000,#1a0000,#000);}
+.tb-plasma{background:conic-gradient(from 0deg,#ff0000,#ff4400,#ff0000,#aa0000,#ff0000);}
+.tp-slider-row{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.tp-slider-lbl{display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.35);}
+.tp-slider-lbl span{color:var(--red2);}
+input[type=range].tp-range{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(255,0,0,0.15);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range].tp-range::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(255,0,0,0.6);cursor:pointer;}
+input[type=range].tp-range::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(255,0,0,0.6);cursor:pointer;border:none;}
+.tp-preset-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+.tp-preset-btn{background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.25);border-radius:4px;padding:5px 10px;font-family:var(--mono);font-size:9px;color:rgba(255,120,120,0.8);letter-spacing:1px;cursor:pointer;transition:all .2s;}
+.tp-preset-btn:hover{background:rgba(255,0,0,0.18);border-color:var(--red);color:#fff;}
+
+/* ALL VISITORS PANEL */
 .hud-visitors-panel{display:none;max-height:480px;overflow-y:auto;}
 .hud-visitors-panel.active{display:block;}
 .hud-visitors-panel::-webkit-scrollbar{width:3px;}
 .hud-visitors-panel::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.4);border-radius:2px;}
-
-.hvp-toolbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px 8px;border-bottom:1px solid rgba(255,0,0,0.1);
-  background:rgba(255,0,0,0.03);
-  position:sticky;top:0;z-index:1;
-}
+.hvp-toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid rgba(255,0,0,0.1);background:rgba(255,0,0,0.03);position:sticky;top:0;z-index:1;}
 .hvp-count{font-size:9px;color:rgba(255,0,0,0.6);letter-spacing:2px;}
 .hvp-clear{background:none;border:1px solid rgba(255,0,0,0.2);border-radius:3px;color:rgba(255,80,80,0.5);font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 8px;cursor:pointer;transition:all .2s;}
 .hvp-clear:hover{border-color:rgba(255,0,0,0.6);color:var(--red2);}
-
 .hv-entry{padding:10px 14px;border-bottom:1px solid rgba(255,0,0,0.07);cursor:pointer;transition:background .2s;position:relative;}
 .hv-entry:hover{background:rgba(255,0,0,0.04);}
 .hv-entry.me{border-left:2px solid var(--red);}
@@ -236,7 +203,6 @@ nav.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;display:
 .nav-logo-ring img{width:115%;height:115%;object-fit:contain;}
 .nav-brand-text{font-family:var(--display);font-size:13px;font-weight:900;letter-spacing:3px;color:#fff;line-height:1.1;}
 .nav-brand-text small{display:block;font-size:8px;color:var(--red);letter-spacing:4px;font-weight:400;}
-
 .nav-links{list-style:none;margin:0;padding:0;display:flex;background:linear-gradient(90deg,#000,#0a0a0a);border-bottom:2px solid #ff0000;box-shadow:0 0 20px #ff0000;}
 .nav-links li{position:relative;}
 .nav-links a{display:block;padding:14px 18px;color:#ff3b3b;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:0.25s;position:relative;}
@@ -288,13 +254,11 @@ nav.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;display:
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
 .about-text p{font-size:16px;line-height:1.8;color:rgba(255,255,255,.68);margin-bottom:16px;}
 .about-text p strong{color:var(--red2);font-weight:600;}
-
 .team-single{padding:100px 20px;text-align:center;background:rgba(255,0,0,0.02);}
 .team-overlay{max-width:1000px;margin:auto;}
 .team-image-box{margin-top:30px;}
 .team-image-box img{width:100%;max-width:1100px;border-radius:20px;border:2px solid red;box-shadow:0 0 20px rgba(255,0,0,0.3);}
 .team-desc{margin-top:24px;font-size:17px;color:rgba(255,255,255,.85);}
-
 .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px;justify-items:center;margin-top:40px;}
 .project-card{width:230px;background:rgba(10,0,0,0.92);border:1px solid rgba(255,0,0,0.18);border-radius:15px;overflow:hidden;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:transform .3s;}
 .project-card:hover{transform:translateY(-8px);}
@@ -307,13 +271,11 @@ nav.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;display:
 .project-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:15px;}
 .project-link{font-size:10px;color:var(--red2);text-decoration:none;font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;}
 .project-link:hover{color:#fff;}
-
 .padrogani-content{display:flex;align-items:flex-start;gap:24px;padding:24px;border:2px solid rgba(255,0,0,0.4);border-radius:15px;background:rgba(8,0,0,0.82);max-width:1000px;margin:40px auto;box-shadow:0 0 20px rgba(255,0,0,0.1);}
 .padrogani-content img{width:200px;flex-shrink:0;border-radius:15px;border:3px solid red;}
 .padrogani-text{text-align:left;}
 .padrogani-text h4{margin-bottom:16px;}
 .padrogani-text p{font-size:15px;color:rgba(255,255,255,.75);line-height:1.8;}
-
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
 .contact-info p{font-size:15px;line-height:1.8;color:rgba(255,255,255,.55);margin-bottom:30px;}
 .contact-links{display:flex;flex-direction:column;gap:12px;}
@@ -326,7 +288,6 @@ nav.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;display:
 .form-group input,.form-group textarea{background:rgba(255,0,0,0.03);border:1px solid rgba(255,0,0,0.18);border-radius:6px;color:#fff;font-family:var(--mono);font-size:13px;padding:12px 16px;outline:none;transition:border-color .2s;width:100%;}
 .form-group input:focus,.form-group textarea:focus{border-color:rgba(255,0,0,.8);background:rgba(255,0,0,.04);}
 .form-group textarea{height:120px;resize:vertical;}
-
 footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;background:rgba(0,0,0,.72);transition:border-color .08s,box-shadow .08s;}
 .footer-logo{font-family:var(--display);font-size:20px;font-weight:900;color:var(--red);letter-spacing:4px;margin-bottom:10px;}
 .footer-sub{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.2);margin-bottom:24px;}
@@ -334,12 +295,39 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
 .footer-links a{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.3);text-decoration:none;text-transform:uppercase;transition:color .2s;}
 .footer-links a:hover{color:var(--red2);}
 .footer-copy{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.15);letter-spacing:1px;}
-
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 
-/* SCRS STYLES */
+/* ═══ LOGIN LOCATION MAP MODAL ═══ */
+#login-map-modal{display:none;position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,0.9);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+#login-map-modal.open{display:flex;}
+.lm-card{background:rgba(3,0,0,0.99);border:1px solid rgba(255,0,0,0.5);border-radius:16px;width:calc(100% - 40px);max-width:700px;max-height:90vh;overflow:hidden;box-shadow:0 0 80px rgba(255,0,0,0.25);display:flex;flex-direction:column;}
+.lm-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid rgba(255,0,0,0.2);background:rgba(255,0,0,0.06);flex-shrink:0;}
+.lm-header h3{font-family:var(--display);font-size:14px;font-weight:700;color:#fff;letter-spacing:3px;display:flex;align-items:center;gap:10px;}
+.lm-header h3::before{content:'';width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse-dot 1s infinite;}
+.lm-close{background:none;border:1px solid rgba(255,0,0,0.3);border-radius:4px;color:rgba(255,80,80,0.6);cursor:pointer;font-size:14px;padding:4px 10px;font-family:var(--mono);transition:all .2s;}
+.lm-close:hover{border-color:var(--red);color:#fff;}
+.lm-body{display:flex;flex-direction:column;gap:0;flex:1;overflow-y:auto;min-height:0;}
+.lm-info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 24px;border-bottom:1px solid rgba(255,0,0,0.1);}
+.lm-info-box{background:rgba(255,0,0,0.04);border:1px solid rgba(255,0,0,0.12);border-radius:8px;padding:12px;text-align:center;}
+.lm-info-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:rgba(255,0,0,0.5);text-transform:uppercase;margin-bottom:5px;}
+.lm-info-value{font-family:var(--mono);font-size:11px;color:rgba(255,200,200,.9);letter-spacing:1px;}
+.lm-map-wrap{width:100%;height:320px;position:relative;flex-shrink:0;}
+.lm-map-wrap iframe{width:100%;height:100%;border:none;display:block;}
+.lm-map-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(3,0,0,0.95);gap:10px;}
+.lm-map-placeholder .lm-mp-icon{font-size:36px;opacity:.3;}
+.lm-map-placeholder p{font-family:var(--mono);font-size:10px;color:rgba(255,0,0,0.4);letter-spacing:2px;text-align:center;}
+.lm-map-placeholder button{background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.4);border-radius:6px;color:var(--red2);font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:8px 18px;cursor:pointer;transition:all .2s;}
+.lm-map-placeholder button:hover{background:rgba(255,0,0,0.2);box-shadow:0 0 16px rgba(255,0,0,0.3);}
+.lm-footer{padding:14px 24px;border-top:1px solid rgba(255,0,0,0.1);display:flex;gap:10px;flex-shrink:0;}
+.lm-btn{flex:1;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;padding:11px;border-radius:6px;cursor:pointer;transition:all .25s;}
+.lm-btn.primary{background:var(--red);color:#000;}
+.lm-btn.primary:hover{background:#ff3333;box-shadow:0 0 20px rgba(255,0,0,0.5);}
+.lm-btn.sec{background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,0,0,0.2);}
+.lm-btn.sec:hover{border-color:var(--red);color:var(--red);}
+
+/* ═══ SCRS STYLES ═══ */
 #scrs-app{background:rgba(4,0,0,0.97);border:1px solid rgba(255,0,0,0.3);border-radius:16px;overflow:hidden;box-shadow:0 0 60px rgba(255,0,0,0.12);margin-top:40px;}
 .scrs-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(255,0,0,0.06);border-bottom:1px solid rgba(255,0,0,0.2);}
 .scrs-header-left{display:flex;align-items:center;gap:10px;}
@@ -487,6 +475,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
 .msg-empty{display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.2);letter-spacing:2px;}
 .scrs-main::-webkit-scrollbar,.scrs-modal::-webkit-scrollbar{width:4px;}
 .scrs-main::-webkit-scrollbar-thumb,.scrs-modal::-webkit-scrollbar-thumb{background:rgba(255,0,0,0.3);border-radius:2px;}
+#bg-3d-canvas{background:transparent;}
 
 @media(max-width:768px){
   nav.topbar{padding:0 20px;}
@@ -507,11 +496,25 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
   .priority-row{grid-template-columns:1fr;}
   .msg-layout{flex-direction:column;height:auto;}
   .msg-list{width:100%;height:150px;}
+  .lm-info-row{grid-template-columns:1fr;}
 }
 @media(max-width:480px){.hero-btns{flex-direction:column;align-items:center;}.dash-stats{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
+
+<!-- ═══ APPLY SAVED THEME IMMEDIATELY (before render) ═══ -->
+<script>
+(function(){
+  var saved = localStorage.getItem('cr_theme') || 'default';
+  document.body.className = 'theme-' + saved;
+  // Also restore slider values storage keys for later use
+  window._savedTheme = saved;
+  window._savedMatrix = parseFloat(localStorage.getItem('cr_matrix') || '10');
+  window._savedOverlay = parseFloat(localStorage.getItem('cr_overlay') || '76');
+  window._savedGlow = parseFloat(localStorage.getItem('cr_glow') || '50');
+})();
+</script>
 
 <!-- HUD LOGIN MODAL -->
 <div id="hud-login-modal">
@@ -520,19 +523,45 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
     <h3>HUD ACCESS</h3>
     <p>ENTER CREDENTIALS TO VIEW VISITOR DATA</p>
     <div class="hud-lc-error" id="hud-lc-error">⚠ Invalid username or password.</div>
-    <div class="hud-lc-group">
-      <label>Username</label>
-      <input type="text" id="hud-lc-user" placeholder="Enter username" autocomplete="off" onkeydown="if(event.key==='Enter')doHudLogin()">
-    </div>
-    <div class="hud-lc-group">
-      <label>Password</label>
-      <input type="password" id="hud-lc-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doHudLogin()">
-    </div>
+    <div class="hud-lc-group"><label>Username</label><input type="text" id="hud-lc-user" placeholder="Enter username" autocomplete="off" onkeydown="if(event.key==='Enter')doHudLogin()"></div>
+    <div class="hud-lc-group"><label>Password</label><input type="password" id="hud-lc-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doHudLogin()"></div>
     <button class="hud-lc-btn" onclick="doHudLogin()">Unlock HUD →</button>
     <span class="hud-lc-cancel" onclick="closeHudLogin()">Cancel</span>
   </div>
 </div>
 
+<!-- LOGIN LOCATION MAP MODAL -->
+<div id="login-map-modal">
+  <div class="lm-card">
+    <div class="lm-header">
+      <h3>LOGIN LOCATION DETECTED</h3>
+      <button class="lm-close" onclick="closeLoginMap()">✕ CLOSE</button>
+    </div>
+    <div class="lm-body">
+      <div class="lm-info-row">
+        <div class="lm-info-box"><div class="lm-info-label">User</div><div class="lm-info-value" id="lm-user">—</div></div>
+        <div class="lm-info-box"><div class="lm-info-label">IP Address</div><div class="lm-info-value" id="lm-ip">—</div></div>
+        <div class="lm-info-box"><div class="lm-info-label">Location</div><div class="lm-info-value" id="lm-loc">—</div></div>
+        <div class="lm-info-box"><div class="lm-info-label">Device</div><div class="lm-info-value" id="lm-device">—</div></div>
+        <div class="lm-info-box"><div class="lm-info-label">OS / Browser</div><div class="lm-info-value" id="lm-os">—</div></div>
+        <div class="lm-info-box"><div class="lm-info-label">Coordinates</div><div class="lm-info-value" id="lm-coords">—</div></div>
+      </div>
+      <div class="lm-map-wrap" id="lm-map-wrap">
+        <div class="lm-map-placeholder" id="lm-map-placeholder">
+          <div class="lm-mp-icon">📡</div>
+          <p>DETECTING LOCATION...</p>
+          <button onclick="loadLoginMap()">🗺 LOAD MAP</button>
+        </div>
+      </div>
+    </div>
+    <div class="lm-footer">
+      <button class="lm-btn primary" onclick="openFullMap()">🗺 OPEN FULL MAP</button>
+      <button class="lm-btn sec" onclick="closeLoginMap()">Continue to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- BACKGROUND VIDEO -->
 <div id="video-bg">
   <video id="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="Recording_2026-05-17_212539.mp4" type="video/mp4">
@@ -540,29 +569,32 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
   <div id="video-overlay"></div>
 </div>
 
+<!-- 3D CANVAS -->
+<canvas id="bg-3d-canvas"></canvas>
 <canvas id="matrixCanvas"></canvas>
 <div id="beat-bar"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div id="arrowmode-indicator"><div>⌨ ARROW KEY MODE</div><div style="margin-top:4px;"><span class="kbd">↑</span><span class="kbd">↓</span><span class="kbd">←</span><span class="kbd">→</span> = Move Cursor</div></div>
 
-<!-- VISITOR HUD -->
+<!-- VISITOR HUD TOGGLE -->
 <button id="hud-toggle" onclick="toggleHud()" title="Toggle Visitor Tracker">
   <span class="dot"></span> VISITOR HUD
 </button>
 
+<!-- VISITOR HUD -->
 <div id="visitor-hud">
   <div class="hud-header">
-    <div class="hud-title-bar">
-      <div class="hud-pulse-dot"></div>
-      LIVE VISITOR DATA
-    </div>
+    <div class="hud-title-bar"><div class="hud-pulse-dot"></div>LIVE VISITOR DATA</div>
     <button class="hud-close-btn" onclick="toggleHud()" title="Close">✕</button>
   </div>
   <div class="hud-tabs">
-    <button class="hud-tab active" onclick="switchHudTab('live',this)">📡 MY SESSION</button>
-    <button class="hud-tab" onclick="switchHudTab('all',this)">👁 ALL VISITORS</button>
+    <button class="hud-tab active" onclick="switchHudTab('live',this)">📡 SESSION</button>
+    <button class="hud-tab" onclick="switchHudTab('all',this)">👁 ALL</button>
+    <button class="hud-tab" onclick="switchHudTab('theme',this)">🎨 THEME</button>
   </div>
+
+  <!-- TAB 1: MY SESSION -->
   <div id="hud-panel-live" class="hud-panel active">
     <div class="hud-online-row"><div class="hud-online-dot"></div><span class="hud-online-text">ONLINE · TRACKING ACTIVE</span></div>
     <div class="hud-ip-badge" id="hud-ip">Fetching IP...</div>
@@ -603,17 +635,79 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
         <div class="hud-map-coord-box"><span class="hud-map-coord-axis">LAT</span><span class="hud-map-coord-val" id="hud-map-lat">—</span></div>
         <div class="hud-map-coord-box"><span class="hud-map-coord-axis">LON</span><span class="hud-map-coord-val" id="hud-map-lon">—</span></div>
       </div>
-      <div style="margin-top:8px;">
-        <a id="hud-map-link" href="#" target="_blank" onclick="openMapLink(event)" style="font-family:var(--mono);font-size:9px;color:var(--red2);letter-spacing:1px;text-decoration:none;display:flex;align-items:center;gap:5px;">📍 VIEW ON MAP</a>
+      <div id="hud-map-frame-wrap">
+        <div id="hud-map-placeholder">
+          <span>📡</span>
+          <span>FETCHING LOCATION...</span>
+        </div>
+      </div>
+      <div class="hud-map-actions">
+        <a class="hud-map-btn" id="hud-map-link" href="#" target="_blank" onclick="openMapLink(event)">📍 GOOGLE MAPS</a>
+        <a class="hud-map-btn" id="hud-sat-link" href="#" target="_blank" onclick="openSatLink(event)">🛰 SATELLITE</a>
       </div>
     </div>
   </div>
+
+  <!-- TAB 2: ALL VISITORS -->
   <div id="hud-panel-all" class="hud-visitors-panel">
     <div class="hvp-toolbar">
       <span class="hvp-count" id="hvp-count">0 VISITORS</span>
       <button class="hvp-clear" onclick="clearVisitorLog()">CLEAR LOG</button>
     </div>
     <div id="hvp-list"></div>
+  </div>
+
+  <!-- TAB 3: THEME -->
+  <div id="hud-panel-theme" class="hud-panel">
+    <div class="tp-section-lbl">BACKGROUND THEME</div>
+    <div class="theme-grid">
+      <div class="theme-btn" id="tbtn-default" onclick="setTheme('default')">
+        <div class="tb-preview tb-default"></div>
+        <div class="tb-name">◀ VIDEO</div>
+      </div>
+      <div class="theme-btn" id="tbtn-cyber" onclick="setTheme('cyber')">
+        <div class="tb-preview tb-cyber"></div>
+        <div class="tb-name">☢ CYBER</div>
+      </div>
+      <div class="theme-btn" id="tbtn-red3d" onclick="setTheme('red3d')">
+        <div class="tb-preview tb-red3d"></div>
+        <div class="tb-name">⬡ 3D GRID</div>
+      </div>
+      <div class="theme-btn" id="tbtn-void" onclick="setTheme('void')">
+        <div class="tb-preview tb-void"></div>
+        <div class="tb-name">◉ VOID</div>
+      </div>
+      <div class="theme-btn" id="tbtn-inferno" onclick="setTheme('inferno')">
+        <div class="tb-preview tb-inferno"></div>
+        <div class="tb-name">🔥 INFERNO</div>
+      </div>
+      <div class="theme-btn" id="tbtn-plasma" onclick="setTheme('plasma')">
+        <div class="tb-preview tb-plasma"></div>
+        <div class="tb-name">⚡ PLASMA</div>
+      </div>
+    </div>
+
+    <div class="tp-section-lbl" style="margin-top:4px;">OVERLAY CONTROLS</div>
+    <div class="tp-slider-row">
+      <div class="tp-slider-lbl">Matrix Opacity <span id="matrix-val">10%</span></div>
+      <input type="range" id="range-matrix" class="tp-range" min="0" max="100" value="10" oninput="setMatrixOpacity(this.value)">
+    </div>
+    <div class="tp-slider-row">
+      <div class="tp-slider-lbl">Dark Overlay <span id="overlay-val">76%</span></div>
+      <input type="range" id="range-overlay" class="tp-range" min="0" max="98" value="76" oninput="setOverlayDark(this.value)">
+    </div>
+    <div class="tp-slider-row">
+      <div class="tp-slider-lbl">Glow Intensity <span id="glow-val">50%</span></div>
+      <input type="range" id="range-glow" class="tp-range" min="0" max="100" value="50" oninput="setGlowIntensity(this.value)">
+    </div>
+
+    <div class="tp-section-lbl" style="margin-top:8px;">QUICK PRESETS</div>
+    <div class="tp-preset-row">
+      <button class="tp-preset-btn" onclick="applyPreset('tactical')">TACTICAL</button>
+      <button class="tp-preset-btn" onclick="applyPreset('stealth')">STEALTH</button>
+      <button class="tp-preset-btn" onclick="applyPreset('alert')">ALERT</button>
+      <button class="tp-preset-btn" onclick="applyPreset('ghost')">GHOST</button>
+    </div>
   </div>
 </div>
 
@@ -795,14 +889,8 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
         <h2>WELCOME TO MY SYSTEM</h2>
         <p>WITH TEAM CODE-RED</p>
         <div class="role-grid">
-          <div class="role-btn selected" id="role-student" onclick="selectRole('student')">
-            <div class="role-icon">👤👨‍🎓👩‍🎓</div>
-            <div class="role-name">Student login</div>
-          </div>
-          <div class="role-btn" id="role-admin" onclick="selectRole('admin')">
-            <div class="role-icon">🛡️🧑‍💻👩‍💻</div>
-            <div class="role-name">Administrator login</div>
-          </div>
+          <div class="role-btn selected" id="role-student" onclick="selectRole('student')"><div class="role-icon">👤👨‍🎓👩‍🎓</div><div class="role-name">Student login</div></div>
+          <div class="role-btn" id="role-admin" onclick="selectRole('admin')"><div class="role-icon">🛡️🧑‍💻👩‍💻</div><div class="role-name">Administrator login</div></div>
         </div>
         <button class="scrs-btn" onclick="proceedToLogin()">Continue →</button>
       </div>
@@ -898,12 +986,13 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
                 <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);" id="sl-time">—</div>
               </div>
             </div>
-            <div id="student-location-banner" style="background:rgba(0,80,0,0.12);border:1px solid rgba(0,200,80,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:rgba(100,255,150,0.85);">
+            <div id="student-location-banner" style="background:rgba(0,80,0,0.12);border:1px solid rgba(0,200,80,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:rgba(100,255,150,0.85);cursor:pointer;" onclick="openLoginMap()">
               <span style="font-size:16px;">📍</span>
-              <div>
-                <div style="letter-spacing:1px;margin-bottom:2px;">LOGIN LOCATION DETECTED</div>
+              <div style="flex:1;">
+                <div style="letter-spacing:1px;margin-bottom:2px;">LOGIN LOCATION DETECTED — CLICK TO VIEW MAP</div>
                 <div id="student-location-text" style="color:rgba(255,255,255,.5);font-size:9px;letter-spacing:1px;">Fetching location...</div>
               </div>
+              <span style="font-size:18px;">🗺</span>
             </div>
             <div class="dash-stats">
               <div class="dash-stat"><div class="ds-num" id="ds-total">0</div><div class="ds-lbl">Total Reports</div></div>
@@ -1010,12 +1099,13 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
                 <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);" id="al-time">—</div>
               </div>
             </div>
-            <div id="admin-location-banner" style="background:rgba(0,80,0,0.12);border:1px solid rgba(0,200,80,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:rgba(100,255,150,0.85);">
+            <div id="admin-location-banner" style="background:rgba(0,80,0,0.12);border:1px solid rgba(0,200,80,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:rgba(100,255,150,0.85);cursor:pointer;" onclick="openLoginMap()">
               <span style="font-size:16px;">📍</span>
-              <div>
-                <div style="letter-spacing:1px;margin-bottom:2px;">ADMIN LOGIN LOCATION</div>
+              <div style="flex:1;">
+                <div style="letter-spacing:1px;margin-bottom:2px;">ADMIN LOGIN LOCATION — CLICK TO VIEW MAP</div>
                 <div id="admin-location-text" style="color:rgba(255,255,255,.5);font-size:9px;letter-spacing:1px;">Fetching location...</div>
               </div>
+              <span style="font-size:18px;">🗺</span>
             </div>
             <div class="dash-stats">
               <div class="dash-stat"><div class="ds-num" id="adm-total">0</div><div class="ds-lbl">Total Reports</div></div>
@@ -1113,7 +1203,7 @@ footer{border-top:1px solid rgba(255,0,0,.5);padding:40px;text-align:center;back
             <div class="panel-header"><h3>LOGIN LOCATION LOG</h3><span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25);">WHERE USERS LOGGED IN FROM</span></div>
             <div class="scrs-table-wrap">
               <table class="visitor-log-table">
-                <thead><tr><th>#</th><th>Username</th><th>Full Name</th><th>Role</th><th>IP Address</th><th>City</th><th>Region</th><th>Country</th><th>ISP</th><th>Device / Brand</th><th>OS</th><th>Browser</th><th>Coordinates</th><th>Login Time</th></tr></thead>
+                <thead><tr><th>#</th><th>Username</th><th>Full Name</th><th>Role</th><th>IP Address</th><th>City</th><th>Region</th><th>Country</th><th>ISP</th><th>Device / Brand</th><th>OS</th><th>Browser</th><th>Coordinates</th><th>Login Time</th><th>Map</th></tr></thead>
                 <tbody id="login-location-body"></tbody>
               </table>
             </div>
@@ -1221,33 +1311,13 @@ const segs=bar.querySelectorAll('.bseg');
 const cursorRingEl=document.getElementById('cursorRing');
 function bang(){
   if(flashing)return;flashing=true;
-  allBeat.forEach(e=>e.classList.add('bang'));
-  titleBeat.forEach(e=>e.classList.add('bang'));
-  lineBeat.forEach(e=>e.classList.add('bang'));
-  divBeat.forEach(e=>e.classList.add('bang'));
-  const n=Math.floor(N*(0.45+Math.random()*0.45));
-  const idx=[];for(let i=0;i<N;i++)idx.push(i);idx.sort(()=>Math.random()-.5);
-  const lit=new Set(idx.slice(0,n));
-  segs.forEach((s,i)=>s.classList.toggle('lit',lit.has(i)));
+  allBeat.forEach(e=>e.classList.add('bang'));titleBeat.forEach(e=>e.classList.add('bang'));lineBeat.forEach(e=>e.classList.add('bang'));divBeat.forEach(e=>e.classList.add('bang'));
+  const n=Math.floor(N*(0.45+Math.random()*0.45));const idx=[];for(let i=0;i<N;i++)idx.push(i);idx.sort(()=>Math.random()-.5);const lit=new Set(idx.slice(0,n));segs.forEach((s,i)=>s.classList.toggle('lit',lit.has(i)));
   if(cursorRingEl){cursorRingEl.style.borderColor='rgba(255,0,0,1)';cursorRingEl.style.width='64px';cursorRingEl.style.height='64px';}
-  setTimeout(()=>{
-    allBeat.forEach(e=>e.classList.remove('bang'));
-    titleBeat.forEach(e=>e.classList.remove('bang'));
-    lineBeat.forEach(e=>e.classList.remove('bang'));
-    divBeat.forEach(e=>e.classList.remove('bang'));
-    segs.forEach(s=>s.classList.remove('lit'));
-    if(cursorRingEl){cursorRingEl.style.borderColor='rgba(255,0,0,0.6)';cursorRingEl.style.width='36px';cursorRingEl.style.height='36px';}
-    flashing=false;
-  },FLASH_MS);
+  setTimeout(()=>{allBeat.forEach(e=>e.classList.remove('bang'));titleBeat.forEach(e=>e.classList.remove('bang'));lineBeat.forEach(e=>e.classList.remove('bang'));divBeat.forEach(e=>e.classList.remove('bang'));segs.forEach(s=>s.classList.remove('lit'));if(cursorRingEl){cursorRingEl.style.borderColor='rgba(255,0,0,0.6)';cursorRingEl.style.width='36px';cursorRingEl.style.height='36px';}flashing=false;},FLASH_MS);
 }
 const vid=document.getElementById('bg-video');
-function beatLoop(){
-  const t=vid.currentTime||0;
-  if(t<0.5&&bIdx>5)bIdx=0;
-  while(bIdx<BEATS.length&&BEATS[bIdx]<t-0.06)bIdx++;
-  if(bIdx<BEATS.length&&Math.abs(BEATS[bIdx]-t)<0.08){bang();bIdx++;}
-  requestAnimationFrame(beatLoop);
-}
+function beatLoop(){const t=vid.currentTime||0;if(t<0.5&&bIdx>5)bIdx=0;while(bIdx<BEATS.length&&BEATS[bIdx]<t-0.06)bIdx++;if(bIdx<BEATS.length&&Math.abs(BEATS[bIdx]-t)<0.08){bang();bIdx++;}requestAnimationFrame(beatLoop);}
 vid.addEventListener('canplay',()=>{vid.play().catch(()=>{});beatLoop();});
 vid.addEventListener('error',()=>{const IV=510;let t0=performance.now();function tfb(){if((performance.now()-t0)%IV<90&&!flashing)bang();requestAnimationFrame(tfb);}tfb();});
 if(vid.readyState>=3){vid.play().catch(()=>{});beatLoop();}
@@ -1261,39 +1331,155 @@ function mx(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,cv.width,cv.heig
 addEventListener('resize',()=>{COLS=Math.floor(cv.width/FS);DR=Array(COLS).fill(1);});
 setInterval(mx,55);
 
+/* ══════════ 3D RED GRID BACKGROUND ══════════ */
+const c3d=document.getElementById('bg-3d-canvas');const ctx3=c3d.getContext('2d');
+let ang3=0;let grid3dRunning=false;
+function resize3d(){c3d.width=innerWidth;c3d.height=innerHeight;}resize3d();addEventListener('resize',resize3d);
+function draw3dGrid(){
+  if(!document.body.classList.contains('theme-red3d')&&!document.body.classList.contains('theme-plasma')){grid3dRunning=false;return;}
+  grid3dRunning=true;
+  const W=c3d.width,H=c3d.height;
+  ctx3.clearRect(0,0,W,H);
+  const isPlasma=document.body.classList.contains('theme-plasma');
+  ctx3.fillStyle=isPlasma?'rgba(10,0,0,0.94)':'rgba(0,0,0,0.94)';
+  ctx3.fillRect(0,0,W,H);
+  ang3+=0.003;
+  const horizon=H*0.5;
+  const vp={x:W/2,y:horizon};
+  const ROWS=20,COLS2=20;
+  const gridW=W*2.2,gridD=2000;
+  const tilt=Math.sin(ang3*0.5)*0.08;
+  for(let r=0;r<=ROWS;r++){
+    const t=r/ROWS;const z=t*gridD;const scale=1/(1+z*0.001);
+    const y=vp.y+(H*0.5+30)*scale*(1+tilt);
+    const xLeft=vp.x-(gridW/2)*scale;const xRight=vp.x+(gridW/2)*scale;
+    const alpha=isPlasma?(0.5-t*0.4):(0.6-t*0.5);
+    const hue=isPlasma?(360*(t+ang3*0.1)%360):0;
+    ctx3.strokeStyle=isPlasma?`hsla(${hue},100%,50%,${Math.max(0,alpha)})`:`rgba(255,${Math.floor(20+t*10)},${Math.floor(t*5)},${Math.max(0,alpha)})`;
+    ctx3.lineWidth=isPlasma?1.5:(r===0?2:1);
+    ctx3.beginPath();ctx3.moveTo(xLeft,y);ctx3.lineTo(xRight,y);ctx3.stroke();
+  }
+  for(let c=0;c<=COLS2;c++){
+    const xFar=vp.x+(c/COLS2-0.5)*gridW;const xNear=vp.x+(c/COLS2-0.5)*gridW*3.5;
+    const yFar=vp.y+H*0.5*0.02;const yNear=vp.y+H*0.5;
+    const alpha=isPlasma?0.4:0.5;const hue2=isPlasma?((c/COLS2*360+ang3*60)%360):0;
+    ctx3.strokeStyle=isPlasma?`hsla(${hue2},100%,50%,${alpha})`:`rgba(255,30,0,${alpha})`;
+    ctx3.lineWidth=1;ctx3.beginPath();ctx3.moveTo(xFar,yFar);ctx3.lineTo(xNear,yNear);ctx3.stroke();
+  }
+  if(!isPlasma){
+    for(let i=0;i<6;i++){
+      const hx=W*(0.1+0.15*i+Math.sin(ang3+i)*0.05);const hy=H*(0.15+0.1*Math.cos(ang3*0.7+i));const hr=20+10*Math.sin(ang3*1.5+i);
+      ctx3.strokeStyle=`rgba(255,0,0,${0.15+0.1*Math.sin(ang3+i)})`;ctx3.lineWidth=1;ctx3.beginPath();
+      for(let a=0;a<6;a++){const aa=a*Math.PI/3+ang3*0.3;ctx3.lineTo(hx+Math.cos(aa)*hr,hy+Math.sin(aa)*hr);}
+      ctx3.closePath();ctx3.stroke();
+    }
+  }
+  ctx3.save();ctx3.globalAlpha=0.04+0.02*Math.sin(ang3*2);ctx3.font=`bold ${W*0.12}px Orbitron,monospace`;
+  ctx3.fillStyle=isPlasma?`hsl(${(ang3*60)%360},100%,50%)`:'#ff0000';ctx3.textAlign='center';ctx3.textBaseline='middle';
+  ctx3.fillText('CODE-RED',W/2,H/2);ctx3.restore();
+  requestAnimationFrame(draw3dGrid);
+}
+
+/* ══════════ THEME CONTROL — NOW WITH PERSISTENT STORAGE ══════════ */
+let currentTheme = window._savedTheme || 'default';
+const themes=['default','cyber','red3d','void','inferno','plasma'];
+
+function saveThemePrefs(){
+  localStorage.setItem('cr_theme', currentTheme);
+  localStorage.setItem('cr_matrix', document.getElementById('range-matrix').value);
+  localStorage.setItem('cr_overlay', document.getElementById('range-overlay').value);
+  localStorage.setItem('cr_glow', document.getElementById('range-glow').value);
+}
+
+function setTheme(t){
+  document.body.className = 'theme-' + t;
+  currentTheme = t;
+  themes.forEach(n=>{const btn=document.getElementById('tbtn-'+n);if(btn)btn.classList.toggle('active',n===t);});
+  if((t==='red3d'||t==='plasma') && !grid3dRunning){draw3dGrid();}
+  saveThemePrefs();
+  toast('Theme: '+t.toUpperCase()+' — saved','info');
+}
+
+function setMatrixOpacity(v){
+  document.getElementById('matrixCanvas').style.opacity=(v/100);
+  document.getElementById('matrix-val').textContent=v+'%';
+  saveThemePrefs();
+}
+function setOverlayDark(v){
+  document.getElementById('video-overlay').style.background=`rgba(0,0,0,${v/100})`;
+  document.getElementById('overlay-val').textContent=v+'%';
+  saveThemePrefs();
+}
+function setGlowIntensity(v){
+  document.getElementById('glow-val').textContent=v+'%';
+  const g=v/100;
+  document.documentElement.style.setProperty('--red',`rgba(255,${Math.floor(g*10)},${Math.floor(g*5)},1)`);
+  saveThemePrefs();
+}
+
+function applyPreset(name){
+  const presets={
+    tactical:{theme:'red3d',matrix:15,overlay:90,glow:80},
+    stealth:{theme:'void',matrix:5,overlay:95,glow:20},
+    alert:{theme:'inferno',matrix:30,overlay:70,glow:100},
+    ghost:{theme:'cyber',matrix:20,overlay:85,glow:60}
+  };
+  const p=presets[name];if(!p)return;
+  setTheme(p.theme);
+  document.getElementById('range-matrix').value=p.matrix;setMatrixOpacity(p.matrix);
+  document.getElementById('range-overlay').value=p.overlay;setOverlayDark(p.overlay);
+  document.getElementById('range-glow').value=p.glow;setGlowIntensity(p.glow);
+  toast('Preset: '+name.toUpperCase()+' — saved','success');
+}
+
+/* ══════════ RESTORE SAVED THEME SETTINGS ON PAGE LOAD ══════════ */
+(function restoreThemeSettings(){
+  // Theme class already applied before render via inline script above
+  // Now sync the UI controls + apply slider effects
+  const t = window._savedTheme || 'default';
+  const matrix = window._savedMatrix;
+  const overlay = window._savedOverlay;
+  const glow = window._savedGlow;
+
+  // Mark active theme button
+  themes.forEach(n=>{const btn=document.getElementById('tbtn-'+n);if(btn)btn.classList.toggle('active',n===t);});
+
+  // Apply matrix opacity
+  document.getElementById('matrixCanvas').style.opacity = matrix/100;
+  document.getElementById('range-matrix').value = matrix;
+  document.getElementById('matrix-val').textContent = matrix+'%';
+
+  // Apply overlay darkness
+  document.getElementById('video-overlay').style.background = `rgba(0,0,0,${overlay/100})`;
+  document.getElementById('range-overlay').value = overlay;
+  document.getElementById('overlay-val').textContent = overlay+'%';
+
+  // Apply glow intensity
+  const g = glow/100;
+  document.documentElement.style.setProperty('--red',`rgba(255,${Math.floor(g*10)},${Math.floor(g*5)},1)`);
+  document.getElementById('range-glow').value = glow;
+  document.getElementById('glow-val').textContent = glow+'%';
+
+  // Start 3D grid if needed
+  if(t==='red3d'||t==='plasma'){draw3dGrid();}
+})();
+
 /* CURSOR */
 const curEl=document.getElementById('cursor');
 let curX=window.innerWidth/2,curY=window.innerHeight/2,rx=curX,ry=curY;
 let arrowMode=false,arrowModeTimer=null;
 const ARROW_STEP=8;const ARROW_KEYS=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
-function showArrowModeIndicator(){
-  const ind=document.getElementById('arrowmode-indicator');
-  ind.classList.add('show');clearTimeout(arrowModeTimer);
-  arrowModeTimer=setTimeout(()=>{ind.classList.remove('show');},2000);
-}
+function showArrowModeIndicator(){const ind=document.getElementById('arrowmode-indicator');ind.classList.add('show');clearTimeout(arrowModeTimer);arrowModeTimer=setTimeout(()=>{ind.classList.remove('show');},2000);}
 document.addEventListener('keydown',function(e){
-  if(!ARROW_KEYS.includes(e.key))return;
-  const tag=document.activeElement.tagName;
-  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
-  e.preventDefault();arrowMode=true;
-  document.getElementById('hud-inputmode').textContent='ARROW KEYS';
-  showArrowModeIndicator();
-  switch(e.key){
-    case 'ArrowUp':    curY=Math.max(0,curY-ARROW_STEP);break;
-    case 'ArrowDown':  curY=Math.min(window.innerHeight,curY+ARROW_STEP);break;
-    case 'ArrowLeft':  curX=Math.max(0,curX-ARROW_STEP);break;
-    case 'ArrowRight': curX=Math.min(window.innerWidth,curX+ARROW_STEP);break;
-  }
-  curEl.style.left=curX+'px';curEl.style.top=curY+'px';
-  document.getElementById('hud-cx').textContent=Math.round(curX)+'px';
-  document.getElementById('hud-cy').textContent=Math.round(curY)+'px';
+  if(!ARROW_KEYS.includes(e.key))return;const tag=document.activeElement.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
+  e.preventDefault();arrowMode=true;document.getElementById('hud-inputmode').textContent='ARROW KEYS';showArrowModeIndicator();
+  switch(e.key){case 'ArrowUp':curY=Math.max(0,curY-ARROW_STEP);break;case 'ArrowDown':curY=Math.min(window.innerHeight,curY+ARROW_STEP);break;case 'ArrowLeft':curX=Math.max(0,curX-ARROW_STEP);break;case 'ArrowRight':curX=Math.min(window.innerWidth,curX+ARROW_STEP);break;}
+  curEl.style.left=curX+'px';curEl.style.top=curY+'px';document.getElementById('hud-cx').textContent=Math.round(curX)+'px';document.getElementById('hud-cy').textContent=Math.round(curY)+'px';
 });
 document.addEventListener('mousemove',function(e){
-  curX=e.clientX;curY=e.clientY;
-  curEl.style.left=curX+'px';curEl.style.top=curY+'px';
+  curX=e.clientX;curY=e.clientY;curEl.style.left=curX+'px';curEl.style.top=curY+'px';
   if(arrowMode){arrowMode=false;document.getElementById('hud-inputmode').textContent='MOUSE';}
-  document.getElementById('hud-cx').textContent=Math.round(curX)+'px';
-  document.getElementById('hud-cy').textContent=Math.round(curY)+'px';
+  document.getElementById('hud-cx').textContent=Math.round(curX)+'px';document.getElementById('hud-cy').textContent=Math.round(curY)+'px';
 });
 function animRing(){rx+=(curX-rx)*.12;ry+=(curY-ry)*.12;cursorRingEl.style.left=rx+'px';cursorRingEl.style.top=ry+'px';requestAnimationFrame(animRing);}
 animRing();
@@ -1310,28 +1496,10 @@ function getDeviceBrand(){const ua=navigator.userAgent;if(/iPhone/.test(ua))retu
 function getTouchSupport(){return navigator.maxTouchPoints>0?'Yes ('+navigator.maxTouchPoints+' points)':'No';}
 
 const entryTime=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
-const BROWSER_VAL=getBrowser();
-const DEVICE_TYPE=getDeviceType();
-const DEVICE_BRAND=getDeviceBrand();
-const OS_VAL=getOS();
-const LANG_VAL=navigator.language||'—';
-const SCREEN_VAL=screen.width+'×'+screen.height;
-const VIEWPORT_VAL=window.innerWidth+'×'+window.innerHeight;
-const TZ_VAL=Intl.DateTimeFormat().resolvedOptions().timeZone;
-const TOUCH_VAL=getTouchSupport();
+const BROWSER_VAL=getBrowser();const DEVICE_TYPE=getDeviceType();const DEVICE_BRAND=getDeviceBrand();const OS_VAL=getOS();const LANG_VAL=navigator.language||'—';const SCREEN_VAL=screen.width+'×'+screen.height;const VIEWPORT_VAL=window.innerWidth+'×'+window.innerHeight;const TZ_VAL=Intl.DateTimeFormat().resolvedOptions().timeZone;const TOUCH_VAL=getTouchSupport();
+document.getElementById('hud-browser').textContent=BROWSER_VAL;document.getElementById('hud-device').textContent=DEVICE_TYPE;document.getElementById('hud-brand').textContent=DEVICE_BRAND;document.getElementById('hud-os').textContent=OS_VAL;document.getElementById('hud-lang').textContent=LANG_VAL;document.getElementById('hud-screen').textContent=SCREEN_VAL;document.getElementById('hud-viewport').textContent=VIEWPORT_VAL;document.getElementById('hud-touch').textContent=TOUCH_VAL;document.getElementById('hud-tz').textContent=TZ_VAL;document.getElementById('hud-time').textContent=entryTime;
 
-document.getElementById('hud-browser').textContent=BROWSER_VAL;
-document.getElementById('hud-device').textContent=DEVICE_TYPE;
-document.getElementById('hud-brand').textContent=DEVICE_BRAND;
-document.getElementById('hud-os').textContent=OS_VAL;
-document.getElementById('hud-lang').textContent=LANG_VAL;
-document.getElementById('hud-screen').textContent=SCREEN_VAL;
-document.getElementById('hud-viewport').textContent=VIEWPORT_VAL;
-document.getElementById('hud-touch').textContent=TOUCH_VAL;
-document.getElementById('hud-tz').textContent=TZ_VAL;
-document.getElementById('hud-time').textContent=entryTime;
-
-/* ══════════ GEO ══════════ */
+/* ══════════ GEO & MAP ══════════ */
 let visitorData={ip:'Unknown',city:'—',region:'—',country:'—',isp:'—',asn:'—',lat:'—',lon:'—',browser:BROWSER_VAL,device:DEVICE_TYPE,brand:DEVICE_BRAND,os:OS_VAL,lang:LANG_VAL,screen:SCREEN_VAL,viewport:VIEWPORT_VAL,touch:TOUCH_VAL,tz:TZ_VAL,time:entryTime,fullTime:new Date().toLocaleString('en-PH')};
 let geoFetched=false;
 
@@ -1346,7 +1514,28 @@ function updateHudLocation(d){
   document.getElementById('hud-asn').textContent=d.asn||'—';
   document.getElementById('hud-map-lat').textContent=d.lat?parseFloat(d.lat).toFixed(4):'—';
   document.getElementById('hud-map-lon').textContent=d.lon?parseFloat(d.lon).toFixed(4):'—';
-  if(d.lat&&d.lon)document.getElementById('hud-map-link').href='https://www.google.com/maps?q='+d.lat+','+d.lon;
+  if(d.lat&&d.lat!=='—'){renderHudMap(d.lat,d.lon);}
+}
+
+function renderHudMap(lat,lon){
+  if(!lat||lat==='—')return;
+  const wrap=document.getElementById('hud-map-frame-wrap');
+  const ph=document.getElementById('hud-map-placeholder');
+  if(ph)ph.style.display='none';
+  const old=wrap.querySelector('iframe');if(old)old.remove();
+  const iframe=document.createElement('iframe');
+  iframe.src=`https://maps.google.com/maps?q=${lat},${lon}&z=14&output=embed`;
+  iframe.allow='geolocation';iframe.referrerPolicy='no-referrer-when-downgrade';
+  wrap.appendChild(iframe);
+}
+
+function openMapLink(e){
+  const lat=visitorData.lat;const lon=visitorData.lon;
+  if(lat!=='—'&&lon!=='—'){e.preventDefault();window.open('https://www.google.com/maps?q='+lat+','+lon,'_blank');}
+}
+function openSatLink(e){
+  const lat=visitorData.lat;const lon=visitorData.lon;
+  if(lat!=='—'&&lon!=='—'){e.preventDefault();window.open('https://www.google.com/maps?q='+lat+','+lon+'&t=k','_blank');}
 }
 
 function fetchGeo(){
@@ -1356,7 +1545,7 @@ function fetchGeo(){
         visitorData.ip=d.ip||'Unknown';visitorData.city=d.city||'—';visitorData.region=d.region||'—';visitorData.country=(d.country||'—');visitorData.country_code=d.country_code||'';visitorData.isp=d.connection&&d.connection.isp?d.connection.isp:(d.org||'—');visitorData.asn=d.connection&&d.connection.asn?('AS'+d.connection.asn):'—';visitorData.lat=d.latitude||'—';visitorData.lon=d.longitude||'—';
         updateHudLocation({ip:visitorData.ip,city:visitorData.city,region:visitorData.region,country:visitorData.country,country_code:visitorData.country_code,isp:visitorData.isp,asn:visitorData.asn,lat:visitorData.lat,lon:visitorData.lon});
         geoFetched=true;resolve(visitorData);
-      }else throw new Error('ipwho.is failed');
+      }else throw new Error('failed');
     }).catch(()=>{
       fetch('https://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,isp,org,as,lat,lon,query').then(r=>r.json()).then(d=>{
         if(d&&d.status==='success'){
@@ -1371,66 +1560,72 @@ function fetchGeo(){
 }
 fetchGeo().then(()=>{logVisitor();});
 
+/* ══════════ LOGIN LOCATION MAP MODAL ══════════ */
+function openLoginMap(){
+  document.getElementById('lm-user').textContent=currentUser?currentUser.name:'—';
+  document.getElementById('lm-ip').textContent=visitorData.ip||'—';
+  document.getElementById('lm-loc').textContent=(visitorData.city!=='—'?visitorData.city+', ':'')+visitorData.country;
+  document.getElementById('lm-device').textContent=DEVICE_BRAND+' ('+DEVICE_TYPE+')';
+  document.getElementById('lm-os').textContent=OS_VAL+' / '+BROWSER_VAL;
+  const lat=visitorData.lat;const lon=visitorData.lon;
+  document.getElementById('lm-coords').textContent=(lat!=='—'&&lon!=='—')?parseFloat(lat).toFixed(4)+', '+parseFloat(lon).toFixed(4):'Not available';
+  const wrap=document.getElementById('lm-map-wrap');
+  while(wrap.firstChild)wrap.removeChild(wrap.firstChild);
+  if(lat!=='—'&&lon!=='—'){
+    const iframe=document.createElement('iframe');
+    iframe.src=`https://maps.google.com/maps?q=${lat},${lon}&z=14&output=embed`;
+    iframe.style.cssText='width:100%;height:320px;border:none;display:block;';
+    iframe.allow='geolocation';iframe.referrerPolicy='no-referrer-when-downgrade';
+    wrap.appendChild(iframe);
+  }else{
+    const ph=document.createElement('div');ph.className='lm-map-placeholder';
+    ph.innerHTML=`<div class="lm-mp-icon">📡</div><p>LOCATION DATA NOT AVAILABLE<br>(IP may be blocked or VPN active)</p><button onclick="retryGeoAndMap()">🔄 RETRY DETECTION</button>`;
+    wrap.appendChild(ph);
+  }
+  document.getElementById('login-map-modal').classList.add('open');
+}
+function retryGeoAndMap(){fetchGeo().then(()=>{openLoginMap();});}
+function loadLoginMap(){openLoginMap();}
+function closeLoginMap(){document.getElementById('login-map-modal').classList.remove('open');}
+function openFullMap(){
+  const lat=visitorData.lat;const lon=visitorData.lon;
+  if(lat!=='—'&&lon!=='—'){window.open('https://www.google.com/maps?q='+lat+','+lon,'_blank');}
+  else{toast('Location data not available.','error');}
+  closeLoginMap();
+}
+
 /* ══════════ HUD LOGIN GATE ══════════ */
 const HUD_CREDS={u:'codered',p:'codered123456789'};
-let hudAuth=false;
-let hudVisible=false;
-let activeHudTab='live';
-
+let hudAuth=false;let hudVisible=false;let activeHudTab='live';
 function toggleHud(){
   if(!hudAuth){
-    document.getElementById('hud-lc-user').value='';
-    document.getElementById('hud-lc-pass').value='';
-    document.getElementById('hud-lc-error').style.display='none';
-    document.getElementById('hud-login-modal').classList.add('open');
-    setTimeout(()=>document.getElementById('hud-lc-user').focus(),100);
-    return;
+    document.getElementById('hud-lc-user').value='';document.getElementById('hud-lc-pass').value='';document.getElementById('hud-lc-error').style.display='none';document.getElementById('hud-login-modal').classList.add('open');setTimeout(()=>document.getElementById('hud-lc-user').focus(),100);return;
   }
   hudVisible=!hudVisible;
-  const hud=document.getElementById('visitor-hud');
-  const btn=document.getElementById('hud-toggle');
-  hud.classList.toggle('visible',hudVisible);
-  btn.style.left=hudVisible?'306px':'16px';
+  const hud=document.getElementById('visitor-hud');const btn=document.getElementById('hud-toggle');
+  hud.classList.toggle('visible',hudVisible);btn.style.left=hudVisible?'306px':'16px';
 }
-
 function doHudLogin(){
-  const u=document.getElementById('hud-lc-user').value.trim();
-  const p=document.getElementById('hud-lc-pass').value;
-  const err=document.getElementById('hud-lc-error');
+  const u=document.getElementById('hud-lc-user').value.trim();const p=document.getElementById('hud-lc-pass').value;const err=document.getElementById('hud-lc-error');
   if(!u||!p){err.style.display='block';err.textContent='⚠ Please enter both fields.';return;}
   if(u===HUD_CREDS.u&&p===HUD_CREDS.p){
-    hudAuth=true;
-    document.getElementById('hud-login-modal').classList.remove('open');
-    toast('✓ HUD access granted.','success');
-    hudVisible=true;
-    const hud=document.getElementById('visitor-hud');
-    const btn=document.getElementById('hud-toggle');
-    hud.classList.add('visible');
-    btn.style.left='306px';
+    hudAuth=true;document.getElementById('hud-login-modal').classList.remove('open');toast('✓ HUD access granted.','success');
+    hudVisible=true;document.getElementById('visitor-hud').classList.add('visible');document.getElementById('hud-toggle').style.left='306px';
   }else{
-    err.style.display='block';
-    err.textContent='⚠ Invalid username or password.';
-    document.getElementById('hud-lc-pass').value='';
-    document.getElementById('hud-lc-pass').focus();
+    err.style.display='block';err.textContent='⚠ Invalid username or password.';document.getElementById('hud-lc-pass').value='';document.getElementById('hud-lc-pass').focus();
   }
 }
+function closeHudLogin(){document.getElementById('hud-login-modal').classList.remove('open');}
 
-function closeHudLogin(){
-  document.getElementById('hud-login-modal').classList.remove('open');
-}
-
+/* ══════════ switchHudTab ══════════ */
 function switchHudTab(tab,el){
   activeHudTab=tab;
   document.querySelectorAll('.hud-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('hud-panel-live').classList.toggle('active',tab==='live');
-  document.getElementById('hud-panel-all').classList.toggle('active',tab==='all');
+  document.getElementById('hud-panel-theme').classList.toggle('active',tab==='theme');
+  document.getElementById('hud-panel-all').style.display=(tab==='all')?'block':'none';
   if(tab==='all')renderHudVisitorList();
-}
-
-function openMapLink(e){
-  const lat=visitorData.lat;const lon=visitorData.lon;
-  if(lat!=='—'&&lon!=='—'){e.preventDefault();window.open('https://www.google.com/maps?q='+lat+','+lon,'_blank');}
 }
 
 function logVisitor(){
@@ -1442,33 +1637,19 @@ function logVisitor(){
 }
 
 function renderHudVisitorList(){
-  const logs=loadData('visitor_logs',[]);
-  const list=document.getElementById('hvp-list');
-  const countEl=document.getElementById('hvp-count');
+  const logs=loadData('visitor_logs',[]);const list=document.getElementById('hvp-list');const countEl=document.getElementById('hvp-count');
   countEl.textContent=logs.length+' VISITOR'+(logs.length!==1?'S':'');
   if(!logs.length){list.innerHTML='<div class="hv-empty">📭 NO VISITORS LOGGED YET</div>';return;}
   list.innerHTML='';
   logs.slice().reverse().forEach((v,i)=>{
-    const isMe=v.ip===visitorData.ip;
-    const num=logs.length-i;
-    const div=document.createElement('div');
-    div.className='hv-entry'+(isMe?' me':'');
-    div.innerHTML=`<div class="hv-entry-top"><span class="hv-num">#${num}</span><span class="hv-ip">${v.ip}${isMe?' <span style="color:rgba(255,0,0,0.6);font-size:8px;">[YOU]</span>':''}</span><span class="hv-online-dot ${v.status==='Online'?'on':'off'}"></span><button class="hv-expand-btn" onclick="toggleHvExpand(this)">▾ MORE</button></div><div class="hv-details"><div class="hv-detail-row"><span class="hv-detail-key">City</span><span class="hv-detail-val">${v.city}, ${v.region}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Country</span><span class="hv-detail-val">${v.country}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Device</span><span class="hv-detail-val">${v.brand||v.device||'—'}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Time</span><span class="hv-detail-val">${v.time}</span></div></div><div class="hv-expanded"><div class="hv-exp-row"><span class="hv-exp-key">ISP</span><span class="hv-exp-val">${v.isp}</span></div><div class="hv-exp-row"><span class="hv-exp-key">ASN</span><span class="hv-exp-val">${v.asn||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Coordinates</span><span class="hv-exp-val">${v.lat||'—'}, ${v.lon||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Browser</span><span class="hv-exp-val">${v.browser}</span></div><div class="hv-exp-row"><span class="hv-exp-key">OS</span><span class="hv-exp-val">${v.os||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Brand</span><span class="hv-exp-val">${v.brand||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Screen</span><span class="hv-exp-val">${v.screen||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Viewport</span><span class="hv-exp-val">${v.viewport||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Touch</span><span class="hv-exp-val">${v.touch||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Language</span><span class="hv-exp-val">${v.lang||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Timezone</span><span class="hv-exp-val">${v.tz||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Status</span><span class="hv-exp-val" style="color:${v.status==='Online'?'#4caf50':'rgba(255,255,255,.3)'}">${v.status}</span></div>${v.lat&&v.lat!=='—'?`<div class="hv-exp-row"><span class="hv-exp-key">Map</span><span class="hv-exp-val"><a href="https://www.google.com/maps?q=${v.lat},${v.lon}" target="_blank" style="color:var(--red2);text-decoration:none;font-size:9px;">📍 Open Map</a></span></div>`:''}</div>`;
+    const isMe=v.ip===visitorData.ip;const num=logs.length-i;
+    const div=document.createElement('div');div.className='hv-entry'+(isMe?' me':'');
+    div.innerHTML=`<div class="hv-entry-top"><span class="hv-num">#${num}</span><span class="hv-ip">${v.ip}${isMe?' <span style="color:rgba(255,0,0,0.6);font-size:8px;">[YOU]</span>':''}</span><span class="hv-online-dot ${v.status==='Online'?'on':'off'}"></span><button class="hv-expand-btn" onclick="toggleHvExpand(this)">▾ MORE</button></div><div class="hv-details"><div class="hv-detail-row"><span class="hv-detail-key">City</span><span class="hv-detail-val">${v.city}, ${v.region}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Country</span><span class="hv-detail-val">${v.country}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Device</span><span class="hv-detail-val">${v.brand||v.device||'—'}</span></div><div class="hv-detail-row"><span class="hv-detail-key">Time</span><span class="hv-detail-val">${v.time}</span></div></div><div class="hv-expanded"><div class="hv-exp-row"><span class="hv-exp-key">ISP</span><span class="hv-exp-val">${v.isp}</span></div><div class="hv-exp-row"><span class="hv-exp-key">ASN</span><span class="hv-exp-val">${v.asn||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Coordinates</span><span class="hv-exp-val">${v.lat||'—'}, ${v.lon||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Browser</span><span class="hv-exp-val">${v.browser}</span></div><div class="hv-exp-row"><span class="hv-exp-key">OS</span><span class="hv-exp-val">${v.os||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Brand</span><span class="hv-exp-val">${v.brand||'—'}</span></div><div class="hv-exp-row"><span class="hv-exp-key">Screen</span><span class="hv-exp-val">${v.screen||'—'}</span></div>${v.lat&&v.lat!=='—'?`<div class="hv-exp-row"><span class="hv-exp-key">Map</span><span class="hv-exp-val"><a href="https://www.google.com/maps?q=${v.lat},${v.lon}" target="_blank" style="color:var(--red2);text-decoration:none;font-size:9px;">📍 Open Map</a></span></div>`:''}</div>`;
     list.appendChild(div);
   });
 }
-
-function toggleHvExpand(btn){
-  const entry=btn.closest('.hv-entry');
-  const exp=entry.querySelector('.hv-expanded');
-  const open=exp.classList.toggle('open');
-  btn.textContent=open?'▴ LESS':'▾ MORE';
-}
-
-function clearVisitorLog(){
-  if(!confirm('Clear the entire visitor log? This cannot be undone.'))return;
-  saveData('visitor_logs',[]);renderHudVisitorList();toast('Visitor log cleared.','info');
-}
+function toggleHvExpand(btn){const entry=btn.closest('.hv-entry');const exp=entry.querySelector('.hv-expanded');const open=exp.classList.toggle('open');btn.textContent=open?'▴ LESS':'▾ MORE';}
+function clearVisitorLog(){if(!confirm('Clear the entire visitor log? This cannot be undone.'))return;saveData('visitor_logs',[]);renderHudVisitorList();toast('Visitor log cleared.','info');}
 
 /* Section tracker */
 const SECS2=document.querySelectorAll('section[id]');
@@ -1479,8 +1660,7 @@ addEventListener('scroll',updateSection);updateSection();
 document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)el.classList.add('visible');});},{threshold:0.1}).observe(el));
 
 /* ACTIVE NAV */
-const SECS=document.querySelectorAll('section[id]');
-const NLS=document.querySelectorAll('.nav-links a');
+const SECS=document.querySelectorAll('section[id]');const NLS=document.querySelectorAll('.nav-links a');
 addEventListener('scroll',()=>{let c='';SECS.forEach(s=>{if(scrollY>=s.offsetTop-100)c=s.id;});NLS.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));});
 
 /* DROPDOWN */
@@ -1499,105 +1679,69 @@ function saveData(key,val){localStorage.setItem('scrs_'+key,JSON.stringify(val))
 
 (function(){
   let users=loadData('users',[]);
-  if(!users.find(u=>u.username==='admin')){
-    users.push({username:'admin',password:'admin123',role:'admin',name:'Administrator',studentId:'ADM-001',grade:'N/A',blocked:false,createdAt:new Date().toLocaleString('en-PH')});
-    saveData('users',users);
-  }
+  if(!users.find(u=>u.username==='admin')){users.push({username:'admin',password:'admin123',role:'admin',name:'Administrator',studentId:'ADM-001',grade:'N/A',blocked:false,createdAt:new Date().toLocaleString('en-PH')});saveData('users',users);}
 })();
 
-let currentUser=null;
-let selectedRole='student';
-let currentReportId=null;
-let activeAdminChatUser=null;
-let sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
-let toastTimer=null;
+let currentUser=null;let selectedRole='student';let currentReportId=null;let activeAdminChatUser=null;let sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});let toastTimer=null;
 
-function toast(msg,type=''){
-  const t=document.getElementById('scrs-toast');
-  t.textContent=msg;t.className='show '+(type||'');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>{t.className='';},3500);
-}
+function toast(msg,type=''){const t=document.getElementById('scrs-toast');t.textContent=msg;t.className='show '+(type||'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.className='';},3500);}
 
 function selectRole(r){selectedRole=r;document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));document.getElementById('role-'+r).classList.add('selected');}
 function proceedToLogin(){if(!document.querySelector('.role-btn.selected')){toast('Please select a role first.','error');return;}showScreen('login');const isAdmin=selectedRole==='admin';document.getElementById('login-title').textContent=isAdmin?'ADMIN LOGIN':'STUDENT LOGIN';document.getElementById('login-icon').textContent=isAdmin?'🛡️':'🎓';document.getElementById('login-sub').textContent=isAdmin?'ADMINISTRATOR ACCESS':'ENTER YOUR CREDENTIALS';document.getElementById('admin-req-notice').style.display=isAdmin?'block':'none';document.getElementById('admin-hint-text').style.display=isAdmin?'block':'none';document.getElementById('register-btn').textContent=isAdmin?'Request Admin Access':'Create Account';}
 function backToRole(){showScreen('role');}
-
-function showScreen(s){
-  ['scrs-role-screen','scrs-login-screen','scrs-register-screen','scrs-adminreq-screen','scrs-main-app'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
-  const map={role:'scrs-role-screen',login:'scrs-login-screen',reg:'scrs-register-screen',adminreq:'scrs-adminreq-screen',app:'scrs-main-app'};
-  const el=document.getElementById(map[s]);
-  if(el)el.style.display=(s==='app')?'block':'flex';
-}
-
+function showScreen(s){['scrs-role-screen','scrs-login-screen','scrs-register-screen','scrs-adminreq-screen','scrs-main-app'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});const map={role:'scrs-role-screen',login:'scrs-login-screen',reg:'scrs-register-screen',adminreq:'scrs-adminreq-screen',app:'scrs-main-app'};const el=document.getElementById(map[s]);if(el)el.style.display=(s==='app')?'block':'flex';}
 function showLogin(){showScreen('login');}
 function showRegister(){if(selectedRole==='admin'){showScreen('adminreq');return;}showScreen('reg');}
 
 function doRegister(){
   const name=document.getElementById('reg-name').value.trim();const sid=document.getElementById('reg-id').value.trim();const grade=document.getElementById('reg-grade').value.trim();const user=document.getElementById('reg-user').value.trim();const pass=document.getElementById('reg-pass').value;
-  if(!name||!sid||!grade||!user||!pass){toast('Please fill in all fields.','error');return;}
-  if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
-  let users=loadData('users',[]);
-  if(users.find(u=>u.username===user)){toast('Username already exists.','error');return;}
+  if(!name||!sid||!grade||!user||!pass){toast('Please fill in all fields.','error');return;}if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
+  let users=loadData('users',[]);if(users.find(u=>u.username===user)){toast('Username already exists.','error');return;}
   users.push({username:user,password:pass,role:'student',name,studentId:sid,grade,blocked:false,createdAt:new Date().toLocaleString('en-PH')});
   saveData('users',users);toast('Account created! Please log in.','success');showLogin();
 }
 
 function doAdminRequest(){
   const name=document.getElementById('adreq-name').value.trim();const user=document.getElementById('adreq-user').value.trim();const pass=document.getElementById('adreq-pass').value;const reason=document.getElementById('adreq-reason').value.trim();
-  if(!name||!user||!pass||!reason){toast('Please fill in all fields.','error');return;}
-  if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
-  const users=loadData('users',[]);
-  if(users.find(u=>u.username===user)){toast('Username already taken.','error');return;}
-  const reqs=loadData('admin_requests',[]);
-  if(reqs.find(r=>r.username===user&&r.status==='Pending')){toast('A request with this username is already pending.','error');return;}
+  if(!name||!user||!pass||!reason){toast('Please fill in all fields.','error');return;}if(pass.length<6){toast('Password must be at least 6 characters.','error');return;}
+  const users=loadData('users',[]);if(users.find(u=>u.username===user)){toast('Username already taken.','error');return;}
+  const reqs=loadData('admin_requests',[]);if(reqs.find(r=>r.username===user&&r.status==='Pending')){toast('A request with this username is already pending.','error');return;}
   reqs.push({id:'REQ-'+Date.now().toString(36).toUpperCase(),name,username:user,password:pass,reason,status:'Pending',date:new Date().toLocaleString('en-PH')});
-  saveData('admin_requests',reqs);
-  ['adreq-name','adreq-user','adreq-pass','adreq-reason'].forEach(id=>document.getElementById(id).value='');
+  saveData('admin_requests',reqs);['adreq-name','adreq-user','adreq-pass','adreq-reason'].forEach(id=>document.getElementById(id).value='');
   toast('✓ Request submitted! Wait for admin approval.','success');showLogin();
 }
 
 function doLogin(){
   const user=document.getElementById('login-user').value.trim();const pass=document.getElementById('login-pass').value;
   if(!user||!pass){toast('Please enter credentials.','error');return;}
-  const users=loadData('users',[]);
-  const found=users.find(u=>u.username===user&&u.password===pass&&u.role===selectedRole);
-  if(!found){toast('Invalid credentials or wrong role.','error');return;}
-  if(found.blocked){toast('Your account has been blocked. Contact the administrator.','error');return;}
-  currentUser=found;
-  sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const users=loadData('users',[]);const found=users.find(u=>u.username===user&&u.password===pass&&u.role===selectedRole);
+  if(!found){toast('Invalid credentials or wrong role.','error');return;}if(found.blocked){toast('Your account has been blocked. Contact the administrator.','error');return;}
+  currentUser=found;sessionStart=new Date().toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
   const loginLogs=loadData('login_location_logs',[]);
   loginLogs.push({id:Date.now(),username:found.username,name:found.name,role:found.role,ip:visitorData.ip,city:visitorData.city,region:visitorData.region,country:visitorData.country+(visitorData.country_code?' ('+visitorData.country_code+')':''),isp:visitorData.isp,lat:visitorData.lat,lon:visitorData.lon,device:visitorData.device,brand:visitorData.brand,os:visitorData.os,browser:visitorData.browser,screen:visitorData.screen,loginTime:new Date().toLocaleString('en-PH')});
   saveData('login_location_logs',loginLogs);
   launchApp();
+  setTimeout(()=>{openLoginMap();},600);
 }
 
 function doLogout(){currentUser=null;activeAdminChatUser=null;document.getElementById('login-user').value='';document.getElementById('login-pass').value='';showScreen('role');document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));document.getElementById('role-student').classList.add('selected');selectedRole='student';toast('Logged out.');}
 
 function launchApp(){
   showScreen('app');
-  document.getElementById('sidebar-name').textContent=currentUser.name;
-  document.getElementById('sidebar-role').textContent=currentUser.role.toUpperCase()+(currentUser.studentId?' · '+currentUser.studentId:'');
-  document.getElementById('sidebar-avatar').textContent=currentUser.role==='admin'?'🛡️':'🎓';
+  document.getElementById('sidebar-name').textContent=currentUser.name;document.getElementById('sidebar-role').textContent=currentUser.role.toUpperCase()+(currentUser.studentId?' · '+currentUser.studentId:'');document.getElementById('sidebar-avatar').textContent=currentUser.role==='admin'?'🛡️':'🎓';
   const now=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   if(currentUser.role==='admin'){
     document.getElementById('nav-admin').style.display='block';document.getElementById('nav-student').style.display='none';
-    document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
-    document.getElementById('panel-dash-admin').classList.add('active');
+    document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-dash-admin').classList.add('active');
     setNavActive(document.querySelectorAll('#nav-admin .scrs-nav-item')[0]);
-    document.getElementById('al-name').textContent=currentUser.name;
-    document.getElementById('al-details').textContent='ADMINISTRATOR · '+currentUser.studentId;
-    document.getElementById('al-time').textContent=sessionStart;
+    document.getElementById('al-name').textContent=currentUser.name;document.getElementById('al-details').textContent='ADMINISTRATOR · '+currentUser.studentId;document.getElementById('al-time').textContent=sessionStart;
     if(document.getElementById('dash-admin-date'))document.getElementById('dash-admin-date').textContent=now;
     updateLoginBanner('admin-location-text');refreshAdminDash();refreshReqBadge();
   }else{
     document.getElementById('nav-student').style.display='block';document.getElementById('nav-admin').style.display='none';
-    document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
-    document.getElementById('panel-dash-student').classList.add('active');
+    document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-dash-student').classList.add('active');
     setNavActive(document.querySelectorAll('#nav-student .scrs-nav-item')[0]);
-    document.getElementById('sl-name').textContent=currentUser.name;
-    document.getElementById('sl-details').textContent=currentUser.studentId+' · '+currentUser.grade;
-    document.getElementById('sl-time').textContent=sessionStart;
+    document.getElementById('sl-name').textContent=currentUser.name;document.getElementById('sl-details').textContent=currentUser.studentId+' · '+currentUser.grade;document.getElementById('sl-time').textContent=sessionStart;
     if(document.getElementById('dash-student-date'))document.getElementById('dash-student-date').textContent=now;
     updateLoginBanner('student-location-text');refreshStudentDash();refreshStudentMsgBadge();
   }
@@ -1605,33 +1749,16 @@ function launchApp(){
 
 function updateLoginBanner(elemId){
   const el=document.getElementById(elemId);if(!el)return;
-  const city=visitorData.city!=='—'?visitorData.city:'Unknown City';
-  const region=visitorData.region!=='—'?visitorData.region:'Unknown Region';
-  const country=visitorData.country!=='—'?visitorData.country:'Unknown Country';
-  const lat=visitorData.lat!=='—'?parseFloat(visitorData.lat).toFixed(4):'—';
-  const lon=visitorData.lon!=='—'?parseFloat(visitorData.lon).toFixed(4):'—';
-  el.innerHTML=city+', '+region+', '+country+' · '+DEVICE_BRAND+' · '+OS_VAL+' · '+BROWSER_VAL+'<br>IP: '+visitorData.ip+' · Coordinates: '+lat+', '+lon;
+  const city=visitorData.city!=='—'?visitorData.city:'Unknown City';const region=visitorData.region!=='—'?visitorData.region:'Unknown Region';const country=visitorData.country!=='—'?visitorData.country:'Unknown Country';const lat=visitorData.lat!=='—'?parseFloat(visitorData.lat).toFixed(4):'—';const lon=visitorData.lon!=='—'?parseFloat(visitorData.lon).toFixed(4):'—';
+  el.innerHTML=city+', '+region+', '+country+' · '+DEVICE_BRAND+' · '+OS_VAL+'<br>IP: '+visitorData.ip+' · Coords: '+lat+', '+lon;
   if(visitorData.ip==='Unknown')fetchGeo().then(()=>updateLoginBanner(elemId));
 }
 
 function setNavActive(el){if(!el)return;const container=el.closest('#nav-student,#nav-admin');if(container)container.querySelectorAll('.scrs-nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
 
 function showPanel(name,navEl){
-  document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));
-  const panel=document.getElementById('panel-'+name);if(panel)panel.classList.add('active');
-  if(navEl)setNavActive(navEl);
-  if(name==='dash-student')refreshStudentDash();
-  if(name==='my-reports')renderMyReports('all');
-  if(name==='dash-admin'){refreshAdminDash();refreshReqBadge();}
-  if(name==='all-reports')renderAllReports('all');
-  if(name==='manage-users')renderUsers();
-  if(name==='announcements')renderAnnouncements();
-  if(name==='admin-requests')renderAdminRequests();
-  if(name==='blocked-users')renderBlockedUsers();
-  if(name==='visitor-log')renderVisitorLog();
-  if(name==='login-location-log')renderLoginLocationLog();
-  if(name==='admin-messages')renderAdminThreadList();
-  if(name==='student-messages'){renderStudentMessages();refreshStudentMsgBadge();}
+  document.querySelectorAll('.scrs-panel').forEach(p=>p.classList.remove('active'));const panel=document.getElementById('panel-'+name);if(panel)panel.classList.add('active');if(navEl)setNavActive(navEl);
+  if(name==='dash-student')refreshStudentDash();if(name==='my-reports')renderMyReports('all');if(name==='dash-admin'){refreshAdminDash();refreshReqBadge();}if(name==='all-reports')renderAllReports('all');if(name==='manage-users')renderUsers();if(name==='announcements')renderAnnouncements();if(name==='admin-requests')renderAdminRequests();if(name==='blocked-users')renderBlockedUsers();if(name==='visitor-log')renderVisitorLog();if(name==='login-location-log')renderLoginLocationLog();if(name==='admin-messages')renderAdminThreadList();if(name==='student-messages'){renderStudentMessages();refreshStudentMsgBadge();}
 }
 
 function genId(){return 'CR-'+Date.now().toString(36).toUpperCase();}
@@ -1641,9 +1768,7 @@ function submitConcern(){
   if(!cat){toast('Please select a category.','error');return;}if(!sub){toast('Please enter a subject.','error');return;}if(!desc){toast('Please enter a description.','error');return;}
   const reports=loadData('reports',[]);const id=genId();
   reports.push({id,studentUsername:currentUser.username,studentName:vis==='Anonymous'?'Anonymous':currentUser.name,studentId:vis==='Anonymous'?'—':currentUser.studentId,grade:currentUser.grade,category:cat,priority:prio,visibility:vis,subject:sub,description:desc,location:loc||'Not specified',status:'Pending',remark:'',date:new Date().toLocaleString('en-PH')});
-  saveData('reports',reports);
-  ['sc-subject','sc-desc','sc-location'].forEach(id2=>{document.getElementById(id2).value='';});
-  document.getElementById('sc-category').selectedIndex=0;
+  saveData('reports',reports);['sc-subject','sc-desc','sc-location'].forEach(id2=>{document.getElementById(id2).value='';});document.getElementById('sc-category').selectedIndex=0;
   toast('✓ Concern submitted! Report ID: '+id,'success');refreshStudentDash();
 }
 
@@ -1668,12 +1793,9 @@ function statusBadge(s){const map={Pending:'pending',Reviewed:'reviewed',Resolve
 function prioBadge(p){const colors={Low:'rgba(76,175,80,0.7)',Medium:'rgba(255,214,0,0.7)',High:'rgba(255,120,0,0.7)',Urgent:'rgba(255,0,0,0.9)'};return`<span style="font-family:var(--mono);font-size:9px;color:${colors[p]||'#fff'};letter-spacing:1px;">${p||'—'}</span>`;}
 
 function renderMyReports(filter){
-  let reports=loadData('reports',[]).filter(r=>r.studentUsername===currentUser.username);
-  if(filter!=='all')reports=reports.filter(r=>r.status===filter);
-  const tbody=document.getElementById('my-reports-body');tbody.innerHTML='';
-  const empty=document.getElementById('my-reports-empty');
-  if(!reports.length){empty.style.display='block';return;}
-  empty.style.display='none';
+  let reports=loadData('reports',[]).filter(r=>r.studentUsername===currentUser.username);if(filter!=='all')reports=reports.filter(r=>r.status===filter);
+  const tbody=document.getElementById('my-reports-body');tbody.innerHTML='';const empty=document.getElementById('my-reports-empty');
+  if(!reports.length){empty.style.display='block';return;}empty.style.display='none';
   reports.slice().reverse().forEach(r=>{tbody.innerHTML+=`<tr><td class="report-id">${r.id}</td><td style="font-size:10px;">${r.category}</td><td>${r.subject}</td><td>${prioBadge(r.priority)}</td><td>${statusBadge(r.status)}</td><td style="font-size:10px;white-space:nowrap;">${r.date}</td><td><button class="scrs-btn secondary" style="padding:5px 12px;font-size:9px;width:auto;" onclick="openReport('${r.id}')">View</button></td></tr>`;});
 }
 function filterMyReports(f,el){document.querySelectorAll('#panel-my-reports .panel-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderMyReports(f);}
@@ -1681,8 +1803,7 @@ function filterMyReports(f,el){document.querySelectorAll('#panel-my-reports .pan
 function renderAllReports(filter){
   let reports=loadData('reports',[]);if(filter!=='all')reports=reports.filter(r=>r.status===filter);
   const tbody=document.getElementById('all-reports-body');tbody.innerHTML='';const empty=document.getElementById('all-reports-empty');
-  if(!reports.length){empty.style.display='block';return;}
-  empty.style.display='none';
+  if(!reports.length){empty.style.display='block';return;}empty.style.display='none';
   reports.slice().reverse().forEach(r=>{tbody.innerHTML+=`<tr><td class="report-id">${r.id}</td><td style="font-size:10px;">${r.studentName}<br><span style="color:rgba(255,255,255,.3);font-size:9px;">${r.grade}</span></td><td style="font-size:10px;">${r.category}</td><td>${r.subject}</td><td>${prioBadge(r.priority)}</td><td>${statusBadge(r.status)}</td><td style="font-size:10px;white-space:nowrap;">${r.date}</td><td><button class="scrs-btn" style="padding:5px 10px;font-size:9px;width:auto;" onclick="openReport('${r.id}')">Manage</button></td></tr>`;});
 }
 function filterAllReports(f,el){document.querySelectorAll('#panel-all-reports .panel-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAllReports(f);}
@@ -1712,7 +1833,19 @@ function renderVisitorLog(){
 function renderLoginLocationLog(){
   const logs=loadData('login_location_logs',[]);const tbody=document.getElementById('login-location-body');const empty=document.getElementById('login-location-empty');tbody.innerHTML='';
   if(!logs.length){if(empty)empty.style.display='block';return;}if(empty)empty.style.display='none';
-  logs.slice().reverse().forEach((l,i)=>{const coords=l.lat&&l.lat!=='—'?`<a href="https://www.google.com/maps?q=${l.lat},${l.lon}" target="_blank" style="color:var(--red2);text-decoration:none;">${parseFloat(l.lat).toFixed(3)}, ${parseFloat(l.lon).toFixed(3)} 📍</a>`:'—';tbody.innerHTML+=`<tr><td>${i+1}</td><td style="color:var(--red2);">${l.username}</td><td>${l.name}</td><td><span class="status ${l.role==='admin'?'reviewed':'resolved'}">${l.role}</span></td><td style="color:rgba(255,180,180,.9);">${l.ip}</td><td>${l.city||'—'}</td><td>${l.region||'—'}</td><td>${l.country||'—'}</td><td style="font-size:9px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.isp||''}">${l.isp||'—'}</td><td style="font-size:9px;">${l.brand||l.device||'—'}</td><td style="font-size:9px;">${l.os||'—'}</td><td style="font-size:9px;">${l.browser||'—'}</td><td style="font-size:9px;">${coords}</td><td style="font-size:9px;white-space:nowrap;">${l.loginTime}</td></tr>`;});
+  logs.slice().reverse().forEach((l,i)=>{
+    const coords=l.lat&&l.lat!=='—'?`<a href="https://www.google.com/maps?q=${l.lat},${l.lon}" target="_blank" style="color:var(--red2);text-decoration:none;">${parseFloat(l.lat).toFixed(3)}, ${parseFloat(l.lon).toFixed(3)} 📍</a>`:'—';
+    const mapBtn=l.lat&&l.lat!=='—'?`<a href="#" onclick="showLoginMapForRow('${l.lat}','${l.lon}','${l.username}');return false;" style="display:inline-block;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);border-radius:4px;padding:3px 8px;font-size:9px;color:var(--red2);text-decoration:none;letter-spacing:1px;">🗺 MAP</a>`:'—';
+    tbody.innerHTML+=`<tr><td>${i+1}</td><td style="color:var(--red2);">${l.username}</td><td>${l.name}</td><td><span class="status ${l.role==='admin'?'reviewed':'resolved'}">${l.role}</span></td><td style="color:rgba(255,180,180,.9);">${l.ip}</td><td>${l.city||'—'}</td><td>${l.region||'—'}</td><td>${l.country||'—'}</td><td style="font-size:9px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.isp||''}">${l.isp||'—'}</td><td style="font-size:9px;">${l.brand||l.device||'—'}</td><td style="font-size:9px;">${l.os||'—'}</td><td style="font-size:9px;">${l.browser||'—'}</td><td style="font-size:9px;">${coords}</td><td style="font-size:9px;white-space:nowrap;">${l.loginTime}</td><td>${mapBtn}</td></tr>`;
+  });
+}
+
+function showLoginMapForRow(lat,lon,username){
+  document.getElementById('lm-user').textContent=username;document.getElementById('lm-ip').textContent='—';document.getElementById('lm-loc').textContent='—';document.getElementById('lm-device').textContent='—';document.getElementById('lm-os').textContent='—';
+  document.getElementById('lm-coords').textContent=parseFloat(lat).toFixed(4)+', '+parseFloat(lon).toFixed(4);
+  const wrap=document.getElementById('lm-map-wrap');while(wrap.firstChild)wrap.removeChild(wrap.firstChild);
+  const iframe=document.createElement('iframe');iframe.src=`https://maps.google.com/maps?q=${lat},${lon}&z=14&output=embed`;iframe.style.cssText='width:100%;height:320px;border:none;display:block;';iframe.referrerPolicy='no-referrer-when-downgrade';
+  wrap.appendChild(iframe);document.getElementById('login-map-modal').classList.add('open');
 }
 
 function refreshReqBadge(){const reqs=loadData('admin_requests',[]).filter(r=>r.status==='Pending');const badge=document.getElementById('req-badge');badge.textContent=reqs.length;badge.style.display=reqs.length?'inline':'none';}
@@ -1729,8 +1862,7 @@ function openReport(id){
   currentReportId=id;
   document.getElementById('modal-subject').textContent=r.subject;document.getElementById('modal-id').textContent=r.id+' · Submitted '+r.date;document.getElementById('modal-category').textContent=r.category;document.getElementById('modal-priority').textContent=r.priority;document.getElementById('modal-status-val').innerHTML=statusBadge(r.status);document.getElementById('modal-location').textContent=r.location;document.getElementById('modal-desc').textContent=r.description;document.getElementById('modal-by').textContent=r.studentName+(r.grade&&r.grade!=='N/A'?' · '+r.grade:'');document.getElementById('modal-date').textContent=r.date;
   const remarkWrap=document.getElementById('modal-remark-wrap');if(r.remark){remarkWrap.style.display='block';document.getElementById('modal-remark').textContent=r.remark;}else remarkWrap.style.display='none';
-  const isAdmin=currentUser&&currentUser.role==='admin';
-  document.getElementById('modal-admin-controls').style.display=isAdmin?'block':'none';document.getElementById('modal-update-btn').style.display=isAdmin?'block':'none';document.getElementById('modal-delete-btn').style.display=isAdmin?'block':'none';
+  const isAdmin=currentUser&&currentUser.role==='admin';document.getElementById('modal-admin-controls').style.display=isAdmin?'block':'none';document.getElementById('modal-update-btn').style.display=isAdmin?'block':'none';document.getElementById('modal-delete-btn').style.display=isAdmin?'block':'none';
   if(isAdmin)document.getElementById('modal-new-status').value=r.status;if(isAdmin)document.getElementById('modal-remark-input').value=r.remark||'';
   document.getElementById('report-modal').classList.add('open');
 }
@@ -1762,6 +1894,7 @@ function renderAnnouncements(){const anns=loadData('announcements',[]);const lis
 function postAnnouncement(){const title=document.getElementById('ann-title').value.trim();const body=document.getElementById('ann-body').value.trim();if(!title||!body){toast('Please fill in both fields.','error');return;}const anns=loadData('announcements',[]);anns.push({title,body,date:new Date().toLocaleString('en-PH'),by:currentUser.name});saveData('announcements',anns);document.getElementById('ann-title').value='';document.getElementById('ann-body').value='';renderAnnouncements();toast('✓ Announcement posted.','success');}
 
 document.getElementById('report-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('login-map-modal').addEventListener('click',function(e){if(e.target===this)closeLoginMap();});
 </script>
 </body>
 </html>
